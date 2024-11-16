@@ -3,4 +3,5 @@ project(battleships_console_game)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(battleships_console_game main.cpp)
+add_executable(battleships_console_game main.cpp
+        core/dimension.hpp)

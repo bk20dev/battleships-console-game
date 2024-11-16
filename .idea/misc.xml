@@ -4,6 +4,7 @@
     <option name="/Default/Housekeeping/GlobalSettingsUpgraded/IsUpgraded/@EntryValue" value="true" type="bool" />
     <option name="/Default/Environment/UserInterface/HierarchyView/ViewStyle/@EntryValue" value="SubTypes" type="string" />
     <option name="/Default/Housekeeping/OptionsDialog/SelectedPageId/@EntryValue" value="CppNaming" type="string" />
+    <option name="/Default/Housekeeping/RefactoringsMru/RenameRefactoring/DoRenameType/@EntryValue" value="false" type="bool" />
   </component>
   <component name="CMakePythonSetting">
     <option name="pythonIntegrationState" value="YES" />
