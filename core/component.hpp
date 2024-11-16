@@ -34,4 +34,20 @@ namespace core
         component(int x, int y, int width, int height,
                   const std::shared_ptr<console::console_view>& console_view);
     };
+
+    class container_component final : public component
+    {
+    protected:
+        std::vector<std::shared_ptr<component>> children_components{};
+
+    public:
+        void add_component(const std::shared_ptr<component>& other_component);
+
+        void paint() override;
+
+        bool handle_keyboard_event(const console::keyboard::key& key) override;
+
+        container_component(int x, int y, int width, int height,
+                            const std::shared_ptr<console::console_view>& console_view);
+    };
 }
