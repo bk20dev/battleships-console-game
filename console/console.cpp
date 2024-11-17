@@ -10,13 +10,16 @@ void console::console::clear() const
     output_stream << "\033[2J" << std::flush;
 }
 
-void console::console::move_to(const int x, const int y) const
+std::string console::console::move_to(const int x, const int y) const
 {
     // Account for 1-based indexing in the terminal window
-    const int row = y + 1;
-    const int column = x + 1;
+    const int row = y + 1, column = x + 1;
+    return std::format("\033[{};{}H", row, column);
+}
 
-    output_stream << std::format("\033[{};{}H", row, column);
+void console::console::write_at(const int x, const int y, const std::string& text)
+{
+    output_stream << move_to(x, y) << text;
 }
 
 std::shared_ptr<console::console_view> console::console::create_view(const core::position& offset) const
@@ -24,16 +27,15 @@ std::shared_ptr<console::console_view> console::console::create_view(const core:
     return std::make_shared<console_view>(*this, offset);
 }
 
+std::string console::console_view::move_to(const int x, const int y) const
+{
+    const int row = y + position.y, column = x + position.x;
+    return console::move_to(column, row);
+}
+
 console::console_view::console_view(const console& base_console, const core::position& position): console(base_console),
     position(position)
 {
-}
-
-void console::console_view::move_to(const int x, const int y) const
-{
-    const int column = position.x + x;
-    const int row = position.y + y;
-    console::move_to(column, row);
 }
 
 std::shared_ptr<console::console_view> console::console_view::create_view(const core::position& offset) const

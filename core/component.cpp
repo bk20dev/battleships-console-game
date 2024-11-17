@@ -22,7 +22,7 @@ bool core::component::handle_keyboard_event(const console::keyboard::key& key)
 
 core::component::component(const int x, const int y, const int width, const int height,
                            const std::shared_ptr<console::console>& console)
-    : position{x, y}, size{width, height}, console(console->create_view({x, y}))
+    : position{x, y}, size{width, height}, console_view(console->create_view({x, y}))
 {
 }
 

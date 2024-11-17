@@ -16,7 +16,7 @@ namespace core
         position position;
         size size;
 
-        const std::shared_ptr<console::console> console;
+        const std::shared_ptr<console::console> console_view;
 
         void invalidate();
 
