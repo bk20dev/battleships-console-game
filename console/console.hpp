@@ -22,6 +22,8 @@ namespace console
 
         void clear() const;
 
+        void set_cursor(bool display = true) const;
+
         virtual void write_at(int x, int y, const std::string& text);
 
         [[nodiscard]] virtual std::shared_ptr<console_view> create_view(const core::position& offset) const;
