@@ -17,9 +17,14 @@ int main()
     const auto keyboard = std::make_shared<console::keyboard::keyboard>();
     keyboard->listen_for_input();
 
-    const auto console_view = std::make_shared<console::console_view>();
+    const auto console = std::make_shared<console::console>(std::cout);
 
-    const auto player = std::make_shared<core::container_component>(0, 0, 3, 3, console_view);
+    const auto player = std::make_shared<core::container_component>(0, 0, 3, 3, console);
+    const auto sword = std::make_shared<core::component>(1, 1, 1, 1, console);
+
+    player->add_component(sword);
+    player->paint();
+
     std::thread keyboard_input_thread([&keyboard, &player]()
     {
         keyboard_input_listener(keyboard, player);

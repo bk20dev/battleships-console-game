@@ -16,7 +16,7 @@ namespace core
         position position;
         size size;
 
-        const std::shared_ptr<console::console_view> console;
+        const std::shared_ptr<console::console> console;
 
         void invalidate();
 
@@ -32,7 +32,7 @@ namespace core
         virtual bool handle_keyboard_event(const console::keyboard::key& key);
 
         component(int x, int y, int width, int height,
-                  const std::shared_ptr<console::console_view>& console_view);
+                  const std::shared_ptr<console::console>& console);
     };
 
     class container_component final : public component
@@ -48,6 +48,6 @@ namespace core
         bool handle_keyboard_event(const console::keyboard::key& key) override;
 
         container_component(int x, int y, int width, int height,
-                            const std::shared_ptr<console::console_view>& console_view);
+                            const std::shared_ptr<console::console>& console);
     };
 }

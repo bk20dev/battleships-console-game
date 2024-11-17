@@ -1,6 +1,5 @@
 #include "keyboard.hpp"
 
-#include <iostream>
 #include <unistd.h>
 #include <sys/termios.h>
 #include <sys/time.h>

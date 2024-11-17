@@ -21,8 +21,8 @@ bool core::component::handle_keyboard_event(const console::keyboard::key& key)
 }
 
 core::component::component(const int x, const int y, const int width, const int height,
-                           const std::shared_ptr<console::console_view>& console_view)
-    : position{x, y}, size{width, height}, console(console_view)
+                           const std::shared_ptr<console::console>& console)
+    : position{x, y}, size{width, height}, console(console->create_view({x, y}))
 {
 }
 
@@ -58,7 +58,7 @@ bool core::container_component::handle_keyboard_event(const console::keyboard::k
 }
 
 core::container_component::container_component(const int x, const int y, const int width, const int height,
-                                               const std::shared_ptr<console::console_view>& console_view)
-    : component(x, y, width, height, console_view)
+                                               const std::shared_ptr<console::console>& console)
+    : component(x, y, width, height, console)
 {
 }
