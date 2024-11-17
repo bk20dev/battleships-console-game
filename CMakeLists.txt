@@ -12,4 +12,6 @@ add_executable(battleships_console_game main.cpp
         core/component.cpp
         core/dimension.hpp
         components/label.cpp
-        components/label.hpp)
+        components/label.hpp
+        components/input.hpp
+        components/input.cpp)

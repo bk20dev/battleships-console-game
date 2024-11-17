@@ -11,6 +11,11 @@ namespace console::keyboard
         bool is_special;
     };
 
+    enum character
+    {
+        BACKSPACE = 127,
+    };
+
     class keyboard
     {
         std::queue<key> keyboard_input_queue{};
