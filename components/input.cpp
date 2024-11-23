@@ -12,40 +12,81 @@ bool components::input::is_key_valid(const console::keyboard::key& key)
     return !key.is_special && isprint(key.character);
 }
 
-console::style::style components::input::get_input_style() const
+// ReSharper disable CppDFAConstantConditions
+console::style::style components::input::get_input_style(const bool is_placeholder) const
 {
-    console::style::style result_style = {
-        .text_effect = console::style::UNDERLINE,
-    };
+    console::style::style result_style;
 
-    // Merge user-applied styles with the default input style
-    // and skip the FAINT effect, because it's used exclusively to indicate the disabled state.
-    result_style.text_effect |= (style.text_effect & ~console::style::FAINT);
-
-    if (!is_enabled)
+    if (is_enabled && is_focused)
     {
-        result_style.text_effect |= console::style::FAINT;
+        result_style.background_color = console::style::CYAN;
+        result_style.foreground_color = console::style::BRIGHT_WHITE;
+    }
+    else if (is_enabled && !is_focused)
+    {
+        result_style.background_color = console::style::WHITE;
+        result_style.foreground_color = console::style::BLACK;
+    }
+    else if (!is_enabled && is_focused)
+    {
+        result_style.background_color = console::style::BRIGHT_BLACK;
+        result_style.foreground_color = console::style::CYAN;
+    }
+    else if (!is_enabled && !is_focused)
+    {
+        result_style.background_color = console::style::BRIGHT_BLACK;
+        result_style.foreground_color = console::style::WHITE;
     }
 
-    if (is_focused)
+    if (is_placeholder)
     {
-        result_style.foreground_color = style.foreground_color;
-        result_style.background_color = style.background_color;
+        result_style.text_effect |= console::style::FAINT;
     }
 
     return result_style;
 }
 
 components::input::input(const int x, const int y, const std::shared_ptr<console::console>& console,
-                         const components::input_type input_type, const int max_length)
-    : component(x, y, max_length, 1, console), input_type(input_type), max_length(max_length)
+                         const components::input_type input_type, const int max_length,
+                         const std::string& placeholder, const std::string& text)
+    : component(x, y, max_length, 1, console),
+      input_type(input_type),
+      max_length(max_length),
+      text(text),
+      placeholder(placeholder)
 {
+}
+
+void components::input::set_text(const std::string& new_text)
+{
+    text = new_text;
+}
+
+void components::input::set_placeholder(const std::string& new_placeholder)
+{
+    placeholder = new_placeholder;
+}
+
+std::string pad_right(const std::string& text, const size_t text_length, const int desired_length,
+                      const char fill = ' ')
+{
+    std::string padded_text = text;
+
+    const size_t spaces_to_add = desired_length - text_length;
+    padded_text.append(spaces_to_add, fill);
+
+    return padded_text;
 }
 
 void components::input::paint()
 {
-    const console::style::style input_style = get_input_style();
-    const std::string styled_text = input_style.apply_to_text(text);
+    const bool paint_placeholder = text.empty();
+
+    const std::string text_to_print = paint_placeholder ? placeholder : text;
+    const std::string padded_text = pad_right(text_to_print, text_to_print.size(), max_length, ' ');
+
+    const console::style::style input_style = get_input_style(paint_placeholder);
+    const std::string styled_text = input_style.apply_to_text(padded_text);
 
     console_view->write_at(0, 0, styled_text);
 

@@ -12,7 +12,6 @@ namespace components
     };
 
     class input final : public core::component,
-                        public core::component_traits::styleable,
                         public core::component_traits::focusable,
                         public core::component_traits::activatable
     {
@@ -21,16 +20,22 @@ namespace components
         int max_length;
 
         std::string text{};
+        std::string placeholder{};
 
         bool is_input_full() const;
 
         static bool is_key_valid(const console::keyboard::key& key);
 
-        console::style::style get_input_style() const;
+        console::style::style get_input_style(bool is_placeholder = false) const;
 
     public:
         input(int x, int y, const std::shared_ptr<console::console>& console,
-              components::input_type input_type, int max_length);
+              components::input_type input_type, int max_length,
+              const std::string& placeholder = "", const std::string& text = "");
+
+        void set_text(const std::string& new_text);
+
+        void set_placeholder(const std::string& new_placeholder);
 
         void paint() override;
 
