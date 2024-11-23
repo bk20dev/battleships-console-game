@@ -6,14 +6,9 @@ components::label::label(const int x, const int y, const std::shared_ptr<console
 {
 }
 
-void components::label::set_style(const std::optional<console::style::style>& style)
-{
-    this->style = style;
-}
-
 void components::label::paint()
 {
-    const std::string styled_text = style->apply_to_text(text);
+    const std::string styled_text = style.apply_to_text(text);
     console_view->write_at(0, 0, styled_text);
 
     component::paint();
