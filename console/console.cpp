@@ -10,7 +10,7 @@ void console::console::clear() const
     output_stream << "\033[2J" << std::flush;
 }
 
-void console::console::set_cursor(const bool display) const
+void console::console::set_cursor_display(const bool display) const
 {
     const char display_flag = display ? 'h' : 'l';
     output_stream << std::format("\x1b[?25{}", display_flag);

@@ -22,7 +22,7 @@ namespace console
 
         void clear() const;
 
-        void set_cursor(bool display = true) const;
+        void set_cursor_display(bool display = true) const;
 
         virtual void write_at(int x, int y, const std::string& text);
 

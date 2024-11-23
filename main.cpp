@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include "components/input.hpp"
+#include "components/label.hpp"
 #include "core/component.hpp"
 
 [[noreturn]] void keyboard_input_listener(const std::shared_ptr<console::keyboard::keyboard>& keyboard,
@@ -9,6 +11,7 @@
     {
         const auto pressed_key = keyboard->get_pressed_key();
         component->handle_keyboard_event(pressed_key);
+        std::cout << std::flush;
     }
 }
 
@@ -18,16 +21,23 @@ int main()
     keyboard->listen_for_input();
 
     const auto console = std::make_shared<console::console>(std::cout);
+    console->set_cursor_display(false);
+    console->clear();
 
-    const auto player = std::make_shared<core::container_component>(0, 0, 3, 3, console);
-    const auto sword = std::make_shared<core::component>(1, 1, 1, 1, console);
+    const auto form = std::make_shared<core::container_component>(0, 0, 100, 100, console);
+    const auto name_input = std::make_shared<components::input>(0, 0, console, components::input_type::TEXT, 16);
 
-    player->add_component(sword);
-    player->paint();
+    name_input->focus();
+    name_input->disable();
 
-    std::thread keyboard_input_thread([&keyboard, &player]()
+    form->add_component(name_input);
+
+    form->paint();
+    std::cout << std::flush;
+
+    std::thread keyboard_input_thread([&keyboard, &form]()
     {
-        keyboard_input_listener(keyboard, player);
+        keyboard_input_listener(keyboard, form);
     });
 
     keyboard_input_thread.join();
