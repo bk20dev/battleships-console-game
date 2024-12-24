@@ -9,6 +9,7 @@ add_executable(battleships_console_game main.cpp
         console/keyboard.hpp
         console/keyboard.cpp
         core/component.hpp
+        core/component.tpp
         core/component.cpp
         core/dimension.hpp
         components/label.cpp

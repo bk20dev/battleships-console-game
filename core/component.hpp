@@ -35,13 +35,14 @@ namespace core
                   const std::shared_ptr<console::console>& console);
     };
 
-    class container_component final : public component
+    template <class C> requires std::is_base_of_v<component, C>
+    class container_component : public component
     {
     protected:
-        std::vector<std::shared_ptr<component>> children_components{};
+        std::vector<std::shared_ptr<C>> children_components{};
 
     public:
-        void add_component(const std::shared_ptr<component>& other_component);
+        void add_component(const std::shared_ptr<C>& other_component);
 
         void paint() override;
 
@@ -51,3 +52,5 @@ namespace core
                             const std::shared_ptr<console::console>& console);
     };
 }
+
+#include "component.tpp"

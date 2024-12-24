@@ -24,7 +24,7 @@ int main()
     console->set_cursor_display(false);
     console->clear();
 
-    const auto form = std::make_shared<core::container_component>(0, 0, 100, 100, console);
+    const auto form = std::make_shared<core::container_component<components::input>>(0, 0, 100, 100, console);
     const auto name_input = std::make_shared<components::input>(0, 0, console, components::input_type::TEXT, 16);
 
     name_input->focus();
