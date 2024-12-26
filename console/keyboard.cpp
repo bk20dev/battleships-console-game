@@ -46,6 +46,23 @@ console::keyboard::key get_pressed_key_from_stdin()
     return console::keyboard::key{.is_special = true, .character = pressed_escape_key};
 }
 
+bool console::keyboard::key::is_vertical_arrow() const
+{
+    if (!is_special) return false;
+    return character == ARROW_UP || character == ARROW_DOWN;
+}
+
+bool console::keyboard::key::is_horizontal_arrow() const
+{
+    if (!is_special) return false;
+    return character == ARROW_RIGHT || character == ARROW_LEFT;
+}
+
+bool console::keyboard::key::is_arrow() const
+{
+    return is_vertical_arrow() || is_horizontal_arrow();
+}
+
 void console::keyboard::keyboard::keyboard_input_listener()
 {
     while (true)

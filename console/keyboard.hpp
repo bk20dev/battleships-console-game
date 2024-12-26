@@ -5,15 +5,25 @@
 
 namespace console::keyboard
 {
+    enum character
+    {
+        ARROW_UP = 65,
+        ARROW_DOWN = 66,
+        ARROW_RIGHT = 67,
+        ARROW_LEFT = 68,
+        BACKSPACE = 127,
+    };
+
     struct key
     {
         int character;
         bool is_special;
-    };
 
-    enum character
-    {
-        BACKSPACE = 127,
+        [[nodiscard]] bool is_vertical_arrow() const;
+
+        [[nodiscard]] bool is_horizontal_arrow() const;
+
+        [[nodiscard]] bool is_arrow() const;
     };
 
     class keyboard
