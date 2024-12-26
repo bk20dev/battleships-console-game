@@ -27,6 +27,40 @@ namespace components
 
         list(int x, int y, const std::shared_ptr<console::console>& console);
     };
+
+    constexpr std::array list_item_select_keys = {
+        console::keyboard::character::ENTER,
+        console::keyboard::character::SPACE,
+    };
+
+    constexpr console::style::style default_list_item_style = {
+    };
+
+    constexpr console::style::style selected_list_item_style = {
+        .background_color = console::style::color::CYAN
+    };
+
+    class list_item final : public core::component, public core::component_traits::focusable,
+                            protected core::component_traits::styleable
+    {
+        std::string text;
+
+        std::function<void()> on_select;
+
+    public:
+        list_item(int x, int y, const std::shared_ptr<console::console>& console,
+                  const std::string& text, const std::function<void()>& on_select = nullptr);
+
+        void paint() override;
+
+        bool handle_keyboard_event(const console::keyboard::key& key) override;
+
+        void focus() override;
+
+        void blur() override;
+
+        void set_style(const console::style::style& new_style) override;
+    };
 }
 
 #include "list.tpp"

@@ -14,33 +14,6 @@
     }
 }
 
-class helper final : public core::component, public core::component_traits::focusable
-{
-public:
-    helper(int x, int y, int width, int height, const std::shared_ptr<console::console>& console)
-        : component(x, y, width, height, console)
-    {
-    }
-
-    void focus() override
-    {
-        focusable::focus();
-        invalidate();
-    }
-
-    void blur() override
-    {
-        focusable::blur();
-        invalidate();
-    }
-
-    void paint() override
-    {
-        const std::string text_to_write = is_focused ? "SOME TEXT" : "some text";
-        console_view->write_at(0, 0, text_to_write);
-    }
-};
-
 int main()
 {
     const auto keyboard = std::make_shared<console::keyboard::keyboard>();
@@ -50,12 +23,11 @@ int main()
     console->set_cursor_display(false);
     console->clear();
 
-    const auto list = std::make_shared<components::list<helper>>(0, 0, console);
+    const auto list = std::make_shared<components::list<components::list_item>>(0, 0, console);
 
-    list->add_component(std::make_shared<helper>(0, 0, 0, 0, console));
-    list->add_component(std::make_shared<helper>(0, 1, 0, 0, console));
-    list->add_component(std::make_shared<helper>(0, 2, 0, 0, console));
-    list->add_component(std::make_shared<helper>(0, 3, 0, 0, console));
+    list->add_component(std::make_shared<components::list_item>(0, 0, console, "first"));
+    list->add_component(std::make_shared<components::list_item>(0, 1, console, "second"));
+    list->add_component(std::make_shared<components::list_item>(0, 2, console, "third"));
 
     list->paint();
     std::cout << std::flush;
