@@ -9,8 +9,10 @@ namespace core::component_traits
     protected:
         console::style::style style;
 
+        ~styleable() = default;
+
     public:
-        void set_style(const console::style::style& new_style);
+        virtual void set_style(const console::style::style& new_style);
     };
 
     class focusable
@@ -18,10 +20,12 @@ namespace core::component_traits
     protected:
         bool is_focused = false;
 
-    public:
-        void focus();
+        ~focusable() = default;
 
-        void blur();
+    public:
+        virtual void focus();
+
+        virtual void blur();
     };
 
     class activatable
@@ -29,9 +33,11 @@ namespace core::component_traits
     protected:
         bool is_enabled = true;
 
-    public:
-        void enable();
+        ~activatable() = default;
 
-        void disable();
+    public:
+        virtual void enable();
+
+        virtual void disable();
     };
 }
