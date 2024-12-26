@@ -41,8 +41,13 @@ namespace core
     protected:
         std::vector<std::shared_ptr<C>> children_components{};
 
+        static bool handle_keyboard_event_for_child(const console::keyboard::key& key,
+                                                    const std::shared_ptr<C>& child_component);
+
     public:
-        void add_component(const std::shared_ptr<C>& other_component);
+        virtual void add_component(const std::shared_ptr<C>& other_component);
+
+        [[nodiscard]] std::optional<std::shared_ptr<C>> get_component_at_index(int index);
 
         void paint() override;
 
