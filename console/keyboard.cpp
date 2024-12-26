@@ -4,8 +4,6 @@
 #include <sys/termios.h>
 #include <sys/time.h>
 
-static constexpr char ESCAPE_CHARACTER = 27;
-
 int read_character_from_stdin()
 {
     char key = 0;
@@ -35,7 +33,7 @@ bool is_key_pressed()
 console::keyboard::key get_pressed_key_from_stdin()
 {
     const int pressed_key = read_character_from_stdin();
-    if (pressed_key != ESCAPE_CHARACTER || !is_key_pressed())
+    if (pressed_key != console::keyboard::ESCAPE || !is_key_pressed())
     {
         return console::keyboard::key{.is_special = false, .character = pressed_key};
     }

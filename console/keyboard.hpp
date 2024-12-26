@@ -7,6 +7,7 @@ namespace console::keyboard
 {
     enum character
     {
+        ESCAPE = 27,
         ARROW_UP = 65,
         ARROW_DOWN = 66,
         ARROW_RIGHT = 67,

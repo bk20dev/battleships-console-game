@@ -24,7 +24,7 @@ int console::style::get_background_color_code(const color& color)
     return get_foreground_color_code(color) + 10;
 }
 
-int console::style::get_effect_code(const effect& effect)
+int console::style::get_effect_code(const text_effect& effect)
 {
     switch (effect)
     {
@@ -55,7 +55,7 @@ std::string console::style::style::to_control_sequence() const
     style_sequence += std::format(";{}", background_color_code);
 
     // Text effects
-    for (const auto& effect : all_effects)
+    for (const auto& effect : text_effects)
     {
         if (text_effect & effect)
         {
@@ -64,7 +64,7 @@ std::string console::style::style::to_control_sequence() const
         }
     }
 
-    return create_control_sequence(style_sequence, STYLE_CONTROL_SEQUENCE);
+    return create_control_sequence(style_sequence, style_control_sequence);
 }
 
 std::string console::style::style::apply_to_text(const std::string& text) const

@@ -5,7 +5,7 @@
 
 namespace console::style
 {
-    static constexpr std::string STYLE_CONTROL_SEQUENCE = "m";
+    static constexpr std::string style_control_sequence = "m";
 
     enum color
     {
@@ -32,7 +32,7 @@ namespace console::style
 
     int get_background_color_code(const color& color);
 
-    enum effect
+    enum text_effect
     {
         BOLD = 1,
         FAINT = 2,
@@ -40,9 +40,9 @@ namespace console::style
         UNDERLINE = 8,
     };
 
-    constexpr std::array all_effects = {BOLD, FAINT, ITALIC, UNDERLINE};
+    constexpr std::array text_effects = {BOLD, FAINT, ITALIC, UNDERLINE};
 
-    int get_effect_code(const effect& effect);
+    int get_effect_code(const text_effect& effect);
 
     struct style
     {

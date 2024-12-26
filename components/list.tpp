@@ -97,7 +97,7 @@ bool components::list<C>::handle_keyboard_event(const console::keyboard::key& ke
 
     if (!update_selected_item_index(key))
     {
-        return false;
+        return core::container_component<C>::handle_keyboard_event(key);
     }
 
     const std::optional<std::shared_ptr<C>> new_selected_item = this->get_component_at_index(selected_item_index);
