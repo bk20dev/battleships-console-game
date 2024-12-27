@@ -4,9 +4,19 @@ namespace core
 {
     struct position
     {
-        int x, y;
+        int x = 0, y = 0;
 
         position operator+(const position& other_position) const;
+    };
+
+    struct offset
+    {
+        int x = 0, y = 0;
+    };
+
+    struct size
+    {
+        int width, height;
     };
 
     inline position position::operator+(const position& other_position) const
@@ -16,9 +26,4 @@ namespace core
             .y = y + other_position.y
         };
     }
-
-    struct size
-    {
-        int width, height;
-    };
 }
