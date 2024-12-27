@@ -61,6 +61,28 @@ bool console::keyboard::key::is_arrow() const
     return is_vertical_arrow() || is_horizontal_arrow();
 }
 
+core::offset console::keyboard::key::get_arrow_offset() const
+{
+    if (!is_special())
+    {
+        return {};
+    }
+
+    switch (character)
+    {
+    case ARROW_UP:
+        return {.y = -1};
+    case ARROW_DOWN:
+        return {.y = 1};
+    case ARROW_RIGHT:
+        return {.x = 1};
+    case ARROW_LEFT:
+        return {.x = -1};
+    default:
+        return {};
+    }
+}
+
 void console::keyboard::keyboard::keyboard_input_listener()
 {
     while (true)

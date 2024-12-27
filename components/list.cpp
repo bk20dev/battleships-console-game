@@ -10,6 +10,8 @@ void components::list_item::paint()
 {
     const std::string styled_text = style.apply_to_text(text);
     console_view->write_at(0, 0, styled_text);
+
+    component::paint();
 }
 
 bool components::list_item::handle_keyboard_event(const console::keyboard::key& key)

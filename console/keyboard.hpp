@@ -3,6 +3,8 @@
 #include <queue>
 #include <thread>
 
+#include "../core/dimension.hpp"
+
 namespace console::keyboard
 {
     enum character
@@ -27,6 +29,8 @@ namespace console::keyboard
         [[nodiscard]] bool is_horizontal_arrow() const;
 
         [[nodiscard]] bool is_arrow() const;
+
+        [[nodiscard]] core::offset get_arrow_offset() const;
     };
 
     class keyboard
