@@ -26,7 +26,7 @@ namespace console
 
         virtual void write_at(int x, int y, const std::string& text);
 
-        [[nodiscard]] virtual std::shared_ptr<console_view> create_view(const core::position& offset) const;
+        [[nodiscard]] virtual std::shared_ptr<console_view> create_view(const core::offset& offset) const;
     };
 
     class console_view final : public console
@@ -38,6 +38,6 @@ namespace console
     public:
         console_view(const console& base_console, const core::position& position);
 
-        [[nodiscard]] std::shared_ptr<console_view> create_view(const core::position& offset) const override;
+        [[nodiscard]] std::shared_ptr<console_view> create_view(const core::offset& offset) const override;
     };
 }

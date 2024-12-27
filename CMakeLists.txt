@@ -24,4 +24,5 @@ add_executable(battleships_console_game main.cpp
         core/component_traits.hpp
         core/component_traits.cpp
         core/dimension.hpp
+        core/dimension.cpp
 )

@@ -2,28 +2,20 @@
 
 namespace core
 {
+    struct offset
+    {
+        int x = 0, y = 0;
+    };
+
     struct position
     {
         int x = 0, y = 0;
 
-        position operator+(const position& other_position) const;
-    };
-
-    struct offset
-    {
-        int x = 0, y = 0;
+        position operator+(const offset& offset_to_add) const;
     };
 
     struct size
     {
         int width, height;
     };
-
-    inline position position::operator+(const position& other_position) const
-    {
-        return position{
-            .x = x + other_position.x,
-            .y = y + other_position.y
-        };
-    }
 }

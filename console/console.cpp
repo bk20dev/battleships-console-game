@@ -28,9 +28,10 @@ void console::console::write_at(const int x, const int y, const std::string& tex
     output_stream << move_to(x, y) << text;
 }
 
-std::shared_ptr<console::console_view> console::console::create_view(const core::position& offset) const
+std::shared_ptr<console::console_view> console::console::create_view(const core::offset& offset) const
 {
-    return std::make_shared<console_view>(*this, offset);
+    const core::position view_position = {.x = offset.x, .y = offset.y};
+    return std::make_shared<console_view>(*this, view_position);
 }
 
 std::string console::console_view::move_to(const int x, const int y) const
@@ -44,7 +45,7 @@ console::console_view::console_view(const console& base_console, const core::pos
 {
 }
 
-std::shared_ptr<console::console_view> console::console_view::create_view(const core::position& offset) const
+std::shared_ptr<console::console_view> console::console_view::create_view(const core::offset& offset) const
 {
     const core::position new_position = position + offset;
     return std::make_shared<console_view>(*this, new_position);
