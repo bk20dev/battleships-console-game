@@ -16,6 +16,16 @@ namespace core
 
     struct size
     {
-        int width, height;
+        int width = 0, height = 0;
+    };
+
+    struct rectangle
+    {
+        position position;
+        size size;
+
+        [[nodiscard]] rectangle fitted_into(const rectangle& target_rectangle) const;
+
+        rectangle operator+(const offset& offset_to_add) const;
     };
 }
