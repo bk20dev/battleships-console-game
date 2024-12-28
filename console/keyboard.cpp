@@ -63,7 +63,7 @@ bool console::keyboard::key::is_arrow() const
 
 core::offset console::keyboard::key::get_arrow_offset() const
 {
-    if (!is_special())
+    if (!is_special)
     {
         return {};
     }

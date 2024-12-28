@@ -24,7 +24,7 @@ namespace console
 
         void set_cursor_display(bool display = true) const;
 
-        virtual void write_at(int x, int y, const std::string& text);
+        void write_at(int x, int y, const std::string& text);
 
         [[nodiscard]] virtual std::shared_ptr<console_view> create_view(const core::offset& offset) const;
     };
