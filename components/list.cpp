@@ -1,17 +1,9 @@
 #include "list.hpp"
 
 components::list_item::list_item(const int x, const int y, const std::shared_ptr<console::console>& console,
-                                 const std::string& text, const std::function<void()>& on_select)
-    : component(x, y, 0, 1, console), text(text), on_select(on_select)
+                                 const std::function<void()>& on_select)
+    : component(x, y, 0, 1, console), on_select(on_select)
 {
-}
-
-void components::list_item::paint()
-{
-    const std::string styled_text = style.apply_to_text(text);
-    console_view->write_at(0, 0, styled_text);
-
-    component::paint();
 }
 
 bool components::list_item::handle_keyboard_event(const console::keyboard::key& key)
@@ -47,4 +39,18 @@ void components::list_item::set_style(const console::style::style& new_style)
 {
     styleable::set_style(new_style);
     invalidate();
+}
+
+components::text_list_item::text_list_item(const int x, const int y, const std::shared_ptr<console::console>& console,
+                                           const std::string& text, const std::function<void()>& on_select)
+    : list_item(x, y, console, on_select), text(text)
+{
+}
+
+void components::text_list_item::paint()
+{
+    const std::string styled_text = style.apply_to_text(text);
+    console_view->write_at(0, 0, styled_text);
+
+    list_item::paint();
 }

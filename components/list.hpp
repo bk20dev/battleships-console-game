@@ -40,18 +40,15 @@ namespace components
         .background_color = console::style::color::CYAN
     };
 
-    class list_item final : public core::component, public core::component_traits::focusable,
-                            protected core::component_traits::styleable
+    class list_item : public core::component, public core::component_traits::focusable,
+                      protected core::component_traits::styleable
     {
-        std::string text;
-
+    protected:
         std::function<void()> on_select;
 
     public:
         list_item(int x, int y, const std::shared_ptr<console::console>& console,
-                  const std::string& text, const std::function<void()>& on_select = nullptr);
-
-        void paint() override;
+                  const std::function<void()>& on_select = nullptr);
 
         bool handle_keyboard_event(const console::keyboard::key& key) override;
 
@@ -60,6 +57,17 @@ namespace components
         void blur() override;
 
         void set_style(const console::style::style& new_style) override;
+    };
+
+    class text_list_item : public list_item
+    {
+        std::string text;
+
+    public:
+        text_list_item(int x, int y, const std::shared_ptr<console::console>& console,
+                       const std::string& text, const std::function<void()>& on_select);
+
+        void paint() override;
     };
 }
 
