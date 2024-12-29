@@ -59,7 +59,7 @@ namespace components
         void set_style(const console::style::style& new_style) override;
     };
 
-    class text_list_item : public list_item
+    class text_list_item final : public list_item
     {
         std::string text;
 
