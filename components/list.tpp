@@ -14,19 +14,6 @@ int components::list<C>::get_new_selected_item_index(const int index_delta) cons
     return (new_selected_item_index + children_component_count) % children_component_count;
 }
 
-inline int get_item_index_delta(const int key_character)
-{
-    switch (key_character)
-    {
-    case console::keyboard::character::ARROW_UP:
-        return -1;
-    case console::keyboard::character::ARROW_DOWN:
-        return 1;
-    default:
-        return 0;
-    }
-}
-
 template <class C> requires is_base_of_multiple_v<C, core::component, core::component_traits::focusable>
 bool components::list<C>::update_selected_item_index(const console::keyboard::key& key)
 {

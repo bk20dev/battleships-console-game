@@ -29,7 +29,14 @@ int main()
     console->set_cursor_display(false);
     console->clear();
 
-    const auto board_designer = std::make_shared<components::board_designer>(0, 0, console);
+    const auto board_designer = std::make_shared<components::board_designer>(
+        0, 0, console, [](const battleship& battleship)
+        {
+            std::cout << "Selected placement" << std::endl;
+        }, []
+        {
+            std::cout << "Cancelled placement" << std::endl;
+        });
 
     board_designer->set_selected_battleship(battleship{.rectangle = {.size = {.width = 4, .height = 1}}});
 

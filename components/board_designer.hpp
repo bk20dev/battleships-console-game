@@ -49,10 +49,16 @@ namespace components
 
         static std::string repeat_text(const std::string& text, int times);
 
+        std::function<void(const battleship& battleship)> on_submit_placement;
+
+        std::function<void()> on_cancel_placement;
+
         std::optional<battleship> selected_battleship;
 
     public:
-        board_designer(int x, int y, const std::shared_ptr<console::console>& console);
+        board_designer(int x, int y, const std::shared_ptr<console::console>& console,
+                       const std::function<void(const battleship& battleship)>& on_submit_placement,
+                       const std::function<void()>& on_cancel_placement);
 
         void paint_board() const;
 

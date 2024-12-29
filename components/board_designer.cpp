@@ -24,8 +24,11 @@ std::string components::board_designer::repeat_text(const std::string& text, con
     return result_text;
 }
 
-components::board_designer::board_designer(const int x, const int y, const std::shared_ptr<console::console>& console):
-    component(x, y, total_board_width, total_board_height, console)
+components::board_designer::board_designer(const int x, const int y, const std::shared_ptr<console::console>& console,
+                                           const std::function<void(const battleship& battleship)>& on_submit_placement,
+                                           const std::function<void()>& on_cancel_placement)
+    : component(x, y, total_board_width, total_board_height, console),
+      on_submit_placement(on_submit_placement), on_cancel_placement(on_cancel_placement)
 {
 }
 
@@ -77,6 +80,24 @@ bool components::board_designer::handle_keyboard_event(const console::keyboard::
     }
 
     const battleship selected_battleship_value = selected_battleship.value();
+
+    if (key == console::keyboard::character::ENTER)
+    {
+        if (on_submit_placement)
+        {
+            on_submit_placement(selected_battleship_value);
+        }
+        return true;
+    }
+
+    if (key == console::keyboard::character::ESCAPE)
+    {
+        if (on_cancel_placement)
+        {
+            on_cancel_placement();
+        }
+        return true;
+    }
 
     battleship updated_battleship = selected_battleship_value;
 
