@@ -76,20 +76,34 @@ bool components::board_designer::handle_keyboard_event(const console::keyboard::
         return false;
     }
 
-    if (!key.is_arrow())
+    const battleship selected_battleship_value = selected_battleship.value();
+
+    battleship updated_battleship = selected_battleship_value;
+
+    if (key.character == console::keyboard::character::SPACE)
     {
-        return false;
+        const battleship rotated_battleship = updated_battleship.rotated();
+        updated_battleship = rotated_battleship;
     }
 
-    const core::offset battleship_position_offset = key.get_arrow_offset();
+    if (key.is_arrow())
+    {
+        const core::offset battleship_position_offset = key.get_arrow_offset();
+        const battleship moved_battleship = updated_battleship.moved_by(battleship_position_offset);
+        updated_battleship = moved_battleship;
+    }
 
-    battleship selected_battleship_value = selected_battleship.value();
-    selected_battleship_value.rectangle = selected_battleship_value.rectangle + battleship_position_offset;
-    selected_battleship_value.rectangle = selected_battleship_value.rectangle.fitted_into(board_rectangle);
+    // Ensure the selected battleship stays on the board
+    updated_battleship.rectangle = updated_battleship.rectangle.fitted_into(board_rectangle);
 
-    selected_battleship = selected_battleship_value;
+    if (updated_battleship == selected_battleship_value)
+    {
+        return component::handle_keyboard_event(key);
+    }
+
+    selected_battleship = updated_battleship;
+
     invalidate();
-
     return true;
 }
 

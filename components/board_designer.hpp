@@ -7,6 +7,25 @@
 struct battleship
 {
     core::rectangle rectangle;
+
+    battleship rotated() const
+    {
+        return {
+            .rectangle = rectangle.rotated(),
+        };
+    }
+
+    battleship moved_by(const core::offset& offset) const
+    {
+        return {
+            .rectangle = rectangle + offset,
+        };
+    }
+
+    bool operator==(const battleship& other_battleship) const
+    {
+        return rectangle == other_battleship.rectangle;
+    }
 };
 
 namespace components
