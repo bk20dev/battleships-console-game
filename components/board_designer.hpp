@@ -54,8 +54,6 @@ namespace components
             .foreground_color = console::style::CYAN,
         };
 
-        static std::string repeat_text(const std::string& text, int times);
-
         std::function<void(const battleship& battleship)> on_submit_placement;
 
         std::function<void()> on_cancel_placement;
