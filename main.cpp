@@ -38,7 +38,14 @@ int main()
             std::cout << "Cancelled placement" << std::endl;
         });
 
-    board_designer->set_selected_battleship(battleship{.rectangle = {.size = {.width = 4, .height = 1}}});
+    board_designer->battleships = {
+        battleship{.id = 1, .rectangle = {.position = {3, 3}, .size = {4, 1}}},
+        battleship{.id = 2, .rectangle = {.position = {5, 5}, .size = {1, 2}}},
+        battleship{.id = 3, .rectangle = {.position = {1, 7}, .size = {3, 1}}},
+        battleship{.id = 4, .rectangle = {.position = {9, 9}, .size = {1, 1}}},
+    };
+
+    board_designer->set_selected_battleship(battleship{.id = 1, .rectangle = {.size = {.width = 4, .height = 1}}});
 
     board_designer->paint();
     std::cout << std::flush;

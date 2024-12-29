@@ -24,6 +24,19 @@ std::string components::board_designer::repeat_text(const std::string& text, con
     return result_text;
 }
 
+bool components::board_designer::is_battleship_selected(const battleship& battleship_to_check) const
+{
+    if (selected_battleship.has_value())
+    {
+        const battleship selected_battleship_value = selected_battleship.value();
+        if (selected_battleship_value.id == battleship_to_check.id)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 components::board_designer::board_designer(const int x, const int y, const std::shared_ptr<console::console>& console,
                                            const std::function<void(const battleship& battleship)>& on_submit_placement,
                                            const std::function<void()>& on_cancel_placement)
@@ -43,7 +56,8 @@ void components::board_designer::paint_board() const
     }
 }
 
-void components::board_designer::paint_battleship(const battleship& battleship_to_paint) const
+void components::board_designer::paint_battleship(
+    const battleship& battleship_to_paint, const console::style::style& style) const
 {
     const auto [position, size] = battleship_to_paint.rectangle;
 
@@ -53,7 +67,7 @@ void components::board_designer::paint_battleship(const battleship& battleship_t
         const int y = (position.y + row) * row_height;
 
         const std::string battleship_row = repeat_text("\u2593", size.width * column_width);
-        const std::string styled_battleship_row = selected_ship_style.apply_to_text(battleship_row);
+        const std::string styled_battleship_row = style.apply_to_text(battleship_row);
 
         console_view->write_at(x, y, styled_battleship_row);
     }
@@ -63,10 +77,21 @@ void components::board_designer::paint()
 {
     paint_board();
 
+    for (const auto& battleship : battleships)
+    {
+        if (is_battleship_selected(battleship))
+        {
+            continue;
+        }
+
+        console::style::style battleship_style = default_battleship_style;
+        paint_battleship(battleship, battleship_style);
+    }
+
     if (selected_battleship.has_value())
     {
         const battleship selected_battleship_value = selected_battleship.value();
-        paint_battleship(selected_battleship_value);
+        paint_battleship(selected_battleship_value, selected_battleship_style);
     }
 
     component::paint();

@@ -6,11 +6,13 @@
 
 struct battleship
 {
+    int id = -1;
     core::rectangle rectangle;
 
     battleship rotated() const
     {
         return {
+            .id = id,
             .rectangle = rectangle.rotated(),
         };
     }
@@ -18,13 +20,14 @@ struct battleship
     battleship moved_by(const core::offset& offset) const
     {
         return {
+            .id = id,
             .rectangle = rectangle + offset,
         };
     }
 
     bool operator==(const battleship& other_battleship) const
     {
-        return rectangle == other_battleship.rectangle;
+        return id == other_battleship.id && rectangle == other_battleship.rectangle;
     }
 };
 
@@ -43,7 +46,11 @@ namespace components
             .foreground_color = console::style::BRIGHT_BLACK,
         };
 
-        static constexpr console::style::style selected_ship_style = {
+        static constexpr console::style::style default_battleship_style = {
+            .foreground_color = console::style::WHITE,
+        };
+
+        static constexpr console::style::style selected_battleship_style = {
             .foreground_color = console::style::CYAN,
         };
 
@@ -55,14 +62,19 @@ namespace components
 
         std::optional<battleship> selected_battleship;
 
+        bool is_battleship_selected(const battleship& battleship_to_check) const;
+
     public:
         board_designer(int x, int y, const std::shared_ptr<console::console>& console,
                        const std::function<void(const battleship& battleship)>& on_submit_placement,
                        const std::function<void()>& on_cancel_placement);
 
+        std::vector<battleship> battleships{};
+
+
         void paint_board() const;
 
-        void paint_battleship(const battleship& battleship_to_paint) const;
+        void paint_battleship(const battleship& battleship_to_paint, const console::style::style& style) const;
 
         void paint() override;
 
