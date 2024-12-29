@@ -32,6 +32,8 @@ namespace core
 
         [[nodiscard]] rectangle rotated() const;
 
+        [[nodiscard]] rectangle normalized() const;
+
         rectangle operator+(const offset& offset_to_add) const;
 
         bool operator==(const rectangle& other_rectangle) const;

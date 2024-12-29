@@ -65,6 +65,15 @@ core::rectangle core::rectangle::rotated() const
     };
 }
 
+core::rectangle core::rectangle::normalized() const
+{
+    if (size.width < size.height)
+    {
+        return rotated();
+    }
+    return *this;
+}
+
 core::rectangle core::rectangle::operator+(const offset& offset_to_add) const
 {
     return {

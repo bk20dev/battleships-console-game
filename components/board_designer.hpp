@@ -25,6 +25,14 @@ struct battleship
         };
     }
 
+    battleship normalized() const
+    {
+        return {
+            .id = id,
+            .rectangle = rectangle.normalized(),
+        };
+    }
+
     bool operator==(const battleship& other_battleship) const
     {
         return id == other_battleship.id && rectangle == other_battleship.rectangle;
