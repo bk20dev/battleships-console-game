@@ -95,7 +95,7 @@ void components::input::paint()
 
 bool components::input::handle_keyboard_event(const console::keyboard::key& key)
 {
-    if (key.character == console::keyboard::character::BACKSPACE)
+    if (key == console::keyboard::character::BACKSPACE)
     {
         if (!text.empty())
         {

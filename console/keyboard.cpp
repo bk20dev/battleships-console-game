@@ -44,6 +44,12 @@ console::keyboard::key get_pressed_key_from_stdin()
     return console::keyboard::key{.is_special = true, .character = pressed_escape_key};
 }
 
+bool console::keyboard::key::operator==(const enum character& character) const
+{
+    if (is_special) return false;
+    return this->character == character;
+}
+
 bool console::keyboard::key::is_vertical_arrow() const
 {
     if (!is_special) return false;

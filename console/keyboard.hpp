@@ -24,6 +24,8 @@ namespace console::keyboard
         int character;
         bool is_special;
 
+        bool operator==(const enum character& character) const;
+
         [[nodiscard]] bool is_vertical_arrow() const;
 
         [[nodiscard]] bool is_horizontal_arrow() const;

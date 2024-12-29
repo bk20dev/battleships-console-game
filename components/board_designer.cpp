@@ -80,7 +80,7 @@ bool components::board_designer::handle_keyboard_event(const console::keyboard::
 
     battleship updated_battleship = selected_battleship_value;
 
-    if (key.character == console::keyboard::character::SPACE)
+    if (key == console::keyboard::character::SPACE)
     {
         const battleship rotated_battleship = updated_battleship.rotated();
         updated_battleship = rotated_battleship;

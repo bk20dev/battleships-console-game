@@ -18,7 +18,7 @@ bool components::list_item::handle_keyboard_event(const console::keyboard::key& 
 {
     for (const auto& select_key : list_item_select_keys)
     {
-        if (key.character == select_key)
+        if (key == select_key)
         {
             if (on_select)
             {
