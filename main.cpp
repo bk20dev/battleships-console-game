@@ -1,5 +1,7 @@
 #include <iostream>
+#include <__ranges/all.h>
 
+#include "components/battleship_selector.hpp"
 #include "components/board_designer.hpp"
 #include "core/component.hpp"
 
@@ -29,33 +31,35 @@ int main()
     console->set_cursor_display(false);
     console->clear();
 
-    const auto board_designer = std::make_shared<components::board_designer>(
-        0, 0, console, [](const battleship& battleship)
-        {
-            std::cout << "Selected placement" << std::endl;
-        }, []
-        {
-            std::cout << "Cancelled placement" << std::endl;
-        });
-
-    board_designer->battleships = {
-        battleship{.id = 1, .rectangle = {.position = {3, 3}, .size = {4, 1}}},
-        battleship{.id = 2, .rectangle = {.position = {5, 5}, .size = {1, 2}}},
-        battleship{.id = 3, .rectangle = {.position = {1, 7}, .size = {3, 1}}},
-        battleship{.id = 4, .rectangle = {.position = {9, 9}, .size = {1, 1}}},
+    const std::vector all_battleships = {
+        battleship{.id = 0, .rectangle = {.size = {.height = 4, .width = 1}}},
+        battleship{.id = 1, .rectangle = {.size = {.height = 1, .width = 3}}},
+        battleship{.id = 2, .rectangle = {.size = {.height = 3, .width = 1}}},
+        battleship{.id = 3, .rectangle = {.size = {.height = 1, .width = 2}}},
+        battleship{.id = 4, .rectangle = {.size = {.height = 1, .width = 2}}},
+        battleship{.id = 5, .rectangle = {.size = {.height = 1, .width = 2}}},
+        battleship{.id = 6, .rectangle = {.size = {.height = 1, .width = 1}}},
+        battleship{.id = 7, .rectangle = {.size = {.height = 1, .width = 1}}},
+        battleship{.id = 8, .rectangle = {.size = {.height = 1, .width = 1}}},
+        battleship{.id = 9, .rectangle = {.size = {.height = 1, .width = 1}}},
     };
 
-    board_designer->set_selected_battleship(battleship{.id = 1, .rectangle = {.size = {.width = 4, .height = 1}}});
+    const auto battleship_selector = std::make_shared<components::battleship_selector>(
+        0, 0, console, all_battleships, [](const battleship& battleship)
+        {
+            std::cout << std::format("Selected #{}", battleship.id) << std::endl;
+        });
 
-    board_designer->paint();
+    battleship_selector->paint();
     std::cout << std::flush;
 
-    std::thread keyboard_input_thread([&keyboard, &board_designer]()
+    std::thread keyboard_input_thread([&keyboard, &battleship_selector]()
     {
-        keyboard_input_listener(keyboard, board_designer);
+        keyboard_input_listener(keyboard, battleship_selector);
     });
 
     keyboard_input_thread.join();
+
 
     return 0;
 }

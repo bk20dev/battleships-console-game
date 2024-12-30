@@ -77,7 +77,6 @@ namespace components
 
         std::vector<battleship> battleships{};
 
-
         void paint_board() const;
 
         void paint_battleship(const battleship& battleship_to_paint, const console::style::style& style) const;
