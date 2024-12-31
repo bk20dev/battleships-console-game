@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../console/style.hpp"
 #include "../core/component.hpp"
 #include "../core/component_traits.hpp"
 #include "../models/battleship.hpp"
@@ -9,6 +8,8 @@ namespace components
 {
     class board_designer final : public core::component, public core::component_traits::focusable
     {
+        static constexpr std::string board_fill_character = "\u2591";
+
         const std::vector<models::battleship>& placed_battleships;
 
         const std::vector<models::battleship>& misplaced_battleships;
@@ -23,11 +24,9 @@ namespace components
 
         bool is_battleship_misplaced(const models::battleship& battleship_to_check) const;
 
-        console::style::style get_battleship_style(const models::battleship& battleship_to_style) const;
-
-        void paint_battleship(const models::battleship& battleship_to_paint, const console::style::style& style) const;
-
         void paint_board() const;
+
+        void paint_battleships() const;
 
     public:
         board_designer(int x, int y, const std::shared_ptr<console::console>& console,

@@ -1,15 +1,15 @@
 #include "board_designer.hpp"
 
+#include "battleship.hpp"
 #include "../constants/constants.hpp"
 #include "../utils/text.hpp"
 
 namespace
 {
-    constexpr int row_height = 1;
-    constexpr int column_width = 2;
+    constexpr core::size pixel_size = {.width = 2, .height = 1};
 
-    constexpr int total_board_width = constants::board_column_count * column_width;
-    constexpr int total_board_height = constants::board_row_count * row_height;
+    constexpr int total_board_width = constants::board_column_count * pixel_size.width;
+    constexpr int total_board_height = constants::board_row_count * pixel_size.height;
 
     constexpr core::rectangle board_rectangle = {
         .size = {
@@ -23,18 +23,6 @@ namespace
 {
     constexpr console::style::style board_style = {
         .foreground_color = console::style::BRIGHT_BLACK,
-    };
-
-    constexpr console::style::style default_battleship_style = {
-        .foreground_color = console::style::WHITE,
-    };
-
-    constexpr console::style::style selected_battleship_style = {
-        .foreground_color = console::style::CYAN,
-    };
-
-    constexpr console::style::style misplaced_battleship_style = {
-        .foreground_color = console::style::RED,
     };
 }
 
@@ -79,48 +67,22 @@ components::board_designer::board_designer(
 {
 }
 
-console::style::style components::board_designer::get_battleship_style(
-    const models::battleship& battleship_to_style) const
-{
-    if (is_battleship_misplaced(battleship_to_style))
-    {
-        return misplaced_battleship_style;
-    }
-    return default_battleship_style;
-}
-
-void components::board_designer::paint_battleship(
-    const models::battleship& battleship_to_paint, const console::style::style& style) const
-{
-    const auto [position, size] = battleship_to_paint.rectangle;
-
-    for (int row = 0; row < size.height; row++)
-    {
-        const int x = position.x * column_width;
-        const int y = (position.y + row) * row_height;
-
-        const std::string battleship_row = utils::repeat_string("\u2593", size.width * column_width);
-        const std::string styled_battleship_row = style.apply_to_text(battleship_row);
-
-        console_view->write_at(x, y, styled_battleship_row);
-    }
-}
-
 void components::board_designer::paint_board() const
 {
-    for (int row = 0; row < size.height; row++)
-    {
-        const std::string board_row = utils::repeat_string("\u2591", constants::board_column_count * column_width);
-        const std::string styled_board_row = board_style.apply_to_text(board_row);
+    static constexpr core::rectangle board_fill_rectangle = {
+        .size = {
+            .height = total_board_height,
+            .width = total_board_width,
+        },
+    };
 
-        console_view->write_at(0, row, styled_board_row);
-    }
+    const std::string board_style_sequence = board_style.to_control_sequence();
+
+    console_view->fill_rectangle(board_fill_rectangle, board_fill_character, board_style_sequence);
 }
 
-void components::board_designer::paint()
+void components::board_designer::paint_battleships() const
 {
-    paint_board();
-
     for (const auto& placed_battleship : placed_battleships)
     {
         if (is_battleship_selected(placed_battleship))
@@ -128,15 +90,21 @@ void components::board_designer::paint()
             continue;
         }
 
-        console::style::style battleship_style = get_battleship_style(placed_battleship);
-        paint_battleship(placed_battleship, battleship_style);
+        const bool is_misplaced = is_battleship_misplaced(placed_battleship);
+        battleship::paint(console_view, placed_battleship, false, is_misplaced, pixel_size);
     }
 
     if (selected_battleship.has_value())
     {
         const models::battleship selected_battleship_value = selected_battleship.value();
-        paint_battleship(selected_battleship_value, selected_battleship_style);
+        battleship::paint(console_view, selected_battleship_value, true, false, pixel_size);
     }
+}
+
+void components::board_designer::paint()
+{
+    paint_board();
+    paint_battleships();
 
     component::paint();
 }
