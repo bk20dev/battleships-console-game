@@ -38,11 +38,11 @@ namespace
     };
 }
 
-bool components::board_designer::is_battleship_selected(const battleship& battleship_to_check) const
+bool components::board_designer::is_battleship_selected(const models::battleship& battleship_to_check) const
 {
     if (selected_battleship.has_value())
     {
-        const battleship selected_battleship_value = selected_battleship.value();
+        const models::battleship selected_battleship_value = selected_battleship.value();
         if (selected_battleship_value.id == battleship_to_check.id)
         {
             return true;
@@ -58,27 +58,29 @@ bool vector_has_if(const std::vector<T>& vector, const std::function<bool(const 
     return found_element != vector.end();
 }
 
-bool components::board_designer::is_battleship_misplaced(const battleship& battleship_to_check) const
+bool components::board_designer::is_battleship_misplaced(const models::battleship& battleship_to_check) const
 {
-    const std::function predicate = [battleship_to_check](const battleship& battleship)
+    const std::function predicate = [battleship_to_check](const models::battleship& battleship)
     {
         return battleship_to_check.id == battleship.id;
     };
     return vector_has_if(misplaced_battleships, predicate);
 }
 
-components::board_designer::board_designer(const int x, const int y, const std::shared_ptr<console::console>& console,
-                                           const std::vector<battleship>& placed_battleships,
-                                           const std::vector<battleship>& misplaced_battleships,
-                                           const std::function<void(const battleship& battleship)>& on_submit_placement,
-                                           const std::function<void()>& on_cancel_placement)
-    : component(x, y, total_board_width, total_board_height, console),
-      placed_battleships(placed_battleships), misplaced_battleships(misplaced_battleships),
-      on_submit_placement(on_submit_placement), on_cancel_placement(on_cancel_placement)
+components::board_designer::board_designer(
+    const int x, const int y, const std::shared_ptr<console::console>& console,
+    const std::vector<models::battleship>& placed_battleships,
+    const std::vector<models::battleship>& misplaced_battleships,
+    const std::function<void(const models::battleship& battleship)>& on_submit_placement,
+    const std::function<void()>& on_cancel_placement
+) : component(x, y, total_board_width, total_board_height, console),
+    placed_battleships(placed_battleships), misplaced_battleships(misplaced_battleships),
+    on_submit_placement(on_submit_placement), on_cancel_placement(on_cancel_placement)
 {
 }
 
-console::style::style components::board_designer::get_battleship_style(const battleship& battleship_to_style) const
+console::style::style components::board_designer::get_battleship_style(
+    const models::battleship& battleship_to_style) const
 {
     if (is_battleship_misplaced(battleship_to_style))
     {
@@ -88,7 +90,7 @@ console::style::style components::board_designer::get_battleship_style(const bat
 }
 
 void components::board_designer::paint_battleship(
-    const battleship& battleship_to_paint, const console::style::style& style) const
+    const models::battleship& battleship_to_paint, const console::style::style& style) const
 {
     const auto [position, size] = battleship_to_paint.rectangle;
 
@@ -132,7 +134,7 @@ void components::board_designer::paint()
 
     if (selected_battleship.has_value())
     {
-        const battleship selected_battleship_value = selected_battleship.value();
+        const models::battleship selected_battleship_value = selected_battleship.value();
         paint_battleship(selected_battleship_value, selected_battleship_style);
     }
 
@@ -146,7 +148,7 @@ bool components::board_designer::handle_keyboard_event(const console::keyboard::
         return false;
     }
 
-    const battleship selected_battleship_value = selected_battleship.value();
+    const models::battleship selected_battleship_value = selected_battleship.value();
 
     if (key == console::keyboard::character::ENTER)
     {
@@ -166,18 +168,18 @@ bool components::board_designer::handle_keyboard_event(const console::keyboard::
         return true;
     }
 
-    battleship updated_battleship = selected_battleship_value;
+    models::battleship updated_battleship = selected_battleship_value;
 
     if (key == console::keyboard::character::SPACE)
     {
-        const battleship rotated_battleship = updated_battleship.rotated();
+        const models::battleship rotated_battleship = updated_battleship.rotated();
         updated_battleship = rotated_battleship;
     }
 
     if (key.is_arrow())
     {
         const core::offset battleship_position_offset = key.get_arrow_offset();
-        const battleship moved_battleship = updated_battleship.moved_by(battleship_position_offset);
+        const models::battleship moved_battleship = updated_battleship.moved_by(battleship_position_offset);
         updated_battleship = moved_battleship;
     }
 
@@ -195,7 +197,7 @@ bool components::board_designer::handle_keyboard_event(const console::keyboard::
     return true;
 }
 
-void components::board_designer::set_selected_battleship(const std::optional<battleship>& battleship_to_select)
+void components::board_designer::set_selected_battleship(const std::optional<models::battleship>& battleship_to_select)
 {
     selected_battleship = battleship_to_select;
     invalidate();

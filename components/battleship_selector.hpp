@@ -17,11 +17,11 @@ namespace components
             .foreground_color = console::style::color::CYAN
         };
 
-        battleship normalized_battleship;
+        models::battleship normalized_battleship;
 
     public:
         battleship_selector_item(int x, int y, const std::shared_ptr<console::console>& console,
-                                 const battleship& battleship, const std::function<void()>& on_select);
+                                 const models::battleship& battleship, const std::function<void()>& on_select);
 
         void paint() override;
 
@@ -30,26 +30,28 @@ namespace components
         void blur() override;
     };
 
-    class battleship_selector final : public core::component
+    class battleship_selector final : public core::component, public core::component_traits::focusable
     {
-        std::vector<battleship> battleships;
+        std::vector<models::battleship> battleships;
         std::shared_ptr<list<battleship_selector_item>> battleship_selector_list;
 
-        std::function<void(const battleship& battleship)> on_battleship_select;
+        std::function<void(const models::battleship& battleship_to_select)> on_battleship_select;
 
-        void add_battleships_to_selector_list(const std::vector<battleship>& battleships_to_add);
+        void add_battleships_to_selector_list(const std::vector<models::battleship>& battleships_to_add);
 
-        void select_battleship(const battleship& battleship_to_select) const;
+        void select_battleship(const models::battleship& battleship_to_select) const;
 
     public:
         battleship_selector(int x, int y, const std::shared_ptr<console::console>& console,
-                            const std::vector<battleship>& battleships,
+                            const std::vector<models::battleship>& battleships,
                             const std::shared_ptr<list<battleship_selector_item>>& battleship_selector_list,
-                            const std::function<void(const battleship& battleship)>& on_battleship_select);
+                            const std::function<void(const models::battleship& battleship_to_select)>&
+                            on_battleship_select);
 
         battleship_selector(int x, int y, const std::shared_ptr<console::console>& console,
-                            const std::vector<battleship>& battleships,
-                            const std::function<void(const battleship& battleship)>& on_battleship_select);
+                            const std::vector<models::battleship>& battleships,
+                            const std::function<void(const models::battleship& battleship_to_select)>&
+                            on_battleship_select);
 
         void paint() override;
 

@@ -4,7 +4,7 @@
 
 components::battleship_selector_item::battleship_selector_item(
     const int x, const int y, const std::shared_ptr<console::console>& console,
-    const battleship& battleship, const std::function<void()>& on_select)
+    const models::battleship& battleship, const std::function<void()>& on_select)
     : list_item(x, y, console, on_select), normalized_battleship(battleship.normalized())
 {
     const auto [width, height] = battleship.rectangle.size;
@@ -38,11 +38,11 @@ void components::battleship_selector_item::blur()
 }
 
 void components::battleship_selector::add_battleships_to_selector_list(
-    const std::vector<battleship>& battleships_to_add)
+    const std::vector<models::battleship>& battleships_to_add)
 {
     for (int i = 0; i < battleships_to_add.size(); i++)
     {
-        const battleship battleship_to_add = battleships_to_add[i];
+        const models::battleship battleship_to_add = battleships_to_add[i];
         const auto battleship_selector_item = std::make_shared<components::battleship_selector_item>(
             0, i, console_view, battleship_to_add, [this, battleship_to_add]
             {
@@ -52,16 +52,16 @@ void components::battleship_selector::add_battleships_to_selector_list(
     }
 }
 
-void components::battleship_selector::select_battleship(const battleship& battleship_to_select) const
+void components::battleship_selector::select_battleship(const models::battleship& battleship_to_select) const
 {
     on_battleship_select(battleship_to_select);
 }
 
 components::battleship_selector::battleship_selector(
     const int x, const int y, const std::shared_ptr<console::console>& console,
-    const std::vector<battleship>& battleships,
+    const std::vector<models::battleship>& battleships,
     const std::shared_ptr<list<battleship_selector_item>>& battleship_selector_list,
-    const std::function<void(const battleship& battleship)>& on_battleship_select)
+    const std::function<void(const models::battleship& battleship_to_select)>& on_battleship_select)
     : component(x, y, 0, 0, console),
       battleships(battleships),
       battleship_selector_list(battleship_selector_list),
@@ -72,8 +72,8 @@ components::battleship_selector::battleship_selector(
 
 components::battleship_selector::battleship_selector(
     const int x, const int y, const std::shared_ptr<console::console>& console,
-    const std::vector<battleship>& battleships,
-    const std::function<void(const battleship& battleship)>& on_battleship_select)
+    const std::vector<models::battleship>& battleships,
+    const std::function<void(const models::battleship& battleship_to_select)>& on_battleship_select)
     : battleship_selector(
         x, y, console, battleships,
         std::make_shared<list<battleship_selector_item>>(0, 0, console),
