@@ -4,6 +4,8 @@ project(battleships_console_game)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(battleships_console_game main.cpp
+        components/battleship.hpp
+        components/battleship.cpp
         components/battleship_selector.hpp
         components/battleship_selector.cpp
         components/board_designer.hpp
