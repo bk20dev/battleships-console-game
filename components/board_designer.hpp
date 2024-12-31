@@ -1,8 +1,8 @@
 #pragma once
 
 #include "../console/style.hpp"
-#include "../constants/constants.hpp"
 #include "../core/component.hpp"
+#include "../core/component_traits.hpp"
 
 struct battleship
 {
@@ -41,26 +41,11 @@ struct battleship
 
 namespace components
 {
-    class board_designer final : public core::component
+    class board_designer final : public core::component, public core::component_traits::focusable
     {
-        static constexpr core::rectangle board_rectangle = {
-            .size = {
-                .width = constants::board_column_count,
-                .height = constants::board_row_count,
-            },
-        };
+        const std::vector<battleship>& placed_battleships;
 
-        static constexpr console::style::style board_style = {
-            .foreground_color = console::style::BRIGHT_BLACK,
-        };
-
-        static constexpr console::style::style default_battleship_style = {
-            .foreground_color = console::style::WHITE,
-        };
-
-        static constexpr console::style::style selected_battleship_style = {
-            .foreground_color = console::style::CYAN,
-        };
+        const std::vector<battleship>& misplaced_battleships;
 
         std::function<void(const battleship& battleship)> on_submit_placement;
 
@@ -70,16 +55,20 @@ namespace components
 
         bool is_battleship_selected(const battleship& battleship_to_check) const;
 
-    public:
-        board_designer(int x, int y, const std::shared_ptr<console::console>& console,
-                       const std::function<void(const battleship& battleship)>& on_submit_placement,
-                       const std::function<void()>& on_cancel_placement);
+        bool is_battleship_misplaced(const battleship& battleship_to_check) const;
 
-        std::vector<battleship> battleships{};
+        console::style::style get_battleship_style(const battleship& battleship_to_style) const;
+
+        void paint_battleship(const battleship& battleship_to_paint, const console::style::style& style) const;
 
         void paint_board() const;
 
-        void paint_battleship(const battleship& battleship_to_paint, const console::style::style& style) const;
+    public:
+        board_designer(int x, int y, const std::shared_ptr<console::console>& console,
+                       const std::vector<battleship>& placed_battleships,
+                       const std::vector<battleship>& misplaced_battleships,
+                       const std::function<void(const battleship& battleship)>& on_submit_placement,
+                       const std::function<void()>& on_cancel_placement);
 
         void paint() override;
 

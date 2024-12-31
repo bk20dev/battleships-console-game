@@ -10,6 +10,32 @@ namespace
 
     constexpr int total_board_width = constants::board_column_count * column_width;
     constexpr int total_board_height = constants::board_row_count * row_height;
+
+    constexpr core::rectangle board_rectangle = {
+        .size = {
+            .width = constants::board_column_count,
+            .height = constants::board_row_count,
+        },
+    };
+}
+
+namespace
+{
+    constexpr console::style::style board_style = {
+        .foreground_color = console::style::BRIGHT_BLACK,
+    };
+
+    constexpr console::style::style default_battleship_style = {
+        .foreground_color = console::style::WHITE,
+    };
+
+    constexpr console::style::style selected_battleship_style = {
+        .foreground_color = console::style::CYAN,
+    };
+
+    constexpr console::style::style misplaced_battleship_style = {
+        .foreground_color = console::style::RED,
+    };
 }
 
 bool components::board_designer::is_battleship_selected(const battleship& battleship_to_check) const
@@ -25,23 +51,40 @@ bool components::board_designer::is_battleship_selected(const battleship& battle
     return false;
 }
 
+template <typename T>
+bool vector_has_if(const std::vector<T>& vector, const std::function<bool(const T&)>& predicate)
+{
+    const auto found_element = std::find_if(vector.begin(), vector.end(), predicate);
+    return found_element != vector.end();
+}
+
+bool components::board_designer::is_battleship_misplaced(const battleship& battleship_to_check) const
+{
+    const std::function predicate = [battleship_to_check](const battleship& battleship)
+    {
+        return battleship_to_check.id == battleship.id;
+    };
+    return vector_has_if(misplaced_battleships, predicate);
+}
+
 components::board_designer::board_designer(const int x, const int y, const std::shared_ptr<console::console>& console,
+                                           const std::vector<battleship>& placed_battleships,
+                                           const std::vector<battleship>& misplaced_battleships,
                                            const std::function<void(const battleship& battleship)>& on_submit_placement,
                                            const std::function<void()>& on_cancel_placement)
     : component(x, y, total_board_width, total_board_height, console),
+      placed_battleships(placed_battleships), misplaced_battleships(misplaced_battleships),
       on_submit_placement(on_submit_placement), on_cancel_placement(on_cancel_placement)
 {
 }
 
-void components::board_designer::paint_board() const
+console::style::style components::board_designer::get_battleship_style(const battleship& battleship_to_style) const
 {
-    for (int row = 0; row < size.height; row++)
+    if (is_battleship_misplaced(battleship_to_style))
     {
-        const std::string board_row = utils::repeat_string("\u2591", constants::board_column_count * column_width);
-        const std::string styled_board_row = board_style.apply_to_text(board_row);
-
-        console_view->write_at(0, row, styled_board_row);
+        return misplaced_battleship_style;
     }
+    return default_battleship_style;
 }
 
 void components::board_designer::paint_battleship(
@@ -61,19 +104,30 @@ void components::board_designer::paint_battleship(
     }
 }
 
+void components::board_designer::paint_board() const
+{
+    for (int row = 0; row < size.height; row++)
+    {
+        const std::string board_row = utils::repeat_string("\u2591", constants::board_column_count * column_width);
+        const std::string styled_board_row = board_style.apply_to_text(board_row);
+
+        console_view->write_at(0, row, styled_board_row);
+    }
+}
+
 void components::board_designer::paint()
 {
     paint_board();
 
-    for (const auto& battleship : battleships)
+    for (const auto& placed_battleship : placed_battleships)
     {
-        if (is_battleship_selected(battleship))
+        if (is_battleship_selected(placed_battleship))
         {
             continue;
         }
 
-        console::style::style battleship_style = default_battleship_style;
-        paint_battleship(battleship, battleship_style);
+        console::style::style battleship_style = get_battleship_style(placed_battleship);
+        paint_battleship(placed_battleship, battleship_style);
     }
 
     if (selected_battleship.has_value())
