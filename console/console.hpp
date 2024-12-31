@@ -26,6 +26,9 @@ namespace console
 
         void write_at(int x, int y, const std::string& text);
 
+        void fill_rectangle(const core::rectangle& rectangle, const std::string& character,
+                            const std::string& line_prefix = "") const;
+
         [[nodiscard]] virtual std::shared_ptr<console_view> create_view(const core::offset& offset) const;
     };
 

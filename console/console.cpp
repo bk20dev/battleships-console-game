@@ -1,5 +1,7 @@
 #include "console.hpp"
 
+#include "../utils/text.hpp"
+
 console::console::console(std::ostream& output_stream)
     : output_stream(output_stream)
 {
@@ -26,6 +28,18 @@ std::string console::console::move_to(const int x, const int y) const
 void console::console::write_at(const int x, const int y, const std::string& text)
 {
     output_stream << move_to(x, y) << text;
+}
+
+void console::console::fill_rectangle(const core::rectangle& rectangle, const std::string& character,
+                                      const std::string& line_prefix) const
+{
+    const auto [position, size] = rectangle;
+
+    for (int y = position.y; y < position.y + size.height; y++)
+    {
+        const std::string row_text = utils::repeat_string(character, size.width);
+        output_stream << move_to(position.x, y) << line_prefix << row_text;
+    }
 }
 
 std::shared_ptr<console::console_view> console::console::create_view(const core::offset& offset) const
