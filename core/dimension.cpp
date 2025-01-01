@@ -37,7 +37,7 @@ core::rectangle core::rectangle::fitted_into(const rectangle& target_rectangle) 
 
     if (width > target_width || height > target_height)
     {
-        throw new std::range_error("The target rectangle is too small.");
+        throw std::range_error("The target rectangle is too small.");
     }
 
     const core::position result_position = {

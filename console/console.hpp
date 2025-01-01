@@ -24,7 +24,7 @@ namespace console
 
         void set_cursor_display(bool display = true) const;
 
-        void write_at(int x, int y, const std::string& text);
+        void write_at(int x, int y, const std::string& text) const;
 
         void fill_rectangle(const core::rectangle& rectangle, const std::string& character,
                             const std::string& line_prefix = "") const;

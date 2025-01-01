@@ -25,7 +25,7 @@ std::string console::console::move_to(const int x, const int y) const
     return std::format("\033[{};{}H", row, column);
 }
 
-void console::console::write_at(const int x, const int y, const std::string& text)
+void console::console::write_at(const int x, const int y, const std::string& text) const
 {
     output_stream << move_to(x, y) << text;
 }
