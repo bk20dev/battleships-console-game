@@ -8,48 +8,31 @@
 
 namespace components
 {
-    class battleship_selector_item final : public list_item
-    {
-        static constexpr console::style::style default_battleship_item_style = {
-        };
-
-        static constexpr console::style::style selected_battleship_item_style = {
-            .foreground_color = console::style::color::CYAN
-        };
-
-        models::battleship normalized_battleship;
-
-    public:
-        battleship_selector_item(int x, int y, const std::shared_ptr<console::console>& console,
-                                 const models::battleship& battleship, const std::function<void()>& on_select);
-
-        void paint() override;
-
-        void focus() override;
-
-        void blur() override;
-    };
-
     class battleship_selector final : public core::component, public core::component_traits::focusable
     {
-        std::vector<models::battleship> battleships;
-        std::shared_ptr<list<battleship_selector_item>> battleship_selector_list;
+        const std::vector<models::battleship>& all_battleships;
+
+        const std::vector<models::battleship>& placed_battleships;
+
+        const std::vector<models::battleship>& misplaced_battleships;
 
         std::function<void(const models::battleship& battleship_to_select)> on_battleship_select;
 
-        void add_battleships_to_selector_list(const std::vector<models::battleship>& battleships_to_add);
+        int selected_battleship_index = 0;
 
-        void select_battleship(const models::battleship& battleship_to_select) const;
+        bool is_battleship_misplaced(const models::battleship& battleship_to_check) const;
+
+        void paint_battleships() const;
+
+        void update_selected_battleship_index(int selected_index_delta);
+
+        std::optional<models::battleship> get_selected_battleship() const;
 
     public:
         battleship_selector(int x, int y, const std::shared_ptr<console::console>& console,
-                            const std::vector<models::battleship>& battleships,
-                            const std::shared_ptr<list<battleship_selector_item>>& battleship_selector_list,
-                            const std::function<void(const models::battleship& battleship_to_select)>&
-                            on_battleship_select);
-
-        battleship_selector(int x, int y, const std::shared_ptr<console::console>& console,
-                            const std::vector<models::battleship>& battleships,
+                            const std::vector<models::battleship>& all_battleships,
+                            const std::vector<models::battleship>& placed_battleships,
+                            const std::vector<models::battleship>& misplaced_battleships,
                             const std::function<void(const models::battleship& battleship_to_select)>&
                             on_battleship_select);
 

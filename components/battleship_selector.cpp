@@ -1,93 +1,123 @@
 #include "battleship_selector.hpp"
 
-#include "../utils/text.hpp"
+#include "battleship.hpp"
 
-components::battleship_selector_item::battleship_selector_item(
-    const int x, const int y, const std::shared_ptr<console::console>& console,
-    const models::battleship& battleship, const std::function<void()>& on_select)
-    : list_item(x, y, console, on_select), normalized_battleship(battleship.normalized())
+namespace
 {
-    const auto [width, height] = battleship.rectangle.size;
-
-    size.width = std::max(width, height);
-    size.height = std::min(width, height);
+    constexpr core::size pixel_size = {.width = 2, .height = 1};
 }
 
-void components::battleship_selector_item::paint()
+template <typename T>
+bool vector_has_if(const std::vector<T>& vector, const std::function<bool(const T&)>& predicate)
 {
-    const int battleship_length = normalized_battleship.rectangle.size.width;
-
-    const std::string battleship_row = utils::repeat_string("\u2593", battleship_length * 2);
-    const std::string styled_battleship_row = style.apply_to_text(battleship_row);
-
-    console_view->write_at(0, 0, styled_battleship_row);
-
-    list_item::paint();
+    const auto found_element = std::find_if(vector.begin(), vector.end(), predicate);
+    return found_element != vector.end();
 }
 
-void components::battleship_selector_item::focus()
+bool components::battleship_selector::is_battleship_misplaced(const models::battleship& battleship_to_check) const
 {
-    focusable::focus();
-    set_style(selected_battleship_item_style);
-}
-
-void components::battleship_selector_item::blur()
-{
-    focusable::blur();
-    set_style(default_battleship_item_style);
-}
-
-void components::battleship_selector::add_battleships_to_selector_list(
-    const std::vector<models::battleship>& battleships_to_add)
-{
-    for (int i = 0; i < battleships_to_add.size(); i++)
+    const std::function predicate = [battleship_to_check](const models::battleship& battleship)
     {
-        const models::battleship battleship_to_add = battleships_to_add[i];
-        const auto battleship_selector_item = std::make_shared<components::battleship_selector_item>(
-            0, i, console_view, battleship_to_add, [this, battleship_to_add]
-            {
-                select_battleship(battleship_to_add);
-            });
-        battleship_selector_list->add_component(battleship_selector_item);
+        return battleship_to_check.id == battleship.id;
+    };
+    return vector_has_if(misplaced_battleships, predicate);
+}
+
+void components::battleship_selector::paint_battleships() const
+{
+    int current_battleship_y = 0;
+
+    for (int battleship_index = 0; battleship_index < all_battleships.size(); battleship_index++)
+    {
+        const models::battleship& battleship = all_battleships[battleship_index];
+
+        models::battleship battleship_to_paint = battleship.normalized();
+        battleship_to_paint.rectangle.position = {.x = 0, .y = current_battleship_y};
+
+        const bool is_selected = battleship_index == selected_battleship_index;
+        const bool is_misplaced = is_battleship_misplaced(battleship_to_paint);
+
+        // Instead of combining selected and misplaced styles, use solely selected style
+        const bool should_mark_as_misplaced = is_misplaced && !is_selected;
+
+        battleship::paint(console_view, battleship_to_paint, is_selected, should_mark_as_misplaced, pixel_size);
+
+        current_battleship_y += battleship_to_paint.rectangle.size.height;
     }
 }
 
-void components::battleship_selector::select_battleship(const models::battleship& battleship_to_select) const
+void components::battleship_selector::update_selected_battleship_index(const int selected_index_delta)
 {
-    on_battleship_select(battleship_to_select);
+    const int battleship_count = all_battleships.size();
+
+    if (battleship_count == 0)
+    {
+        selected_battleship_index = 0;
+        return;
+    }
+
+    const auto clamped_battleship_index = std::clamp(selected_battleship_index, 0, battleship_count - 1);
+
+    // In case the selected_battleship_index is out of bounds, simply treat the update as a corrective action
+    // without taking the selected_index_delta into account.
+    // This can happen when some items were removed from the all_battleships vector.
+    if (clamped_battleship_index != selected_battleship_index)
+    {
+        selected_battleship_index = clamped_battleship_index;
+        return;
+    }
+
+    const auto updated_battleship_index = clamped_battleship_index + selected_index_delta;
+
+    // Loop the selection, by adding and dividing by the battleship count.
+    selected_battleship_index = (updated_battleship_index + battleship_count) % battleship_count;
+}
+
+std::optional<models::battleship> components::battleship_selector::get_selected_battleship() const
+{
+    if (selected_battleship_index < 0 || selected_battleship_index >= all_battleships.size())
+    {
+        return std::nullopt;
+    }
+    return all_battleships[selected_battleship_index];
 }
 
 components::battleship_selector::battleship_selector(
     const int x, const int y, const std::shared_ptr<console::console>& console,
-    const std::vector<models::battleship>& battleships,
-    const std::shared_ptr<list<battleship_selector_item>>& battleship_selector_list,
+    const std::vector<models::battleship>& all_battleships,
+    const std::vector<models::battleship>& placed_battleships,
+    const std::vector<models::battleship>& misplaced_battleships,
     const std::function<void(const models::battleship& battleship_to_select)>& on_battleship_select)
-    : component(x, y, 0, 0, console),
-      battleships(battleships),
-      battleship_selector_list(battleship_selector_list),
-      on_battleship_select(on_battleship_select)
-{
-    add_battleships_to_selector_list(battleships);
-}
-
-components::battleship_selector::battleship_selector(
-    const int x, const int y, const std::shared_ptr<console::console>& console,
-    const std::vector<models::battleship>& battleships,
-    const std::function<void(const models::battleship& battleship_to_select)>& on_battleship_select)
-    : battleship_selector(
-        x, y, console, battleships,
-        std::make_shared<list<battleship_selector_item>>(0, 0, console),
-        on_battleship_select)
+    : component(x, y, 0, 0, console), all_battleships(all_battleships), placed_battleships(placed_battleships),
+      misplaced_battleships(misplaced_battleships), on_battleship_select(on_battleship_select)
 {
 }
 
 void components::battleship_selector::paint()
 {
-    battleship_selector_list->paint();
+    paint_battleships();
     component::paint();
 }
 
 bool components::battleship_selector::handle_keyboard_event(const console::keyboard::key& key)
 {
-    return battleship_selector_list->handle_keyboard_event(key);
+    if (key == console::keyboard::character::ENTER)
+    {
+        if (const auto selected_battleship = get_selected_battleship())
+        {
+            on_battleship_select(*selected_battleship);
+        }
+        return true;
+    }
+
+    if (!key.is_vertical_arrow())
+    {
+        return component::handle_keyboard_event(key);
+    }
+
+    const core::offset key_arrow_offset = key.get_arrow_offset();
+    update_selected_battleship_index(key_arrow_offset.y);
+
+    invalidate();
+    return true;
 }
