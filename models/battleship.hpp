@@ -9,33 +9,15 @@ namespace models
         int id = -1;
         core::rectangle rectangle;
 
-        battleship rotated() const
-        {
-            return {
-                .id = id,
-                .rectangle = rectangle.rotated(),
-            };
-        }
+        [[nodiscard]] battleship rotated() const;
 
-        battleship moved_by(const core::offset& offset) const
-        {
-            return {
-                .id = id,
-                .rectangle = rectangle + offset,
-            };
-        }
+        [[nodiscard]] battleship moved_by(const core::offset& offset) const;
 
-        battleship normalized() const
-        {
-            return {
-                .id = id,
-                .rectangle = rectangle.normalized(),
-            };
-        }
+        [[nodiscard]] battleship normalized() const;
 
-        bool operator==(const battleship& other_battleship) const
-        {
-            return id == other_battleship.id && rectangle == other_battleship.rectangle;
-        }
+        bool operator==(const battleship& other_battleship) const;
+
+    private:
+        [[nodiscard]] battleship with_rectangle(const core::rectangle& updated_rectangle) const;
     };
 }
