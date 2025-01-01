@@ -74,10 +74,9 @@ bool components::list<C>::handle_keyboard_event(const console::keyboard::key& ke
 {
     const std::optional<std::shared_ptr<C>> selected_item = this->get_component_at_index(selected_item_index);
 
-    if (selected_item.has_value())
+    if (selected_item)
     {
-        const std::shared_ptr<C> selected_item_value = selected_item.value();
-        if (this->handle_keyboard_event_for_child(key, selected_item_value))
+        if (this->handle_keyboard_event_for_child(key, *selected_item))
         {
             return true;
         }
@@ -90,16 +89,14 @@ bool components::list<C>::handle_keyboard_event(const console::keyboard::key& ke
 
     const std::optional<std::shared_ptr<C>> new_selected_item = this->get_component_at_index(selected_item_index);
 
-    if (selected_item.has_value())
+    if (selected_item)
     {
-        const std::shared_ptr<C> selected_item_value = selected_item.value();
-        update_item_style(selected_item_value, /* is_focused */ false);
+        update_item_style(*selected_item, /* is_focused */ false);
     }
 
-    if (new_selected_item.has_value())
+    if (new_selected_item)
     {
-        const std::shared_ptr<C> new_selected_item_value = new_selected_item.value();
-        update_item_style(new_selected_item_value, /* is_focused */ true);
+        update_item_style(*new_selected_item, /* is_focused */ true);
     }
 
     return true;

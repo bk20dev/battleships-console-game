@@ -103,7 +103,7 @@ bool components::battleship_selector::handle_keyboard_event(const console::keybo
 {
     if (key == console::keyboard::character::ENTER)
     {
-        if (const auto selected_battleship = get_selected_battleship())
+        if (const std::optional<models::battleship> selected_battleship = get_selected_battleship())
         {
             on_battleship_select(*selected_battleship);
         }

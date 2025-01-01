@@ -2,7 +2,6 @@
 
 #include "battleship.hpp"
 #include "../constants/constants.hpp"
-#include "../utils/text.hpp"
 
 namespace
 {
@@ -28,13 +27,9 @@ namespace
 
 bool components::board_designer::is_battleship_selected(const models::battleship& battleship_to_check) const
 {
-    if (selected_battleship.has_value())
+    if (selected_battleship)
     {
-        const models::battleship selected_battleship_value = selected_battleship.value();
-        if (selected_battleship_value.id == battleship_to_check.id)
-        {
-            return true;
-        }
+        return selected_battleship->id == battleship_to_check.id;
     }
     return false;
 }
@@ -94,10 +89,9 @@ void components::board_designer::paint_battleships() const
         battleship::paint(console_view, placed_battleship, false, is_misplaced, pixel_size);
     }
 
-    if (selected_battleship.has_value())
+    if (selected_battleship)
     {
-        const models::battleship selected_battleship_value = selected_battleship.value();
-        battleship::paint(console_view, selected_battleship_value, true, false, pixel_size);
+        battleship::paint(console_view, *selected_battleship, true, false, pixel_size);
     }
 }
 
@@ -105,24 +99,21 @@ void components::board_designer::paint()
 {
     paint_board();
     paint_battleships();
-
     component::paint();
 }
 
 bool components::board_designer::handle_keyboard_event(const console::keyboard::key& key)
 {
-    if (!selected_battleship.has_value())
+    if (!selected_battleship)
     {
         return false;
     }
-
-    const models::battleship selected_battleship_value = selected_battleship.value();
 
     if (key == console::keyboard::character::ENTER)
     {
         if (on_submit_placement)
         {
-            on_submit_placement(selected_battleship_value);
+            on_submit_placement(*selected_battleship);
         }
         return true;
     }
@@ -136,7 +127,7 @@ bool components::board_designer::handle_keyboard_event(const console::keyboard::
         return true;
     }
 
-    models::battleship updated_battleship = selected_battleship_value;
+    models::battleship updated_battleship = *selected_battleship;
 
     if (key == console::keyboard::character::SPACE)
     {
@@ -154,7 +145,7 @@ bool components::board_designer::handle_keyboard_event(const console::keyboard::
     // Ensure the selected battleship stays on the board
     updated_battleship.rectangle = updated_battleship.rectangle.fitted_into(board_rectangle);
 
-    if (updated_battleship == selected_battleship_value)
+    if (updated_battleship == *selected_battleship)
     {
         return component::handle_keyboard_event(key);
     }
