@@ -18,14 +18,14 @@ namespace components::battleship
         .foreground_color = console::style::CYAN,
     };
 
+    constexpr console::style::style placed_style = {
+        .foreground_color = console::style::GREEN,
+    };
+
     constexpr console::style::style misplaced_style = {
         .foreground_color = console::style::RED,
     };
 
-    constexpr console::style::style selected_misplaced_style = {
-        .foreground_color = console::style::MAGENTA,
-    };
-
     void paint(const std::shared_ptr<const console::console>& console, const models::battleship& battleship_to_paint,
-               bool is_selected, bool is_misplaced, const core::size& pixel_size = {1, 1});
+               const console::style::style& style, const core::size& pixel_size = {1, 1});
 }

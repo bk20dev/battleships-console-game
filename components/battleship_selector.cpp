@@ -23,6 +23,14 @@ bool components::battleship_selector::is_battleship_misplaced(const models::batt
     return vector_has_if(misplaced_battleships, predicate);
 }
 
+console::style::style get_battleship_style(const bool is_selected, const bool is_misplaced)
+{
+    using namespace components::battleship;
+    if (is_selected) return selected_style;
+    if (is_misplaced) return misplaced_style;
+    return default_style;
+}
+
 void components::battleship_selector::paint_battleships() const
 {
     int current_battleship_y = 0;
@@ -37,10 +45,8 @@ void components::battleship_selector::paint_battleships() const
         const bool is_selected = battleship_index == selected_battleship_index;
         const bool is_misplaced = is_battleship_misplaced(battleship_to_paint);
 
-        // Instead of combining selected and misplaced styles, use solely selected style
-        const bool should_mark_as_misplaced = is_misplaced && !is_selected;
-
-        battleship::paint(console_view, battleship_to_paint, is_selected, should_mark_as_misplaced, pixel_size);
+        console::style::style battleship_style = get_battleship_style(is_selected, is_misplaced);
+        battleship::paint(console_view, battleship_to_paint, battleship_style, pixel_size);
 
         current_battleship_y += battleship_to_paint.rectangle.size.height;
     }

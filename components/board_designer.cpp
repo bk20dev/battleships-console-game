@@ -76,6 +76,12 @@ void components::board_designer::paint_board() const
     console_view->fill_rectangle(board_fill_rectangle, board_fill_character, board_style_sequence);
 }
 
+console::style::style get_battleship_style(const bool is_misplaced)
+{
+    if (is_misplaced) return components::battleship::misplaced_style;
+    return components::battleship::default_style;
+}
+
 void components::board_designer::paint_battleships() const
 {
     for (const auto& placed_battleship : placed_battleships)
@@ -86,12 +92,13 @@ void components::board_designer::paint_battleships() const
         }
 
         const bool is_misplaced = is_battleship_misplaced(placed_battleship);
-        battleship::paint(console_view, placed_battleship, false, is_misplaced, pixel_size);
+        const console::style::style battleship_style = get_battleship_style(is_misplaced);
+        battleship::paint(console_view, placed_battleship, battleship_style, pixel_size);
     }
 
     if (selected_battleship)
     {
-        battleship::paint(console_view, *selected_battleship, true, false, pixel_size);
+        battleship::paint(console_view, *selected_battleship, battleship::selected_style, pixel_size);
     }
 }
 
