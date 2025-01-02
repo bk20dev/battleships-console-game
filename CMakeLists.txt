@@ -33,6 +33,8 @@ add_executable(battleships_console_game main.cpp
         core/dimension.cpp
         models/battleship.hpp
         models/battleship.cpp
+        screens/battleship_selector_screen.hpp
+        screens/battleship_selector_screen.cpp
         utils/text.hpp
         utils/text.cpp
 )
