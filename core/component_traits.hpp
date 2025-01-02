@@ -26,6 +26,8 @@ namespace core::component_traits
         virtual void focus();
 
         virtual void blur();
+
+        [[nodiscard]] bool get_is_focused() const;
     };
 
     class activatable
@@ -39,5 +41,7 @@ namespace core::component_traits
         virtual void enable();
 
         virtual void disable();
+
+        [[nodiscard]] bool get_is_enabled() const;
     };
 }
