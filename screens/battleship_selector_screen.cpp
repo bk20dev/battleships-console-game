@@ -1,5 +1,7 @@
 #include "battleship_selector_screen.hpp"
 
+#include "../utils/vector.hpp"
+
 void screens::battleship_selector_screen::initialize_components()
 {
     board_designer = std::make_shared<components::board_designer>(
@@ -40,10 +42,18 @@ void screens::battleship_selector_screen::focus_battleship_selector()
     paint();
 }
 
-void screens::battleship_selector_screen::erase_battleship(const models::battleship& battleship_to_find,
-                                                           std::vector<models::battleship>& vector_to_search)
+std::optional<models::battleship> screens::battleship_selector_screen::find_placed_battleship(
+    const models::battleship& battleship_to_find) const
 {
-    std::erase_if(vector_to_search, [battleship_to_find](const models::battleship& current_battleship)
+    return utils::find_if_or_null(placed_battleships, [battleship_to_find](const models::battleship& current_battleship)
+    {
+        return current_battleship.id == battleship_to_find.id;
+    });
+}
+
+void screens::battleship_selector_screen::erase_placed_battleship(const models::battleship& battleship_to_find)
+{
+    std::erase_if(placed_battleships, [battleship_to_find](const models::battleship& current_battleship)
     {
         return current_battleship.id == battleship_to_find.id;
     });
@@ -51,9 +61,8 @@ void screens::battleship_selector_screen::erase_battleship(const models::battles
 
 void screens::battleship_selector_screen::place_battleship(const models::battleship& battleship_to_place)
 {
-    erase_battleship(battleship_to_place, placed_battleships);
+    erase_placed_battleship(battleship_to_place);
     placed_battleships.push_back(battleship_to_place);
-
     board_designer->set_selected_battleship(std::nullopt);
     focus_battleship_selector();
 }
@@ -66,7 +75,14 @@ void screens::battleship_selector_screen::cancel_battleship_placement()
 
 void screens::battleship_selector_screen::select_battleship(const models::battleship& battleship_to_select)
 {
-    board_designer->set_selected_battleship(battleship_to_select);
+    if (const auto& placed_battleship = find_placed_battleship(battleship_to_select))
+    {
+        board_designer->set_selected_battleship(placed_battleship);
+    }
+    else
+    {
+        board_designer->set_selected_battleship(battleship_to_select);
+    }
     focus_board_designer();
 }
 

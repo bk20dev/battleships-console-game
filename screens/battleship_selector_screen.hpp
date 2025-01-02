@@ -26,8 +26,9 @@ namespace screens
 
         void focus_battleship_selector();
 
-        static void erase_battleship(const models::battleship& battleship_to_find,
-                                     std::vector<models::battleship>& vector_to_search);
+        std::optional<models::battleship> find_placed_battleship(const models::battleship& battleship_to_find) const;
+
+        void erase_placed_battleship(const models::battleship& battleship_to_find);
 
         void place_battleship(const models::battleship& battleship_to_place);
 
