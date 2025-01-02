@@ -1,33 +1,40 @@
 #include "battleship_selector.hpp"
 
 #include "battleship.hpp"
+#include "../utils/vector.tpp"
 
 namespace
 {
     constexpr core::size pixel_size = {.width = 2, .height = 1};
 }
 
-template <typename T>
-bool vector_has_if(const std::vector<T>& vector, const std::function<bool(const T&)>& predicate)
+bool is_battleship_contained(const models::battleship& battleship_to_check,
+                             const std::vector<models::battleship>& battleships_vector)
 {
-    const auto found_element = std::find_if(vector.begin(), vector.end(), predicate);
-    return found_element != vector.end();
+    return utils::contains(
+        battleships_vector,
+        [battleship_to_check](const models::battleship& current_battleship)
+        {
+            return current_battleship.id == battleship_to_check.id;
+        });
+}
+
+bool components::battleship_selector::is_battleship_placed(const models::battleship& battleship_to_check) const
+{
+    return is_battleship_contained(battleship_to_check, placed_battleships);
 }
 
 bool components::battleship_selector::is_battleship_misplaced(const models::battleship& battleship_to_check) const
 {
-    const std::function predicate = [battleship_to_check](const models::battleship& battleship)
-    {
-        return battleship_to_check.id == battleship.id;
-    };
-    return vector_has_if(misplaced_battleships, predicate);
+    return is_battleship_contained(battleship_to_check, misplaced_battleships);
 }
 
-console::style::style get_battleship_style(const bool is_selected, const bool is_misplaced)
+console::style::style get_battleship_style(const bool is_selected, const bool is_placed, const bool is_misplaced)
 {
     using namespace components::battleship;
     if (is_selected) return selected_style;
     if (is_misplaced) return misplaced_style;
+    if (is_placed) return components::battleship_selector::placed_style;
     return default_style;
 }
 
@@ -43,9 +50,10 @@ void components::battleship_selector::paint_battleships() const
         battleship_to_paint.rectangle.position = {.x = 0, .y = current_battleship_y};
 
         const bool is_selected = battleship_index == selected_battleship_index;
+        const bool is_placed = is_battleship_placed(battleship_to_paint);
         const bool is_misplaced = is_battleship_misplaced(battleship_to_paint);
 
-        console::style::style battleship_style = get_battleship_style(is_selected, is_misplaced);
+        console::style::style battleship_style = get_battleship_style(is_selected, is_placed, is_misplaced);
         battleship::paint(console_view, battleship_to_paint, battleship_style, pixel_size);
 
         current_battleship_y += battleship_to_paint.rectangle.size.height;

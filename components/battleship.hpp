@@ -18,10 +18,6 @@ namespace components::battleship
         .foreground_color = console::style::CYAN,
     };
 
-    constexpr console::style::style placed_style = {
-        .foreground_color = console::style::GREEN,
-    };
-
     constexpr console::style::style misplaced_style = {
         .foreground_color = console::style::RED,
     };
