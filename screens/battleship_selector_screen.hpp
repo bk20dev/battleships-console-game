@@ -32,6 +32,8 @@ namespace screens
 
         void place_battleship(const models::battleship& battleship_to_place);
 
+        void put_back_battleship(const models::battleship& battleship_to_place);
+
         void cancel_battleship_placement();
 
         void select_battleship(const models::battleship& battleship_to_select);

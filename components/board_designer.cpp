@@ -55,10 +55,12 @@ components::board_designer::board_designer(
     const std::vector<models::battleship>& placed_battleships,
     const std::vector<models::battleship>& misplaced_battleships,
     const std::function<void(const models::battleship& battleship)>& on_submit_placement,
+    const std::function<void(const models::battleship& battleship)>& on_reset_placement,
     const std::function<void()>& on_cancel_placement
 ) : component(x, y, total_board_width, total_board_height, console),
     placed_battleships(placed_battleships), misplaced_battleships(misplaced_battleships),
-    on_submit_placement(on_submit_placement), on_cancel_placement(on_cancel_placement)
+    on_submit_placement(on_submit_placement), on_reset_placement(on_reset_placement),
+    on_cancel_placement(on_cancel_placement)
 {
 }
 
@@ -121,6 +123,15 @@ bool components::board_designer::handle_keyboard_event(const console::keyboard::
         if (on_submit_placement)
         {
             on_submit_placement(*selected_battleship);
+        }
+        return true;
+    }
+
+    if (key == console::keyboard::character::BACKSPACE)
+    {
+        if (on_reset_placement)
+        {
+            on_reset_placement(*selected_battleship);
         }
         return true;
     }

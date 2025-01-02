@@ -12,6 +12,10 @@ void screens::battleship_selector_screen::initialize_components()
         {
             place_battleship(battleship_to_place);
         },
+        [this](const models::battleship& battleship_to_put_back)
+        {
+            put_back_battleship(battleship_to_put_back);
+        },
         [this]
         {
             cancel_battleship_placement();
@@ -63,6 +67,13 @@ void screens::battleship_selector_screen::place_battleship(const models::battles
 {
     erase_placed_battleship(battleship_to_place);
     placed_battleships.push_back(battleship_to_place);
+    board_designer->set_selected_battleship(std::nullopt);
+    focus_battleship_selector();
+}
+
+void screens::battleship_selector_screen::put_back_battleship(const models::battleship& battleship_to_place)
+{
+    erase_placed_battleship(battleship_to_place);
     board_designer->set_selected_battleship(std::nullopt);
     focus_battleship_selector();
 }

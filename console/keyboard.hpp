@@ -16,6 +16,7 @@ namespace console::keyboard
         ARROW_DOWN = 66,
         ARROW_RIGHT = 67,
         ARROW_LEFT = 68,
+        R = 82,
         BACKSPACE = 127,
     };
 

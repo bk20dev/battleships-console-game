@@ -16,6 +16,8 @@ namespace components
 
         std::function<void(const models::battleship& battleship_placement)> on_submit_placement;
 
+        std::function<void(const models::battleship& battleship_placement)> on_reset_placement;
+
         std::function<void()> on_cancel_placement;
 
         std::optional<models::battleship> selected_battleship;
@@ -33,6 +35,7 @@ namespace components
                        const std::vector<models::battleship>& placed_battleships,
                        const std::vector<models::battleship>& misplaced_battleships,
                        const std::function<void(const models::battleship& battleship_placement)>& on_submit_placement,
+                       const std::function<void(const models::battleship& battleship_placement)>& on_reset_placement,
                        const std::function<void()>& on_cancel_placement);
 
         void paint() override;
