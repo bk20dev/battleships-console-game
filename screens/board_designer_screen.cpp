@@ -1,8 +1,8 @@
-#include "battleship_selector_screen.hpp"
+#include "board_designer_screen.hpp"
 
 #include "../utils/vector.hpp"
 
-void screens::battleship_selector_screen::initialize_components()
+void screens::board_designer_screen::initialize_components()
 {
     board_designer = std::make_shared<components::board_designer>(
         0, 0, console_view,
@@ -32,21 +32,21 @@ void screens::battleship_selector_screen::initialize_components()
         });
 }
 
-void screens::battleship_selector_screen::focus_board_designer()
+void screens::board_designer_screen::focus_board_designer()
 {
     board_designer->focus();
     battleship_selector->blur();
     paint();
 }
 
-void screens::battleship_selector_screen::focus_battleship_selector()
+void screens::board_designer_screen::focus_battleship_selector()
 {
     board_designer->blur();
     battleship_selector->focus();
     paint();
 }
 
-std::optional<models::battleship> screens::battleship_selector_screen::find_placed_battleship(
+std::optional<models::battleship> screens::board_designer_screen::find_placed_battleship(
     const models::battleship& battleship_to_find) const
 {
     return utils::find_if_or_null(placed_battleships, [battleship_to_find](const models::battleship& current_battleship)
@@ -55,7 +55,7 @@ std::optional<models::battleship> screens::battleship_selector_screen::find_plac
     });
 }
 
-void screens::battleship_selector_screen::erase_placed_battleship(const models::battleship& battleship_to_find)
+void screens::board_designer_screen::erase_placed_battleship(const models::battleship& battleship_to_find)
 {
     std::erase_if(placed_battleships, [battleship_to_find](const models::battleship& current_battleship)
     {
@@ -63,7 +63,7 @@ void screens::battleship_selector_screen::erase_placed_battleship(const models::
     });
 }
 
-void screens::battleship_selector_screen::place_battleship(const models::battleship& battleship_to_place)
+void screens::board_designer_screen::place_battleship(const models::battleship& battleship_to_place)
 {
     erase_placed_battleship(battleship_to_place);
     placed_battleships.push_back(battleship_to_place);
@@ -71,20 +71,20 @@ void screens::battleship_selector_screen::place_battleship(const models::battles
     focus_battleship_selector();
 }
 
-void screens::battleship_selector_screen::put_back_battleship(const models::battleship& battleship_to_place)
+void screens::board_designer_screen::put_back_battleship(const models::battleship& battleship_to_place)
 {
     erase_placed_battleship(battleship_to_place);
     board_designer->set_selected_battleship(std::nullopt);
     focus_battleship_selector();
 }
 
-void screens::battleship_selector_screen::cancel_battleship_placement()
+void screens::board_designer_screen::cancel_battleship_placement()
 {
     board_designer->set_selected_battleship(std::nullopt);
     focus_battleship_selector();
 }
 
-void screens::battleship_selector_screen::select_battleship(const models::battleship& battleship_to_select)
+void screens::board_designer_screen::select_battleship(const models::battleship& battleship_to_select)
 {
     if (const auto& placed_battleship = find_placed_battleship(battleship_to_select))
     {
@@ -97,7 +97,7 @@ void screens::battleship_selector_screen::select_battleship(const models::battle
     focus_board_designer();
 }
 
-screens::battleship_selector_screen::battleship_selector_screen(
+screens::board_designer_screen::board_designer_screen(
     const int x, const int y, const std::shared_ptr<console::console>& console)
     : component(x, y, 0, 0, console)
 {
@@ -105,7 +105,7 @@ screens::battleship_selector_screen::battleship_selector_screen(
     battleship_selector->focus();
 }
 
-void screens::battleship_selector_screen::paint()
+void screens::board_designer_screen::paint()
 {
     board_designer->paint();
     battleship_selector->paint();
@@ -130,7 +130,7 @@ bool handle_keyboard_event_if_focused(const std::shared_ptr<C>& component, const
     return true;
 }
 
-bool screens::battleship_selector_screen::handle_keyboard_event(const console::keyboard::key& key)
+bool screens::board_designer_screen::handle_keyboard_event(const console::keyboard::key& key)
 {
     if (handle_keyboard_event_if_focused(board_designer, key))
     {

@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "core/component.hpp"
-#include "screens/battleship_selector_screen.hpp"
+#include "screens/board_designer_screen.hpp"
 
 [[noreturn]] void keyboard_input_listener(const std::shared_ptr<console::keyboard::keyboard>& keyboard,
                                           const std::shared_ptr<core::component>& component)
@@ -29,7 +29,7 @@ int main()
     console->set_cursor_display(false);
     console->clear();
 
-    auto battleship_selector_screen = std::make_shared<screens::battleship_selector_screen>(0, 0, console);
+    auto battleship_selector_screen = std::make_shared<screens::board_designer_screen>(0, 0, console);
 
     battleship_selector_screen->paint();
     std::cout << std::flush;

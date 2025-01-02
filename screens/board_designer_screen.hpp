@@ -7,7 +7,7 @@
 
 namespace screens
 {
-    class battleship_selector_screen final : public core::component
+    class board_designer_screen final : public core::component
     {
         std::shared_ptr<components::board_designer> board_designer;
 
@@ -39,7 +39,7 @@ namespace screens
         void select_battleship(const models::battleship& battleship_to_select);
 
     public:
-        battleship_selector_screen(int x, int y, const std::shared_ptr<console::console>& console);
+        board_designer_screen(int x, int y, const std::shared_ptr<console::console>& console);
 
         void paint() override;
 
