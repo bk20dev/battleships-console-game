@@ -147,7 +147,7 @@ bool components::board_designer::handle_keyboard_event(const console::keyboard::
 
     models::battleship updated_battleship = *selected_battleship;
 
-    if (key == console::keyboard::character::SPACE)
+    if (key == console::keyboard::character::SPACE || key == console::keyboard::character::R)
     {
         const models::battleship rotated_battleship = updated_battleship.rotated();
         updated_battleship = rotated_battleship;

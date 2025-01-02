@@ -115,7 +115,7 @@ void components::battleship_selector::paint()
 
 bool components::battleship_selector::handle_keyboard_event(const console::keyboard::key& key)
 {
-    if (key == console::keyboard::character::ENTER)
+    if (key == console::keyboard::character::ENTER || key == console::keyboard::character::SPACE)
     {
         if (const std::optional<models::battleship> selected_battleship = get_selected_battleship())
         {
