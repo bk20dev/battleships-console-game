@@ -37,4 +37,6 @@ add_executable(battleships_console_game main.cpp
         screens/battleship_selector_screen.cpp
         utils/text.hpp
         utils/text.cpp
+        utils/vector.hpp
+        utils/vector.tpp
 )
