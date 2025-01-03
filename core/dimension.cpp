@@ -88,6 +88,20 @@ core::rectangle core::rectangle::expanded_by(const int amount) const
     };
 }
 
+core::rectangle core::rectangle::scaled_by(const core::size& pixel_size) const
+{
+    return rectangle{
+        .position = {
+            .x = position.x * pixel_size.width,
+            .y = position.y * pixel_size.height,
+        },
+        .size = {
+            .width = size.width * pixel_size.width,
+            .height = size.height * pixel_size.height,
+        }
+    };
+}
+
 bool is_point_between(const int point, const int a, const int b)
 {
     return point > a && point < b;

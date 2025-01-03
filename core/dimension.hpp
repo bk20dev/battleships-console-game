@@ -36,6 +36,8 @@ namespace core
 
         [[nodiscard]] rectangle expanded_by(int amount) const;
 
+        [[nodiscard]] rectangle scaled_by(const core::size& pixel_size) const;
+
         bool intersects(const rectangle& other_rectangle) const;
 
         rectangle operator+(const offset& offset_to_add) const;
