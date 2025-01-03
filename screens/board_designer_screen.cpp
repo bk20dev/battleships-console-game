@@ -1,5 +1,7 @@
 #include "board_designer_screen.hpp"
 
+#include <set>
+
 #include "../utils/vector.hpp"
 
 void screens::board_designer_screen::initialize_components()
@@ -63,10 +65,50 @@ void screens::board_designer_screen::erase_placed_battleship(const models::battl
     });
 }
 
+bool screens::board_designer_screen::check_battleship_conflicts(const models::battleship& battleship_to_check) const
+{
+    const core::rectangle prohibited_zone = battleship_to_check.rectangle.expanded_by(1);
+
+    for (const auto& placed_battleship : placed_battleships)
+    {
+        if (placed_battleship.id == battleship_to_check.id)
+        {
+            continue;
+        }
+        if (placed_battleship.rectangle.intersects(prohibited_zone))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+std::vector<models::battleship> screens::board_designer_screen::find_conflicting_battleships() const
+{
+    static const auto battleship_compare = [](const models::battleship& a, const models::battleship& b)
+    {
+        return a.id < b.id;
+    };
+
+    std::set<models::battleship, decltype(battleship_compare)> conflicting_battleships(battleship_compare);
+
+    for (const auto& placed_battleship : placed_battleships)
+    {
+        if (check_battleship_conflicts(placed_battleship))
+        {
+            conflicting_battleships.emplace(placed_battleship);
+        }
+    }
+
+    return std::vector(conflicting_battleships.begin(), conflicting_battleships.end());
+}
+
 void screens::board_designer_screen::place_battleship(const models::battleship& battleship_to_place)
 {
     erase_placed_battleship(battleship_to_place);
     placed_battleships.push_back(battleship_to_place);
+    misplaced_battleships = find_conflicting_battleships();
     board_designer->set_selected_battleship(std::nullopt);
     focus_battleship_selector();
 }
@@ -74,6 +116,7 @@ void screens::board_designer_screen::place_battleship(const models::battleship& 
 void screens::board_designer_screen::put_back_battleship(const models::battleship& battleship_to_place)
 {
     erase_placed_battleship(battleship_to_place);
+    misplaced_battleships = find_conflicting_battleships();
     board_designer->set_selected_battleship(std::nullopt);
     focus_battleship_selector();
 }

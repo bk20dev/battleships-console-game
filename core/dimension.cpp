@@ -74,6 +74,45 @@ core::rectangle core::rectangle::normalized() const
     return *this;
 }
 
+core::rectangle core::rectangle::expanded_by(const int amount) const
+{
+    return {
+        .position = {
+            .x = position.x - amount,
+            .y = position.y - amount,
+        },
+        .size = {
+            .width = amount + size.width + amount,
+            .height = amount + size.height + amount,
+        },
+    };
+}
+
+bool is_point_between(const int point, const int a, const int b)
+{
+    return point > a && point < b;
+}
+
+bool is_segment_between(const int a, const int b, const int p, const int q)
+{
+    return is_point_between(a, p, q) || is_point_between(b, p, q);
+}
+
+bool is_any_segment_between(const int a, const int b, const int p, const int q)
+{
+    return is_segment_between(a, b, p, q) || is_segment_between(p, q, a, b);
+}
+
+bool core::rectangle::intersects(const rectangle& other_rectangle) const
+{
+    const int ax = position.x, bx = ax + size.width,
+              px = other_rectangle.position.x, qx = px + other_rectangle.size.width;
+    const int ay = position.y, by = ay + size.height,
+              py = other_rectangle.position.y, qy = py + other_rectangle.size.height;
+
+    return is_any_segment_between(ax, bx, px, qx) && is_any_segment_between(ay, by, py, qy);
+}
+
 core::rectangle core::rectangle::operator+(const offset& offset_to_add) const
 {
     return {

@@ -30,6 +30,10 @@ namespace screens
 
         void erase_placed_battleship(const models::battleship& battleship_to_find);
 
+        bool check_battleship_conflicts(const models::battleship& battleship_to_check) const;
+
+        std::vector<models::battleship> find_conflicting_battleships() const;
+
         void place_battleship(const models::battleship& battleship_to_place);
 
         void put_back_battleship(const models::battleship& battleship_to_place);
