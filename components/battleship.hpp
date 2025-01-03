@@ -1,15 +1,11 @@
 #pragma once
 
-#include <string>
-
 #include "../console/console.hpp"
 #include "../console/style.hpp"
 #include "../models/battleship.hpp"
 
 namespace components::battleship
 {
-    constexpr std::string solid_fill_character = "\u2593";
-
     constexpr console::style::style default_style = {
         .foreground_color = console::style::WHITE,
     };

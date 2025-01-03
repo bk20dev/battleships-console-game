@@ -8,8 +8,6 @@ namespace components
 {
     class board_designer final : public core::component, public core::component_traits::focusable
     {
-        static constexpr std::string board_fill_character = "\u2591";
-
         const std::vector<models::battleship>& placed_battleships;
 
         const std::vector<models::battleship>& misplaced_battleships;
