@@ -18,6 +18,10 @@ namespace components::battleship
         .foreground_color = console::style::RED,
     };
 
+    constexpr console::style::style destroyed_style = {
+        .foreground_color = console::style::RED,
+    };
+
     void paint(const std::shared_ptr<const console::console>& console, const models::battleship& battleship_to_paint,
                const console::style::style& style, const core::size& pixel_size = {1, 1});
 }

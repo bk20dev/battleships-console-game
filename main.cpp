@@ -29,7 +29,22 @@ int main()
     console->set_cursor_display(false);
     console->clear();
 
-    auto player_board = std::make_shared<components::player_board>(0, 0, console);
+    std::vector placed_battleships{
+        models::battleship{.id = 0, .rectangle = {.position = {3, 3}, .size = {1, 4}}},
+        models::battleship{.id = 1, .rectangle = {.position = {5, 4}, .size = {3, 1}}},
+        models::battleship{.id = 2, .rectangle = {.position = {1, 1}, .size = {1, 2}}},
+    };
+
+    std::vector opponent_shots{
+        models::bullet{{1, 2}},
+        models::bullet{{4, 5}},
+        models::bullet{{3, 3}},
+        models::bullet{{7, 4}},
+    };
+
+    const auto player_board = std::make_shared<components::player_board>(
+        0, 0, console, placed_battleships, opponent_shots
+    );
 
     const std::shared_ptr<core::component>& current_component = player_board;
 

@@ -1,5 +1,6 @@
 #include "player_board.hpp"
 
+#include "battleship.hpp"
 #include "../console/style.hpp"
 #include "../constants/constants.hpp"
 
@@ -16,6 +17,19 @@ namespace
     constexpr console::style::style board_style = {
         .foreground_color = console::style::BRIGHT_BLACK,
     };
+
+    constexpr console::style::style missed_bullet_style = {
+        .foreground_color = console::style::BLUE,
+    };
+}
+
+static void paint_scaled_rectangle(const std::shared_ptr<const console::console>& console,
+                                   const core::rectangle& rectangle, const std::string& character,
+                                   const console::style::style& style, const core::size& pixel_size = ::pixel_size)
+{
+    const core::rectangle scaled_fill_rectangle = rectangle.scaled_by(pixel_size);
+    const std::string style_sequence = style.to_control_sequence();
+    console->fill_rectangle(scaled_fill_rectangle, character, style_sequence);
 }
 
 void components::player_board::paint_board() const
@@ -31,15 +45,63 @@ void components::player_board::paint_board() const
     console_view->fill_rectangle(board_fill_rectangle, constants::tertiary_fill_character, board_style_sequence);
 }
 
-components::player_board::player_board(const int x, const int y,
-                                       const std::shared_ptr<console::console>& console): component(
-    x, y, total_board_width, total_board_height, console)
+void components::player_board::paint_placed_battleships() const
+{
+    for (const auto& placed_battleship : placed_battleships)
+    {
+        battleship::paint(console_view, placed_battleship, battleship::default_style, pixel_size);
+    }
+}
+
+bool components::player_board::is_battleship_hit(const models::bullet& bullet) const
+{
+    for (const auto& placed_battleship : placed_battleships)
+    {
+        if (placed_battleship.rectangle.intersects(bullet.position))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void components::player_board::paint_opponent_bullet(const models::bullet& bullet) const
+{
+    const bool is_battleship_hit = player_board::is_battleship_hit(bullet);
+
+    std::string bullet_fill_character = constants::tertiary_fill_character;
+    console::style::style bullet_style = missed_bullet_style;
+
+    if (is_battleship_hit)
+    {
+        bullet_fill_character = constants::primary_fill_character;
+        bullet_style = battleship::destroyed_style;
+    }
+
+    paint_scaled_rectangle(console_view, bullet.get_rectangle(), bullet_fill_character, bullet_style, pixel_size);
+}
+
+void components::player_board::paint_opponent_bullets() const
+{
+    for (const auto& opponent_bullet : opponent_bullets)
+    {
+        paint_opponent_bullet(opponent_bullet);
+    }
+}
+
+components::player_board::player_board(const int x, const int y, const std::shared_ptr<console::console>& console,
+                                       const std::vector<models::battleship>& placed_battleships,
+                                       const std::vector<models::bullet>& opponent_bullets)
+    : component(x, y, total_board_width, total_board_height, console),
+      placed_battleships(placed_battleships), opponent_bullets(opponent_bullets)
 {
 }
 
 void components::player_board::paint()
 {
     paint_board();
+    paint_placed_battleships();
+    paint_opponent_bullets();
 
     component::paint();
 }
