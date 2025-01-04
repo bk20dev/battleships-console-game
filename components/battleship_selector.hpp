@@ -31,10 +31,6 @@ namespace components
         std::optional<models::battleship> get_selected_battleship() const;
 
     public:
-        static constexpr console::style::style placed_style = {
-            .foreground_color = console::style::BRIGHT_BLACK,
-        };
-
         battleship_selector(int x, int y, const std::shared_ptr<console::console>& console,
                             const std::vector<models::battleship>& all_battleships,
                             const std::vector<models::battleship>& placed_battleships,

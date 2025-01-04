@@ -15,10 +15,6 @@ namespace
 
 namespace
 {
-    constexpr console::style::style board_style = {
-        .foreground_color = console::style::BRIGHT_BLACK,
-    };
-
     constexpr console::style::style missed_bullet_style = {
         .foreground_color = console::style::BLUE,
     };
@@ -42,7 +38,7 @@ void components::player_board::paint_board() const
         },
     };
 
-    const std::string board_style_sequence = board_style.to_control_sequence();
+    const std::string board_style_sequence = constants::style::board::default_style.to_control_sequence();
     console_view->fill_rectangle(board_fill_rectangle, constants::style::tertiary_fill_character, board_style_sequence);
 }
 
@@ -50,7 +46,7 @@ void components::player_board::paint_placed_battleships() const
 {
     for (const auto& placed_battleship : placed_battleships)
     {
-        battleship::paint(console_view, placed_battleship, battleship::default_style, pixel_size);
+        battleship::paint(console_view, placed_battleship, constants::style::battleship::default_style, pixel_size);
     }
 }
 
@@ -76,7 +72,7 @@ void components::player_board::paint_opponent_bullet(const models::bullet& bulle
     if (is_battleship_hit)
     {
         bullet_fill_character = constants::style::primary_fill_character;
-        bullet_style = battleship::destroyed_style;
+        bullet_style = constants::style::battleship::destroyed_style;
     }
 
     paint_scaled_rectangle(console_view, bullet.get_rectangle(), bullet_fill_character, bullet_style, pixel_size);

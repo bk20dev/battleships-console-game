@@ -1,6 +1,7 @@
 #include "battleship_selector.hpp"
 
 #include "battleship.hpp"
+#include "../constants/style.hpp"
 #include "../utils/vector.tpp"
 
 namespace
@@ -31,10 +32,10 @@ bool components::battleship_selector::is_battleship_misplaced(const models::batt
 
 static console::style::style get_battleship_style(const bool is_selected, const bool is_placed, const bool is_misplaced)
 {
-    using namespace components::battleship;
+    using namespace constants::style::battleship;
     if (is_selected) return selected_style;
     if (is_misplaced) return misplaced_style;
-    if (is_placed) return components::battleship_selector::placed_style;
+    if (is_placed) return placed_style;
     return default_style;
 }
 

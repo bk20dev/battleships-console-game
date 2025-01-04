@@ -19,13 +19,6 @@ namespace
     };
 }
 
-namespace
-{
-    constexpr console::style::style board_style = {
-        .foreground_color = console::style::BRIGHT_BLACK,
-    };
-}
-
 bool components::board_designer::is_battleship_selected(const models::battleship& battleship_to_check) const
 {
     if (selected_battleship)
@@ -74,14 +67,15 @@ void components::board_designer::paint_board() const
         },
     };
 
-    const std::string board_style_sequence = board_style.to_control_sequence();
+    const std::string board_style_sequence = constants::style::board::default_style.to_control_sequence();
     console_view->fill_rectangle(board_fill_rectangle, constants::style::tertiary_fill_character, board_style_sequence);
 }
 
 console::style::style get_battleship_style(const bool is_misplaced)
 {
-    if (is_misplaced) return components::battleship::misplaced_style;
-    return components::battleship::default_style;
+    using namespace constants::style::battleship;
+    if (is_misplaced) return misplaced_style;
+    return default_style;
 }
 
 void components::board_designer::paint_battleships() const
@@ -100,7 +94,7 @@ void components::board_designer::paint_battleships() const
 
     if (selected_battleship)
     {
-        battleship::paint(console_view, *selected_battleship, battleship::selected_style, pixel_size);
+        battleship::paint(console_view, *selected_battleship, constants::style::battleship::selected_style, pixel_size);
     }
 }
 
