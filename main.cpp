@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "components/opponent_board.hpp"
 #include "components/player_board.hpp"
 #include "core/component.hpp"
 
@@ -42,11 +43,14 @@ int main()
         models::bullet{{7, 4}},
     };
 
-    const auto player_board = std::make_shared<components::player_board>(
-        0, 0, console, placed_battleships, opponent_shots
+    // const auto player_board = std::make_shared<components::player_board>(
+    //     0, 0, console, placed_battleships, opponent_shots
+    // );
+    const auto opponent_board = std::make_shared<components::opponent_board>(
+        0, 0, console
     );
 
-    const std::shared_ptr<core::component>& current_component = player_board;
+    const std::shared_ptr<core::component>& current_component = opponent_board;
 
     current_component->paint();
     std::cout << std::flush;

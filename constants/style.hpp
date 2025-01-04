@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "../console/style.hpp"
+
 namespace constants::style
 {
     /** Used for painting primary visual elements, e.g. battleships. */
