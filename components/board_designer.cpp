@@ -1,19 +1,20 @@
 #include "board_designer.hpp"
 
 #include "battleship.hpp"
-#include "../constants/constants.hpp"
+#include "../constants/dimension.hpp"
+#include "../constants/style.hpp"
 
 namespace
 {
     constexpr core::size pixel_size = {.width = 2, .height = 1};
 
-    constexpr int total_board_width = constants::board_column_count * pixel_size.width;
-    constexpr int total_board_height = constants::board_row_count * pixel_size.height;
+    constexpr int total_board_width = constants::dimension::board_column_count * pixel_size.width;
+    constexpr int total_board_height = constants::dimension::board_row_count * pixel_size.height;
 
     constexpr core::rectangle board_rectangle = {
         .size = {
-            .width = constants::board_column_count,
-            .height = constants::board_row_count,
+            .width = constants::dimension::board_column_count,
+            .height = constants::dimension::board_row_count,
         },
     };
 }
@@ -74,7 +75,7 @@ void components::board_designer::paint_board() const
     };
 
     const std::string board_style_sequence = board_style.to_control_sequence();
-    console_view->fill_rectangle(board_fill_rectangle, constants::tertiary_fill_character, board_style_sequence);
+    console_view->fill_rectangle(board_fill_rectangle, constants::style::tertiary_fill_character, board_style_sequence);
 }
 
 console::style::style get_battleship_style(const bool is_misplaced)

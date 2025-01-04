@@ -2,7 +2,7 @@
 
 #include "../components/battleship_selector.hpp"
 #include "../components/board_designer.hpp"
-#include "../constants/constants.hpp"
+#include "../constants/gameplay.hpp"
 #include "../core/component.hpp"
 
 namespace screens
@@ -14,7 +14,7 @@ namespace screens
         std::shared_ptr<components::battleship_selector> battleship_selector;
 
         const std::vector<models::battleship> all_battleships = std::vector(
-            constants::battleships.begin(), constants::battleships.end());
+            constants::gameplay::battleships.begin(), constants::gameplay::battleships.end());
 
         std::vector<models::battleship> placed_battleships{};
 

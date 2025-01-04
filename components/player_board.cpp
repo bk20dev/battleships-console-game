@@ -2,14 +2,15 @@
 
 #include "battleship.hpp"
 #include "../console/style.hpp"
-#include "../constants/constants.hpp"
+#include "../constants/dimension.hpp"
+#include "../constants/style.hpp"
 
 namespace
 {
     constexpr core::size pixel_size = {.width = 2, .height = 1};
 
-    constexpr int total_board_width = constants::board_column_count * pixel_size.width;
-    constexpr int total_board_height = constants::board_row_count * pixel_size.height;
+    constexpr int total_board_width = constants::dimension::board_column_count * pixel_size.width;
+    constexpr int total_board_height = constants::dimension::board_row_count * pixel_size.height;
 }
 
 namespace
@@ -42,7 +43,7 @@ void components::player_board::paint_board() const
     };
 
     const std::string board_style_sequence = board_style.to_control_sequence();
-    console_view->fill_rectangle(board_fill_rectangle, constants::tertiary_fill_character, board_style_sequence);
+    console_view->fill_rectangle(board_fill_rectangle, constants::style::tertiary_fill_character, board_style_sequence);
 }
 
 void components::player_board::paint_placed_battleships() const
@@ -69,12 +70,12 @@ void components::player_board::paint_opponent_bullet(const models::bullet& bulle
 {
     const bool is_battleship_hit = player_board::is_battleship_hit(bullet);
 
-    std::string bullet_fill_character = constants::tertiary_fill_character;
+    std::string bullet_fill_character = constants::style::tertiary_fill_character;
     console::style::style bullet_style = missed_bullet_style;
 
     if (is_battleship_hit)
     {
-        bullet_fill_character = constants::primary_fill_character;
+        bullet_fill_character = constants::style::primary_fill_character;
         bullet_style = battleship::destroyed_style;
     }
 
