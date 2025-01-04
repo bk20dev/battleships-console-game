@@ -17,6 +17,8 @@ add_executable(battleships_console_game main.cpp
         components/list.hpp
         components/list.tpp
         components/list.cpp
+        components/player_board.hpp
+        components/player_board.cpp
         console/console.hpp
         console/console.cpp
         console/keyboard.hpp
