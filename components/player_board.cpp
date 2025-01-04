@@ -52,24 +52,18 @@ void components::player_board::paint_placed_battleships() const
 
 bool components::player_board::is_battleship_hit(const models::bullet& bullet) const
 {
-    for (const auto& placed_battleship : placed_battleships)
+    return std::ranges::any_of(placed_battleships, [bullet](const auto& placed_battleship)
     {
-        if (placed_battleship.rectangle.intersects(bullet.position))
-        {
-            return true;
-        }
-    }
-    return false;
+        return placed_battleship.rectangle.intersects(bullet.position);
+    });
 }
 
 void components::player_board::paint_opponent_bullet(const models::bullet& bullet) const
 {
-    const bool is_battleship_hit = player_board::is_battleship_hit(bullet);
-
     std::string bullet_fill_character = constants::style::tertiary_fill_character;
     console::style::style bullet_style = missed_bullet_style;
 
-    if (is_battleship_hit)
+    if (is_battleship_hit(bullet))
     {
         bullet_fill_character = constants::style::primary_fill_character;
         bullet_style = constants::style::battleship::destroyed_style;
