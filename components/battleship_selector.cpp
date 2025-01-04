@@ -8,8 +8,8 @@ namespace
     constexpr core::size pixel_size = {.width = 2, .height = 1};
 }
 
-bool is_battleship_contained(const models::battleship& battleship_to_check,
-                             const std::vector<models::battleship>& battleships_vector)
+static bool is_battleship_contained(const models::battleship& battleship_to_check,
+                                    const std::vector<models::battleship>& battleships_vector)
 {
     return utils::contains(
         battleships_vector,
@@ -29,7 +29,7 @@ bool components::battleship_selector::is_battleship_misplaced(const models::batt
     return is_battleship_contained(battleship_to_check, misplaced_battleships);
 }
 
-console::style::style get_battleship_style(const bool is_selected, const bool is_placed, const bool is_misplaced)
+static console::style::style get_battleship_style(const bool is_selected, const bool is_placed, const bool is_misplaced)
 {
     using namespace components::battleship;
     if (is_selected) return selected_style;
