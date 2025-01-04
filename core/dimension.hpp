@@ -38,6 +38,8 @@ namespace core
 
         [[nodiscard]] rectangle scaled_by(const core::size& pixel_size) const;
 
+        bool intersects(const core::position& other_position) const;
+
         bool intersects(const rectangle& other_rectangle) const;
 
         rectangle operator+(const offset& offset_to_add) const;

@@ -104,7 +104,14 @@ core::rectangle core::rectangle::scaled_by(const core::size& pixel_size) const
 
 bool is_point_between(const int point, const int a, const int b)
 {
-    return point > a && point < b;
+    return point >= a && point <= b;
+}
+
+bool core::rectangle::intersects(const core::position& other_position) const
+{
+    const int ax = position.x, bx = ax + size.width - 1;
+    const int ay = position.y, by = ay + size.height - 1;
+    return is_point_between(other_position.x, ax, bx) && is_point_between(other_position.y, ay, by);
 }
 
 bool is_segment_between(const int a, const int b, const int p, const int q)
@@ -119,10 +126,10 @@ bool is_any_segment_between(const int a, const int b, const int p, const int q)
 
 bool core::rectangle::intersects(const rectangle& other_rectangle) const
 {
-    const int ax = position.x, bx = ax + size.width,
-              px = other_rectangle.position.x, qx = px + other_rectangle.size.width;
-    const int ay = position.y, by = ay + size.height,
-              py = other_rectangle.position.y, qy = py + other_rectangle.size.height;
+    const int ax = position.x, bx = ax + size.width - 1,
+              px = other_rectangle.position.x, qx = px + other_rectangle.size.width - 1;
+    const int ay = position.y, by = ay + size.height - 1,
+              py = other_rectangle.position.y, qy = py + other_rectangle.size.height - 1;
 
     return is_any_segment_between(ax, bx, px, qx) && is_any_segment_between(ay, by, py, qy);
 }
