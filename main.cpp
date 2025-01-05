@@ -31,7 +31,9 @@ int main()
     console->set_cursor_display(false);
     console->clear();
 
-    const auto gameplay_screen = std::make_shared<screens::gameplay_screen>(0, 0, console);
+    const auto game_controller = std::make_shared<engine::game_controller>();
+
+    const auto gameplay_screen = std::make_shared<screens::gameplay_screen>(0, 0, console, game_controller);
 
     const std::shared_ptr<core::component>& current_component = gameplay_screen;
 

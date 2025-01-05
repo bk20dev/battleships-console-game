@@ -6,9 +6,9 @@ void screens::gameplay_screen::initialize_components()
 {
     opponent_board = std::make_shared<components::opponent_board>(
         0, 0, console_view,
-        current_player_bullets,
-        opponent_revealed_battleship_parts,
-        opponent_destroyed_battleships,
+        game_controller->current_player_bullets,
+        game_controller->opponent_revealed_battleship_parts,
+        game_controller->opponent_destroyed_battleships,
         [this](const core::position& position)
         {
             shot_opponent_board(position);
@@ -16,18 +16,19 @@ void screens::gameplay_screen::initialize_components()
 
     player_board = std::make_shared<components::player_board>(
         26, 0, console_view,
-        current_player_battleships,
-        opponent_bullets);
+        game_controller->current_player_battleships,
+        game_controller->opponent_bullets);
 }
 
-void screens::gameplay_screen::shot_opponent_board(const core::position& position)
+void screens::gameplay_screen::shot_opponent_board(const core::position& position) const
 {
-    // TODO:
+    game_controller->shot_opponent_board(position);
 }
 
 screens::gameplay_screen::gameplay_screen(
-    const int x, const int y, const std::shared_ptr<console::console>& console)
-    : component(x, y, 0, 0, console)
+    const int x, const int y, const std::shared_ptr<console::console>& console,
+    const std::shared_ptr<engine::game_controller>& game_controller)
+    : component(x, y, 0, 0, console), game_controller(game_controller)
 {
     initialize_components();
 }
