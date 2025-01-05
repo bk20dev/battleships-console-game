@@ -40,6 +40,11 @@ int fit_line_segment(const int segment_start, const int segment_length,
     return std::clamp(segment_start, target_segment_start, target_segment_end - segment_length);
 }
 
+int core::rectangle::get_area() const
+{
+    return size.width * size.height;
+}
+
 core::rectangle core::rectangle::fitted_into(const rectangle& target_rectangle) const
 {
     const auto [x, y] = position;

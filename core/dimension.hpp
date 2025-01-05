@@ -32,6 +32,8 @@ namespace core
         position position;
         size size;
 
+        [[nodiscard]] int get_area() const;
+
         [[nodiscard]] rectangle fitted_into(const rectangle& target_rectangle) const;
 
         [[nodiscard]] rectangle rotated() const;
