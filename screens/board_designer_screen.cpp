@@ -157,7 +157,7 @@ void screens::board_designer_screen::paint()
 }
 
 template <class C> requires is_base_of_multiple_v<C, core::component, core::component_traits::focusable>
-bool handle_keyboard_event_if_focused(const std::shared_ptr<C>& component, const console::keyboard::key& key)
+static bool handle_keyboard_event_if_focused(const std::shared_ptr<C>& component, const console::keyboard::key& key)
 {
     if (!component->get_is_focused())
     {

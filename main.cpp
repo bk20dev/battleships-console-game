@@ -3,6 +3,7 @@
 #include "components/opponent_board.hpp"
 #include "components/player_board.hpp"
 #include "core/component.hpp"
+#include "screens/gameplay_screen.hpp"
 
 [[noreturn]] void keyboard_input_listener(const std::shared_ptr<console::keyboard::keyboard>& keyboard,
                                           const std::shared_ptr<core::component>& component)
@@ -30,37 +31,9 @@ int main()
     console->set_cursor_display(false);
     console->clear();
 
-    std::vector player_bullets{
-        // battleship id=0
-        models::bullet{{3, 3}},
-        models::bullet{{3, 4}},
-        models::bullet{{3, 5}},
+    const auto gameplay_screen = std::make_shared<screens::gameplay_screen>(0, 0, console);
 
-        // revealed battleship parts
-        models::bullet{{7, 3}},
-
-        // misses
-        models::bullet{{7, 3}},
-        models::bullet{{8, 2}},
-    };
-
-    std::vector revealed_battleship_parts = {
-        core::position{7, 3}
-    };
-
-    std::vector destroyed_battleships{
-        models::battleship{.id = 0, .rectangle = {.position = {3, 3}, .size = {1, 3}}},
-    };
-
-    const auto opponent_board = std::make_shared<components::opponent_board>(
-        0, 0, console, player_bullets, revealed_battleship_parts, destroyed_battleships,
-        [](const core::position position)
-        {
-        }
-    );
-    opponent_board->focus();
-
-    const std::shared_ptr<core::component>& current_component = opponent_board;
+    const std::shared_ptr<core::component>& current_component = gameplay_screen;
 
     current_component->paint();
     std::cout << std::flush;
