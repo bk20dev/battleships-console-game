@@ -53,7 +53,10 @@ int main()
     };
 
     const auto opponent_board = std::make_shared<components::opponent_board>(
-        0, 0, console, player_bullets, revealed_battleship_parts, destroyed_battleships
+        0, 0, console, player_bullets, revealed_battleship_parts, destroyed_battleships,
+        [](const core::position position)
+        {
+        }
     );
     opponent_board->focus();
 
