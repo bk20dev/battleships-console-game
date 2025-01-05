@@ -55,6 +55,7 @@ int main()
     const auto opponent_board = std::make_shared<components::opponent_board>(
         0, 0, console, player_bullets, revealed_battleship_parts, destroyed_battleships
     );
+    opponent_board->focus();
 
     const std::shared_ptr<core::component>& current_component = opponent_board;
 

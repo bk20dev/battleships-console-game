@@ -2,6 +2,8 @@
 
 namespace core
 {
+    struct rectangle;
+
     struct offset
     {
         int x = 0, y = 0;
@@ -10,6 +12,8 @@ namespace core
     struct position
     {
         int x = 0, y = 0;
+
+        [[nodiscard]] position fitted_into(const rectangle& target_rectangle) const;
 
         position operator+(const offset& offset_to_add) const;
 
@@ -38,9 +42,11 @@ namespace core
 
         [[nodiscard]] rectangle scaled_by(const core::size& pixel_size) const;
 
-        bool intersects(const core::position& other_position) const;
+        [[nodiscard]] rectangle intersect(const rectangle& other_rectangle) const;
 
-        bool intersects(const rectangle& other_rectangle) const;
+        [[nodiscard]] bool intersects(const core::position& other_position) const;
+
+        [[nodiscard]] bool intersects(const rectangle& other_rectangle) const;
 
         rectangle operator+(const offset& offset_to_add) const;
 

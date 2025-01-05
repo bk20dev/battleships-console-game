@@ -1,7 +1,19 @@
 #include "dimension.hpp"
 
+#include <algorithm>
 #include <stdexcept>
 #include <__algorithm/clamp.h>
+
+core::position core::position::fitted_into(const rectangle& target_rectangle) const
+{
+    const auto [target_x, target_y] = target_rectangle.position;
+    const auto [target_width, target_height] = target_rectangle.size;
+
+    return position{
+        .x = std::clamp(x, target_x, target_x + target_width - 1),
+        .y = std::clamp(y, target_y, target_y + target_height - 1),
+    };
+}
 
 core::position core::position::operator+(const offset& offset_to_add) const
 {
@@ -99,6 +111,23 @@ core::rectangle core::rectangle::scaled_by(const core::size& pixel_size) const
             .width = size.width * pixel_size.width,
             .height = size.height * pixel_size.height,
         }
+    };
+}
+
+core::rectangle core::rectangle::intersect(const rectangle& other_rectangle) const
+{
+    const int x = std::max(position.x, other_rectangle.position.x);
+    const int y = std::max(position.y, other_rectangle.position.y);
+
+    const int tx = std::min(position.x + size.width, other_rectangle.position.x + other_rectangle.size.width);
+    const int ty = std::min(position.y + size.height, other_rectangle.position.y + other_rectangle.size.height);
+
+    const int width = std::max(0, tx - x);
+    const int height = std::max(0, ty - y);
+
+    return rectangle{
+        .position = {x, y},
+        .size = {width, height},
     };
 }
 
