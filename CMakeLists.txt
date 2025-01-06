@@ -39,6 +39,8 @@ add_executable(battleships_console_game main.cpp
         core/dimension.cpp
         engine/game_controller.hpp
         engine/game_controller.cpp
+        engine/player.hpp
+        engine/player.cpp
         models/battleship.hpp
         models/battleship.cpp
         models/bullet.hpp
