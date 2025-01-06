@@ -31,7 +31,10 @@ int main()
     console->set_cursor_display(false);
     console->clear();
 
-    const auto game_controller = std::make_shared<engine::game_controller>();
+    const auto game_controller = std::make_shared<engine::game_controller>(std::vector{
+        models::battleship{.id = 0, .rectangle = {.size = {.height = 1, .width = 4}, .position = {0, 0}}},
+        models::battleship{.id = 1, .rectangle = {.size = {.height = 1, .width = 3}, .position = {3, 3}}},
+    });
 
     const auto gameplay_screen = std::make_shared<screens::gameplay_screen>(0, 0, console, game_controller);
 

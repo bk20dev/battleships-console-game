@@ -33,6 +33,8 @@ namespace engine
         [[nodiscard]] bool is_battleship_destroyed(const models::battleship& battleship_to_check) const;
 
     public:
+        [[nodiscard]] bool get_is_currently_playing() const;
+
         [[nodiscard]] const std::vector<models::battleship>& get_placed_battleships() const;
 
         [[nodiscard]] const std::vector<models::bullet>& get_opponent_bullets() const;
@@ -40,6 +42,8 @@ namespace engine
         [[nodiscard]] const std::vector<core::position>& get_damaged_battleship_parts() const;
 
         [[nodiscard]] const std::vector<models::battleship>& get_destroyed_battleships() const;
+
+        void set_placed_battleships(const std::vector<models::battleship>& placed_battleships);
 
         bool shoot_with(const models::bullet& bullet);
 

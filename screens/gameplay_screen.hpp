@@ -17,7 +17,7 @@ namespace screens
 
         void initialize_components();
 
-        void shot_opponent_board(const core::position& position) const;
+        void shoot_opponent_board(const core::position& position) const;
 
     public:
         gameplay_screen(int x, int y, const std::shared_ptr<console::console>& console,

@@ -34,6 +34,11 @@ bool engine::player::is_battleship_destroyed(const models::battleship& battleshi
     return shots_on_target >= battleship_size;
 }
 
+bool engine::player::get_is_currently_playing() const
+{
+    return currently_plays;
+}
+
 const std::vector<models::battleship>& engine::player::get_placed_battleships() const
 {
     return placed_battleships;
@@ -52,6 +57,11 @@ const std::vector<core::position>& engine::player::get_damaged_battleship_parts(
 const std::vector<models::battleship>& engine::player::get_destroyed_battleships() const
 {
     return destroyed_battleships;
+}
+
+void engine::player::set_placed_battleships(const std::vector<models::battleship>& placed_battleships)
+{
+    this->placed_battleships = placed_battleships;
 }
 
 bool engine::player::shoot_with(const models::bullet& bullet)

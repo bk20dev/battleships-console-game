@@ -4,25 +4,31 @@
 
 void screens::gameplay_screen::initialize_components()
 {
+    const auto& current_player = game_controller->get_current_player();
+    const auto& opponent_player = game_controller->get_opponent_player();
+
     opponent_board = std::make_shared<components::opponent_board>(
         0, 0, console_view,
-        game_controller->current_player_bullets,
-        game_controller->opponent_revealed_battleship_parts,
-        game_controller->opponent_destroyed_battleships,
+        opponent_player.get_opponent_bullets(),
+        opponent_player.get_damaged_battleship_parts(),
+        opponent_player.get_destroyed_battleships(),
         [this](const core::position& position)
         {
-            shot_opponent_board(position);
+            shoot_opponent_board(position);
         });
 
     player_board = std::make_shared<components::player_board>(
         26, 0, console_view,
-        game_controller->current_player_battleships,
-        game_controller->opponent_bullets);
+        current_player.get_placed_battleships(),
+        current_player.get_opponent_bullets());
 }
 
-void screens::gameplay_screen::shot_opponent_board(const core::position& position) const
+void screens::gameplay_screen::shoot_opponent_board(const core::position& position) const
 {
-    game_controller->shot_opponent_board(position);
+    if (game_controller->shoot_opponent_board(position))
+    {
+        game_controller->set_player(/* current_player */ false); // Set selected player to the opponent player
+    }
 }
 
 screens::gameplay_screen::gameplay_screen(
@@ -31,6 +37,10 @@ screens::gameplay_screen::gameplay_screen(
     : component(x, y, 0, 0, console), game_controller(game_controller)
 {
     initialize_components();
+    game_controller->on_set_player = [](const bool current_player)
+    {
+        // TODO: NOW!!!
+    };
 }
 
 template <class C> requires is_base_of_multiple_v<C, core::component, core::component_traits::focusable>
