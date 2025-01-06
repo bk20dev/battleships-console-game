@@ -16,7 +16,7 @@ namespace core
         position position;
         size size;
 
-        const std::shared_ptr<console::console> console_view;
+        std::shared_ptr<console::console> console_view;
 
         void invalidate();
 
@@ -24,6 +24,8 @@ namespace core
         virtual ~component() = default;
 
         std::weak_ptr<component> parent{};
+
+        void set_console_view(const std::shared_ptr<console::console>& console_view);
 
         [[nodiscard]] bool should_repaint() const;
 

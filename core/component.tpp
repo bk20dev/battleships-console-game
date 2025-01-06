@@ -5,6 +5,7 @@ void core::container_component<C>::add_component(const std::shared_ptr<C>& other
 {
     children_components.emplace_back(other_component);
     other_component->parent = shared_from_this();
+    other_component->set_console_view(console_view);
 }
 
 template <class C> requires std::is_base_of_v<core::component, C>
