@@ -12,6 +12,8 @@ add_executable(battleships_console_game main.cpp
         components/board_designer.cpp
         components/input.hpp
         components/input.cpp
+        components/keyboard_actions.hpp
+        components/keyboard_actions.cpp
         components/label.hpp
         components/label.cpp
         components/list.hpp
@@ -51,6 +53,8 @@ add_executable(battleships_console_game main.cpp
         screens/game_mode_selector_screen.hpp
         screens/gameplay_screen.hpp
         screens/gameplay_screen.cpp
+        screens/main_window.hpp
+        screens/main_window.cpp
         utils/text.hpp
         utils/text.cpp
         utils/vector.hpp
