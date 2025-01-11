@@ -13,6 +13,24 @@ namespace constants::style
     /** Used for painting backgrounds. */
     constexpr std::string tertiary_fill_character = "\u2591";
 
+    namespace general
+    {
+        /** Used to draw textual hints. */
+        constexpr console::style::style hint_style = {
+            .text_effect = console::style::text_effect::FAINT,
+        };
+
+        /** Used to draw selected elements, e.g. buttons. */
+        constexpr console::style::style selected_style = {
+            .background_color = console::style::CYAN,
+        };
+
+        /** Used to draw selectable elements which are inactive at the moment, e.g. buttons. */
+        constexpr console::style::style deselected_style = {
+            .background_color = console::style::BRIGHT_BLACK,
+        };
+    }
+
     namespace board
     {
         /** Default style used to draw game board background. */

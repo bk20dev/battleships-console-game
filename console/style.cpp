@@ -44,7 +44,7 @@ int console::style::get_effect_code(const text_effect& effect)
 
 std::string console::style::style::to_control_sequence() const
 {
-    std::string style_sequence = ";0";
+    std::string style_sequence = "0";
 
     // Foreground color
     const int foreground_color_code = get_foreground_color_code(foreground_color);

@@ -31,9 +31,12 @@ add_executable(battleships_console_game main.cpp
         console/keyboard.cpp
         console/style.hpp
         console/style.cpp
+        constants/controls.hpp
         constants/dimension.hpp
-        constants/style.hpp
         constants/gameplay.hpp
+        constants/style.hpp
+        components/button.hpp
+        components/button.cpp
         core/component.hpp
         core/component.tpp
         core/component.cpp
