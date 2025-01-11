@@ -23,6 +23,8 @@ add_executable(battleships_console_game main.cpp
         components/opponent_board.cpp
         components/player_board.hpp
         components/player_board.cpp
+        components/screen.hpp
+        components/screen.cpp
         console/console.hpp
         console/console.cpp
         console/keyboard.hpp
@@ -53,8 +55,6 @@ add_executable(battleships_console_game main.cpp
         screens/game_mode_selector_screen.hpp
         screens/gameplay_screen.hpp
         screens/gameplay_screen.cpp
-        screens/main_window.hpp
-        screens/main_window.cpp
         utils/text.hpp
         utils/text.cpp
         utils/vector.hpp
