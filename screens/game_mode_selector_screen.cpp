@@ -2,11 +2,9 @@
 
 #include <iostream>
 
-#include "../constants/dimension.hpp"
-
 namespace
 {
-    const std::vector<components::keyboard_actions::keyboard_action> screen_keyboard_actions = {
+    const std::vector<components::keyboard_actions::keyboard_action> game_mode_screen_keyboard_actions = {
         {
             .key_to_press = components::keyboard_actions::VERTICAL_ARROWS,
             .action_description = "Move cursor",
@@ -15,12 +13,14 @@ namespace
         {
             .key_to_press = "Enter",
             .action_description = "Select",
-        }
+        },
     };
 }
 
-void screens::game_mode_selector_screen::initialize_game_mode_options() const
+void screens::game_mode_selector_screen::initialize_game_mode_list()
 {
+    game_mode_list = std::make_shared<components::list<components::text_list_item>>(0, 0, child_console_view);
+
     const auto play_with_computer_option = std::make_shared<components::text_list_item>(
         0, 0, nullptr, "Play against computer", [this]
         {
@@ -46,21 +46,15 @@ void screens::game_mode_selector_screen::initialize_game_mode_options() const
             }
         });
 
-    game_mode_options_list->add_component(play_with_computer_option);
-    game_mode_options_list->add_component(start_network_game);
-    game_mode_options_list->add_component(join_network_game);
+    game_mode_list->add_component(play_with_computer_option);
+    game_mode_list->add_component(start_network_game);
+    game_mode_list->add_component(join_network_game);
 }
 
 void screens::game_mode_selector_screen::initialize_components()
 {
-    screen_label = std::make_shared<components::label>(0, 1, console_view, "Select game mode");
-
-    game_mode_options_list = std::make_shared<components::list<components::text_list_item>>(0, 3, console_view);
-    initialize_game_mode_options();
-
-    keyboard_actions_footer = std::make_shared<components::keyboard_actions::footer_component>(
-        0, size.height - 1, size.width, console_view);
-    keyboard_actions_footer->set_actions(screen_keyboard_actions);
+    initialize_game_mode_list();
+    set_keyboard_actions(game_mode_screen_keyboard_actions);
 }
 
 screens::game_mode_selector_screen::game_mode_selector_screen(
@@ -68,7 +62,7 @@ screens::game_mode_selector_screen::game_mode_selector_screen(
     const std::function<void()>& on_play_with_computer_selected,
     const std::function<void()>& on_start_network_game_selected,
     const std::function<void()>& on_join_network_game_selected)
-    : component(x, y, constants::dimension::screen_width, constants::dimension::screen_height, console),
+    : screen(0, 0, console, "Select game mode"),
       on_play_with_computer_selected(on_play_with_computer_selected),
       on_start_network_game_selected(on_start_network_game_selected),
       on_join_network_game_selected(on_join_network_game_selected)
@@ -78,14 +72,11 @@ screens::game_mode_selector_screen::game_mode_selector_screen(
 
 void screens::game_mode_selector_screen::paint()
 {
-    screen_label->paint();
-    game_mode_options_list->paint();
-    keyboard_actions_footer->paint();
-
-    component::paint();
+    game_mode_list->paint();
+    screen::paint();
 }
 
 bool screens::game_mode_selector_screen::handle_keyboard_event(const console::keyboard::key& key)
 {
-    return game_mode_options_list->handle_keyboard_event(key);
+    return game_mode_list->handle_keyboard_event(key);
 }
