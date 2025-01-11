@@ -41,6 +41,8 @@ add_executable(battleships_console_game main.cpp
         core/component_traits.cpp
         core/dimension.hpp
         core/dimension.cpp
+        core/tab_indexer.hpp
+        core/tab_indexer.cpp
         engine/game_controller.hpp
         engine/game_controller.cpp
         engine/player.hpp
