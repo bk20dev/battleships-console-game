@@ -63,6 +63,7 @@ components::keyboard_actions::footer_component::footer_component(
 void components::keyboard_actions::footer_component::set_actions(const std::vector<keyboard_action>& keyboard_actions)
 {
     this->keyboard_actions = keyboard_actions;
+    invalidate();
 }
 
 void components::keyboard_actions::footer_component::paint()

@@ -30,6 +30,11 @@ void components::screen::set_keyboard_actions(
     const std::vector<keyboard_actions::keyboard_action>& keyboard_actions) const
 {
     keyboard_actions_footer->set_actions(keyboard_actions);
+
+    if (keyboard_actions_footer->should_repaint())
+    {
+        keyboard_actions_footer->paint();
+    }
 }
 
 components::screen::screen(
