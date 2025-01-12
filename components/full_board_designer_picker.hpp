@@ -2,6 +2,7 @@
 
 #include "battleship_selector.hpp"
 #include "board_designer.hpp"
+#include "keyboard_actions.hpp"
 #include "../constants/gameplay.hpp"
 #include "../core/component.hpp"
 
@@ -20,9 +21,13 @@ namespace components
         std::vector<models::battleship> placed_battleships{};
         std::vector<models::battleship> conflicting_battleships{};
 
+        const std::function<void(const std::vector<keyboard_actions::keyboard_action>&)> on_set_keyboard_actions;
+
         void initialize_board_designer();
         void initialize_battleship_selector();
         void initialize_components();
+
+        void set_keyboard_actions(const std::vector<keyboard_actions::keyboard_action>& keyboard_actions) const;
 
         void focus_component(const std::shared_ptr<focusable>& component_to_focus);
         void focus_board_designer();
@@ -41,7 +46,9 @@ namespace components
         std::vector<models::battleship> find_conflicting_battleships() const;
 
     public:
-        full_board_designer_picker(int x, int y, const std::shared_ptr<console::console>& console);
+        full_board_designer_picker(
+            int x, int y, const std::shared_ptr<console::console>& console,
+            const std::function<void(const std::vector<keyboard_actions::keyboard_action>&)>& on_set_keyboard_actions);
 
         void paint() override;
 

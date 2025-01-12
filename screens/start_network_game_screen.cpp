@@ -8,9 +8,9 @@ namespace
 {
     const std::vector<components::keyboard_actions::keyboard_action> start_network_game_screen_keyboard_actions = {
         {
-            .key_to_press = components::keyboard_actions::ARROWS,
+            .key_to_press = components::keyboard_actions::VERTICAL_ARROWS,
             .action_description = "Move cursor",
-            .key_to_press_length = components::keyboard_actions::ARROWS_LENGTH
+            .key_to_press_length = components::keyboard_actions::VERTICAL_ARROWS_LENGTH,
         },
         {
             .key_to_press = "Enter",

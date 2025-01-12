@@ -3,6 +3,42 @@
 #include "../constants/dimension.hpp"
 #include "../utils/vector.tpp"
 
+const std::vector<components::keyboard_actions::keyboard_action> board_designer_keyboard_actions = {
+    {
+        .key_to_press = components::keyboard_actions::ARROWS,
+        .action_description = "Move",
+        .key_to_press_length = components::keyboard_actions::ARROWS_LENGTH,
+    },
+    {
+        .key_to_press = "R/Space",
+        .action_description = "Rotate",
+    },
+    {
+        .key_to_press = "Enter",
+        .action_description = "Place",
+    },
+    {
+        .key_to_press = "BKSP",
+        .action_description = "Remove",
+    },
+    {
+        .key_to_press = "ESC",
+        .action_description = "Cancel",
+    },
+};
+
+const std::vector<components::keyboard_actions::keyboard_action> battleship_selector_keyboard_actions = {
+    {
+        .key_to_press = components::keyboard_actions::VERTICAL_ARROWS,
+        .action_description = "Move cursor",
+        .key_to_press_length = components::keyboard_actions::VERTICAL_ARROWS_LENGTH,
+    },
+    {
+        .key_to_press = "Enter",
+        .action_description = "Select",
+    },
+};
+
 void components::full_board_designer_picker::initialize_board_designer()
 {
     board_designer = std::make_shared<components::board_designer>(
@@ -42,6 +78,15 @@ void components::full_board_designer_picker::initialize_components()
     initialize_battleship_selector();
 }
 
+void components::full_board_designer_picker::set_keyboard_actions(
+    const std::vector<keyboard_actions::keyboard_action>& keyboard_actions) const
+{
+    if (on_set_keyboard_actions)
+    {
+        on_set_keyboard_actions(keyboard_actions);
+    }
+}
+
 void components::full_board_designer_picker::focus_component(
     const std::shared_ptr<focusable>& component_to_focus)
 {
@@ -63,11 +108,13 @@ void components::full_board_designer_picker::focus_component(
 void components::full_board_designer_picker::focus_board_designer()
 {
     focus_component(board_designer);
+    set_keyboard_actions(board_designer_keyboard_actions);
 }
 
 void components::full_board_designer_picker::focus_battleship_selector()
 {
     focus_component(battleship_selector);
+    set_keyboard_actions(battleship_selector_keyboard_actions);
 }
 
 void components::full_board_designer_picker::place_battleship(const models::battleship& battleship_to_place)
@@ -157,8 +204,10 @@ std::vector<models::battleship> components::full_board_designer_picker::find_con
 }
 
 components::full_board_designer_picker::full_board_designer_picker(
-    const int x, const int y, const std::shared_ptr<console::console>& console)
-    : component(x, y, 0, constants::dimension::board_row_count, console)
+    const int x, const int y, const std::shared_ptr<console::console>& console,
+    const std::function<void(const std::vector<keyboard_actions::keyboard_action>&)>& on_set_keyboard_actions)
+    : component(x, y, 0, constants::dimension::board_row_count, console),
+      on_set_keyboard_actions(on_set_keyboard_actions)
 {
     initialize_components();
 }
@@ -175,12 +224,8 @@ bool components::full_board_designer_picker::handle_keyboard_event(const console
 {
     if (const auto& component = std::dynamic_pointer_cast<core::component>(focused_component))
     {
-        if (component->handle_keyboard_event(key))
+        if (handle_keyboard_event_for_child(key, component))
         {
-            if (component->should_repaint())
-            {
-                component->paint();
-            }
             return true;
         }
     }
@@ -190,7 +235,7 @@ bool components::full_board_designer_picker::handle_keyboard_event(const console
 
 void components::full_board_designer_picker::focus()
 {
-    focus_component(battleship_selector);
+    focus_battleship_selector();
     focusable::focus();
 }
 

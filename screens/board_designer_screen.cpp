@@ -2,7 +2,12 @@
 
 void screens::board_designer_screen::initialize_components()
 {
-    full_board_designer_picker = std::make_shared<components::full_board_designer_picker>(0, 0, child_console_view);
+    full_board_designer_picker = std::make_shared<components::full_board_designer_picker>(
+        0, 0, child_console_view,
+        [this](const std::vector<components::keyboard_actions::keyboard_action>& keyboard_actions)
+        {
+            set_keyboard_actions(keyboard_actions);
+        });
 }
 
 void screens::board_designer_screen::initialize_tab_indexer()

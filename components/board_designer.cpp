@@ -109,10 +109,14 @@ bool components::board_designer::handle_keyboard_event(const console::keyboard::
 {
     if (!selected_battleship)
     {
+        if (on_cancel_placement)
+        {
+            on_cancel_placement();
+        }
         return false;
     }
 
-    if (key == console::keyboard::character::ENTER)
+    if (key == console::keyboard::ENTER)
     {
         if (on_submit_placement)
         {
@@ -121,7 +125,7 @@ bool components::board_designer::handle_keyboard_event(const console::keyboard::
         return true;
     }
 
-    if (key == console::keyboard::character::BACKSPACE)
+    if (key == console::keyboard::BACKSPACE)
     {
         if (on_reset_placement)
         {
@@ -130,7 +134,7 @@ bool components::board_designer::handle_keyboard_event(const console::keyboard::
         return true;
     }
 
-    if (key == console::keyboard::character::ESCAPE)
+    if (key == console::keyboard::ESCAPE)
     {
         if (on_cancel_placement)
         {
@@ -141,7 +145,7 @@ bool components::board_designer::handle_keyboard_event(const console::keyboard::
 
     models::battleship updated_battleship = *selected_battleship;
 
-    if (key == console::keyboard::character::SPACE || key == console::keyboard::character::R)
+    if (key == console::keyboard::SPACE || key == console::keyboard::R)
     {
         const models::battleship rotated_battleship = updated_battleship.rotated();
         updated_battleship = rotated_battleship;

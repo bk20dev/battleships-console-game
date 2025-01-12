@@ -50,7 +50,7 @@ void components::battleship_selector::paint_battleships() const
         models::battleship battleship_to_paint = battleship.normalized();
         battleship_to_paint.rectangle.position = {.x = 0, .y = current_battleship_y};
 
-        const bool is_selected = battleship_index == selected_battleship_index;
+        const bool is_selected = is_focused && battleship_index == selected_battleship_index;
         const bool is_placed = is_battleship_placed(battleship_to_paint);
         const bool is_misplaced = is_battleship_misplaced(battleship_to_paint);
 
@@ -116,7 +116,7 @@ void components::battleship_selector::paint()
 
 bool components::battleship_selector::handle_keyboard_event(const console::keyboard::key& key)
 {
-    if (key == console::keyboard::character::ENTER || key == console::keyboard::character::SPACE)
+    if (key == console::keyboard::character::ENTER)
     {
         if (const std::optional<models::battleship> selected_battleship = get_selected_battleship())
         {
