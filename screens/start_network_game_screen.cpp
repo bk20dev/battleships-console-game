@@ -64,12 +64,8 @@ bool screens::start_network_game_screen::handle_keyboard_event_for_child_if_focu
     {
         return false;
     }
-    if (component->handle_keyboard_event(key))
+    if (handle_keyboard_event_for_child(key, component))
     {
-        if (component->should_repaint())
-        {
-            component->paint();
-        }
         return true;
     }
     return false;

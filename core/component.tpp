@@ -29,21 +29,6 @@ void core::container_component<C>::paint()
 }
 
 template <class C> requires std::is_base_of_v<core::component, C>
-bool core::container_component<C>::handle_keyboard_event_for_child(const console::keyboard::key& key,
-                                                                   const std::shared_ptr<C>& child_component)
-{
-    if (child_component->handle_keyboard_event(key))
-    {
-        if (child_component->should_repaint())
-        {
-            child_component->paint();
-        }
-        return true;
-    }
-    return false;
-}
-
-template <class C> requires std::is_base_of_v<core::component, C>
 bool core::container_component<C>::handle_keyboard_event(const console::keyboard::key& key)
 {
     for (const auto& child_component : children_components)

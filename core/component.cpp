@@ -5,6 +5,20 @@ void core::component::invalidate()
     needs_repaint = true;
 }
 
+bool core::component::handle_keyboard_event_for_child(const console::keyboard::key& key,
+                                                      const std::shared_ptr<component>& child_component)
+{
+    if (child_component->handle_keyboard_event(key))
+    {
+        if (child_component->should_repaint())
+        {
+            child_component->paint();
+        }
+        return true;
+    }
+    return false;
+}
+
 void core::component::set_console_view(const std::shared_ptr<console::console>& console_view)
 {
     const offset component_offset = {.x = position.x, .y = position.y};
