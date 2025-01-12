@@ -25,7 +25,7 @@ console::style::style components::input::get_input_style(const bool is_placehold
     else if (is_enabled && !is_focused)
     {
         result_style.background_color = console::style::WHITE;
-        result_style.foreground_color = console::style::BLACK;
+        result_style.foreground_color = console::style::DEFAULT;
     }
     else if (!is_enabled && is_focused)
     {
@@ -35,7 +35,7 @@ console::style::style components::input::get_input_style(const bool is_placehold
     else if (!is_enabled && !is_focused)
     {
         result_style.background_color = console::style::BRIGHT_BLACK;
-        result_style.foreground_color = console::style::WHITE;
+        result_style.foreground_color = console::style::DEFAULT;
     }
 
     if (is_placeholder)
@@ -134,4 +134,16 @@ bool components::input::handle_keyboard_event(const console::keyboard::key& key)
     }
 
     return component::handle_keyboard_event(key);
+}
+
+void components::input::focus()
+{
+    focusable::focus();
+    invalidate();
+}
+
+void components::input::blur()
+{
+    focusable::blur();
+    invalidate();
 }

@@ -40,5 +40,9 @@ namespace components
         void paint() override;
 
         bool handle_keyboard_event(const console::keyboard::key& key) override;
+
+        void focus() override;
+
+        void blur() override;
     };
 }
