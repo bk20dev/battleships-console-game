@@ -50,12 +50,15 @@ namespace components
             int x, int y, const std::shared_ptr<console::console>& console,
             const std::function<void(const std::vector<keyboard_actions::keyboard_action>&)>& on_set_keyboard_actions);
 
-        void paint() override;
+        std::vector<models::battleship> get_placed_battleships() const;
 
+        bool validate_no_conflicting_battleships() const;
+        bool validate_all_battleships_placed() const;
+
+        void paint() override;
         bool handle_keyboard_event(const console::keyboard::key& key) override;
 
         void focus() override;
-
         void blur() override;
     };
 }

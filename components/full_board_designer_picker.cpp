@@ -212,6 +212,22 @@ components::full_board_designer_picker::full_board_designer_picker(
     initialize_components();
 }
 
+std::vector<models::battleship> components::full_board_designer_picker::get_placed_battleships() const
+{
+    return placed_battleships;
+}
+
+bool components::full_board_designer_picker::validate_no_conflicting_battleships() const
+{
+    const std::vector<models::battleship>& conflicting_battleships = find_conflicting_battleships();
+    return conflicting_battleships.empty();
+}
+
+bool components::full_board_designer_picker::validate_all_battleships_placed() const
+{
+    return placed_battleships.size() == all_battleships.size();
+}
+
 void components::full_board_designer_picker::paint()
 {
     board_designer->paint();
