@@ -1,12 +1,11 @@
 #pragma once
 
-#include "../components/button.hpp"
-#include "../components/input.hpp"
-#include "../components/label.hpp"
-#include "../components/list.hpp"
-#include "../components/screen.hpp"
-#include "../core/component.hpp"
-#include "../core/tab_indexer.hpp"
+#include "../../components/button.hpp"
+#include "../../components/input.hpp"
+#include "../../components/label.hpp"
+#include "../../components/screen.hpp"
+#include "../../core/component.hpp"
+#include "../../core/tab_indexer.hpp"
 
 namespace screens
 {

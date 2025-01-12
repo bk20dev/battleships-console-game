@@ -1,10 +1,8 @@
 #pragma once
 
-#include "../components/keyboard_actions.hpp"
-#include "../components/label.hpp"
-#include "../components/list.hpp"
-#include "../components/screen.hpp"
-#include "../core/component.hpp"
+#include "../../components/list.hpp"
+#include "../../components/screen.hpp"
+#include "../../core/component.hpp"
 
 namespace screens
 {

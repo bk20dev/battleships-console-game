@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "../constants/style.hpp"
+#include "../../constants/style.hpp"
 
 namespace
 {

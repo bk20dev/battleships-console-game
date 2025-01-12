@@ -1,6 +1,6 @@
 #include "gameplay_screen.hpp"
 
-#include "../components/list.hpp"
+#include "../../components/list.hpp"
 
 void screens::gameplay_screen::initialize_components()
 {

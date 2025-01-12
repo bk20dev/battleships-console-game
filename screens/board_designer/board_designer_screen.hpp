@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../components/button.hpp"
-#include "../components/full_board_designer_picker.hpp"
-#include "../components/screen.hpp"
-#include "../core/tab_indexer.hpp"
+#include "../../components/button.hpp"
+#include "../../components/full_board_designer_picker.hpp"
+#include "../../components/screen.hpp"
+#include "../../core/tab_indexer.hpp"
 
 namespace screens
 {

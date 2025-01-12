@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../components/opponent_board.hpp"
-#include "../components/player_board.hpp"
-#include "../core/component.hpp"
-#include "../engine/game_controller.hpp"
+#include "../../components/opponent_board.hpp"
+#include "../../components/player_board.hpp"
+#include "../../core/component.hpp"
+#include "../../engine/game_controller.hpp"
 
 namespace screens
 {

@@ -1,6 +1,6 @@
 #include "board_designer_screen.hpp"
 
-#include "../constants/style.hpp"
+#include "../../constants/style.hpp"
 
 void screens::board_designer_screen::initialize_components()
 {

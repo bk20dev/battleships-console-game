@@ -1,6 +1,6 @@
 #include "join_network_game_screen.hpp"
 
-#include "../components/button.hpp"
+#include "../../components/button.hpp"
 
 namespace
 {

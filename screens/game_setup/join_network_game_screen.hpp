@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../components/input.hpp"
-#include "../components/screen.hpp"
-#include "../core/tab_indexer.hpp"
+#include "../../components/input.hpp"
+#include "../../components/screen.hpp"
+#include "../../core/tab_indexer.hpp"
 
 namespace components
 {
