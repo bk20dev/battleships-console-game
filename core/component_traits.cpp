@@ -19,18 +19,3 @@ bool core::component_traits::focusable::get_is_focused() const
 {
     return is_focused;
 }
-
-void core::component_traits::activatable::enable()
-{
-    is_enabled = true;
-}
-
-void core::component_traits::activatable::disable()
-{
-    is_enabled = false;
-}
-
-bool core::component_traits::activatable::get_is_enabled() const
-{
-    return is_enabled;
-}

@@ -12,8 +12,7 @@ namespace components
     };
 
     class input final : public core::component,
-                        public core::component_traits::focusable,
-                        public core::component_traits::activatable
+                        public core::component_traits::focusable
     {
         input_type input_type;
 

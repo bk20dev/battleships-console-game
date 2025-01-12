@@ -29,19 +29,4 @@ namespace core::component_traits
 
         [[nodiscard]] bool get_is_focused() const;
     };
-
-    class activatable
-    {
-    protected:
-        bool is_enabled = true;
-
-        ~activatable() = default;
-
-    public:
-        virtual void enable();
-
-        virtual void disable();
-
-        [[nodiscard]] bool get_is_enabled() const;
-    };
 }

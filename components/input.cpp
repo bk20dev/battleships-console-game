@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "../constants/style.hpp"
+
 bool components::input::is_input_full() const
 {
     return text.size() >= max_length;
@@ -15,27 +17,11 @@ bool components::input::is_key_valid(const console::keyboard::key& key)
 // ReSharper disable CppDFAConstantConditions
 console::style::style components::input::get_input_style(const bool is_placeholder) const
 {
-    console::style::style result_style;
+    console::style::style result_style = constants::style::general::deselected_style;
 
-    if (is_enabled && is_focused)
+    if (is_focused)
     {
-        result_style.background_color = console::style::CYAN;
-        result_style.foreground_color = console::style::BRIGHT_WHITE;
-    }
-    else if (is_enabled && !is_focused)
-    {
-        result_style.background_color = console::style::WHITE;
-        result_style.foreground_color = console::style::DEFAULT;
-    }
-    else if (!is_enabled && is_focused)
-    {
-        result_style.background_color = console::style::BRIGHT_BLACK;
-        result_style.foreground_color = console::style::CYAN;
-    }
-    else if (!is_enabled && !is_focused)
-    {
-        result_style.background_color = console::style::BRIGHT_BLACK;
-        result_style.foreground_color = console::style::DEFAULT;
+        result_style = constants::style::general::selected_style;
     }
 
     if (is_placeholder)
