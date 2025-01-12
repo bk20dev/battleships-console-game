@@ -160,12 +160,6 @@ bool components::board_designer::handle_keyboard_event(const console::keyboard::
 
     // Ensure the selected battleship stays on the board
     updated_battleship.rectangle = updated_battleship.rectangle.fitted_into(board_rectangle);
-
-    if (updated_battleship == *selected_battleship)
-    {
-        return component::handle_keyboard_event(key);
-    }
-
     selected_battleship = updated_battleship;
 
     invalidate();

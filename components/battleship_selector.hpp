@@ -26,7 +26,7 @@ namespace components
 
         void paint_battleships() const;
 
-        void update_selected_battleship_index(int selected_index_delta);
+        bool update_selected_battleship_index(int selected_index_delta);
 
         std::optional<models::battleship> get_selected_battleship() const;
 

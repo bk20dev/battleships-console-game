@@ -61,31 +61,23 @@ void components::battleship_selector::paint_battleships() const
     }
 }
 
-void components::battleship_selector::update_selected_battleship_index(const int selected_index_delta)
+bool components::battleship_selector::update_selected_battleship_index(const int selected_index_delta)
 {
     const int battleship_count = all_battleships.size();
 
     if (battleship_count == 0)
     {
         selected_battleship_index = 0;
-        return;
+        return false;
     }
 
-    const auto clamped_battleship_index = std::clamp(selected_battleship_index, 0, battleship_count - 1);
+    const int current_battleship_index = selected_battleship_index;
+    const int updated_battleship_index = std::clamp(
+        current_battleship_index + selected_index_delta, 0, battleship_count - 1);
 
-    // In case the selected_battleship_index is out of bounds, simply treat the update as a corrective action
-    // without taking the selected_index_delta into account.
-    // This can happen when some items were removed from the all_battleships vector.
-    if (clamped_battleship_index != selected_battleship_index)
-    {
-        selected_battleship_index = clamped_battleship_index;
-        return;
-    }
+    selected_battleship_index = updated_battleship_index;
 
-    const auto updated_battleship_index = clamped_battleship_index + selected_index_delta;
-
-    // Loop the selection, by adding and dividing by the battleship count.
-    selected_battleship_index = (updated_battleship_index + battleship_count) % battleship_count;
+    return current_battleship_index != updated_battleship_index;
 }
 
 std::optional<models::battleship> components::battleship_selector::get_selected_battleship() const
@@ -131,7 +123,10 @@ bool components::battleship_selector::handle_keyboard_event(const console::keybo
     }
 
     const core::offset key_arrow_offset = key.get_arrow_offset();
-    update_selected_battleship_index(key_arrow_offset.y);
+    if (!update_selected_battleship_index(key_arrow_offset.y))
+    {
+        return false;
+    }
 
     invalidate();
     return true;
