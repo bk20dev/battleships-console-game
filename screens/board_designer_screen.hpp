@@ -1,46 +1,19 @@
 #pragma once
 
-#include "../components/battleship_selector.hpp"
-#include "../components/board_designer.hpp"
-#include "../constants/gameplay.hpp"
-#include "../core/component.hpp"
+#include "../components/full_board_designer_picker.hpp"
+#include "../components/screen.hpp"
+#include "../core/tab_indexer.hpp"
 
 namespace screens
 {
-    class board_designer_screen final : public core::component
+    class board_designer_screen final : public components::screen
     {
-        std::shared_ptr<components::board_designer> board_designer;
+        core::tab_indexer tab_indexer{};
 
-        std::shared_ptr<components::battleship_selector> battleship_selector;
-
-        const std::vector<models::battleship> all_battleships = std::vector(
-            constants::gameplay::battleships.begin(), constants::gameplay::battleships.end());
-
-        std::vector<models::battleship> placed_battleships{};
-
-        std::vector<models::battleship> misplaced_battleships{};
+        std::shared_ptr<components::full_board_designer_picker> full_board_designer_picker;
 
         void initialize_components();
-
-        void focus_board_designer();
-
-        void focus_battleship_selector();
-
-        std::optional<models::battleship> find_placed_battleship(const models::battleship& battleship_to_find) const;
-
-        void erase_placed_battleship(const models::battleship& battleship_to_find);
-
-        bool check_battleship_conflicts(const models::battleship& battleship_to_check) const;
-
-        std::vector<models::battleship> find_conflicting_battleships() const;
-
-        void place_battleship(const models::battleship& battleship_to_place);
-
-        void put_back_battleship(const models::battleship& battleship_to_place);
-
-        void cancel_battleship_placement();
-
-        void select_battleship(const models::battleship& battleship_to_select);
+        void initialize_tab_indexer();
 
     public:
         board_designer_screen(int x, int y, const std::shared_ptr<console::console>& console);
