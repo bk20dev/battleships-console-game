@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-#include "../components/list.hpp"
 #include "../constants/style.hpp"
 
 namespace
@@ -39,6 +38,7 @@ void screens::start_network_game_screen::initialize_components()
     start_game_button = std::make_shared<components::text_button>(
         0, 6, child_console_view, "Start game", []
         {
+            // TODO: Implement establishing a connection
         });
     go_back_button = std::make_shared<components::text_button>(
         0, 7, child_console_view, "Go back", [this]
@@ -54,39 +54,6 @@ void screens::start_network_game_screen::initialize_tab_indexer()
     tab_indexer.connect_component(port_input);
     tab_indexer.connect_component(start_game_button);
     tab_indexer.connect_component(go_back_button);
-}
-
-template <class C> requires is_base_of_multiple_v<C, core::component, core::component_traits::focusable>
-bool screens::start_network_game_screen::handle_keyboard_event_for_child_if_focused(
-    const console::keyboard::key& key, const std::shared_ptr<C>& component)
-{
-    if (!component->get_is_focused())
-    {
-        return false;
-    }
-    if (handle_keyboard_event_for_child(key, component))
-    {
-        return true;
-    }
-    return false;
-}
-
-
-bool screens::start_network_game_screen::handle_keyboard_event_for_children(const console::keyboard::key& key) const
-{
-    if (handle_keyboard_event_for_child_if_focused(key, port_input))
-    {
-        return true;
-    }
-    if (handle_keyboard_event_for_child_if_focused(key, start_game_button))
-    {
-        return true;
-    }
-    if (handle_keyboard_event_for_child_if_focused(key, go_back_button))
-    {
-        return true;
-    }
-    return false;
 }
 
 screens::start_network_game_screen::start_network_game_screen(
@@ -118,9 +85,12 @@ bool screens::start_network_game_screen::handle_keyboard_event(const console::ke
         return true;
     }
 
-    if (handle_keyboard_event_for_children(key))
+    if (const auto& focused_component = tab_indexer.get_focused_component<component>())
     {
-        return true;
+        if (handle_keyboard_event_for_child(key, focused_component))
+        {
+            return true;
+        }
     }
 
     if (!key.is_vertical_arrow())

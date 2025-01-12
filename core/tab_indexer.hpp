@@ -26,6 +26,11 @@ namespace core
     public:
         int connect_component(const std::shared_ptr<component_traits::focusable>& component_to_add);
 
+        template <typename T>
+        std::shared_ptr<T> get_focused_component();
+
         int focus_next_component(int delta = 1);
     };
 }
+
+#include "tab_indexer.tpp"

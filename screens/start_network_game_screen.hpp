@@ -25,12 +25,6 @@ namespace screens
         void initialize_components();
         void initialize_tab_indexer();
 
-        template <class C> requires is_base_of_multiple_v<C, component, core::component_traits::focusable>
-        static bool handle_keyboard_event_for_child_if_focused(
-            const console::keyboard::key& key, const std::shared_ptr<C>& component);
-
-        bool handle_keyboard_event_for_children(const console::keyboard::key& key) const;
-
     public:
         start_network_game_screen(int x, int y, const std::shared_ptr<console::console>& console,
                                   const std::function<void()>& on_navigate_up);
