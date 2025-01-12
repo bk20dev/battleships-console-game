@@ -79,12 +79,10 @@ void screens::board_designer_screen::paint()
 
 bool screens::board_designer_screen::handle_keyboard_event(const console::keyboard::key& key)
 {
-    if (const auto& component = tab_indexer.get_focused_component<core::component>())
+    const auto& component = tab_indexer.get_focused_component<core::component>();
+    if (handle_keyboard_event_for_child(key, component))
     {
-        if (handle_keyboard_event_for_child(key, component))
-        {
-            return true;
-        }
+        return true;
     }
 
     if (!key.is_vertical_arrow())

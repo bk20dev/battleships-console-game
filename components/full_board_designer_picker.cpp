@@ -238,12 +238,10 @@ void components::full_board_designer_picker::paint()
 
 bool components::full_board_designer_picker::handle_keyboard_event(const console::keyboard::key& key)
 {
-    if (const auto& component = std::dynamic_pointer_cast<core::component>(focused_component))
+    const auto& component = std::dynamic_pointer_cast<core::component>(focused_component);
+    if (handle_keyboard_event_for_child(key, component))
     {
-        if (handle_keyboard_event_for_child(key, component))
-        {
-            return true;
-        }
+        return true;
     }
 
     return component::handle_keyboard_event(key);

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "board_designer/board_designer_screen.hpp"
-#include "game_setup/game_mode_selector_screen.hpp"
 #include "../core/component.hpp"
 #include "game_setup/game_setup_screen.hpp"
 

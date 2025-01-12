@@ -75,12 +75,10 @@ bool screens::join_network_game_screen::handle_keyboard_event(const console::key
         return true;
     }
 
-    if (const auto& focused_component = tab_indexer.get_focused_component<component>())
+    const auto& focused_component = tab_indexer.get_focused_component<component>();
+    if (handle_keyboard_event_for_child(key, focused_component))
     {
-        if (handle_keyboard_event_for_child(key, focused_component))
-        {
-            return true;
-        }
+        return true;
     }
 
     if (!key.is_vertical_arrow())
