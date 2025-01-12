@@ -8,6 +8,10 @@ void core::component::invalidate()
 bool core::component::handle_keyboard_event_for_child(const console::keyboard::key& key,
                                                       const std::shared_ptr<component>& child_component)
 {
+    if (!child_component)
+    {
+        return false;
+    }
     if (child_component->handle_keyboard_event(key))
     {
         if (child_component->should_repaint())
