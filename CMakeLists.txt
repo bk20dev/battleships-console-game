@@ -61,6 +61,8 @@ add_executable(battleships_console_game main.cpp
         screens/game_mode_selector_screen.cpp
         screens/gameplay_screen.hpp
         screens/gameplay_screen.cpp
+        screens/join_network_game_screen.cpp
+        screens/join_network_game_screen.hpp
         screens/start_network_game_screen.hpp
         screens/start_network_game_screen.cpp
         utils/text.hpp
