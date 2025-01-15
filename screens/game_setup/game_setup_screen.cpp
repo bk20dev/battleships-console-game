@@ -70,7 +70,7 @@ screens::game_setup_screen::game_setup_screen(
     : component(x, y, constants::dimension::screen_width, constants::dimension::screen_height, console),
       on_connection_established(on_connection_established)
 {
-    navigate_to(GAME_MODE_SELECTOR_SCREEN);
+    navigate_to(JOIN_NETWORK_GAME_SCREEN);
 }
 
 void screens::game_setup_screen::paint()

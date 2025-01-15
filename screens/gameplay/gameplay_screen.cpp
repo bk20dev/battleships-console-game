@@ -27,7 +27,7 @@ void screens::gameplay_screen::shoot_opponent_board(const core::position& positi
 {
     if (game_controller->shoot_opponent_board(position))
     {
-        game_controller->set_player(/* current_player */ false); // Set selected player to the opponent player
+        game_controller->change_turn(/* current_player */ false); // Set selected player to the opponent player
     }
 }
 
@@ -37,7 +37,7 @@ screens::gameplay_screen::gameplay_screen(
     : component(x, y, 0, 0, console), game_controller(game_controller)
 {
     initialize_components();
-    game_controller->on_set_player = [](const bool current_player)
+    game_controller->on_turn_changed = [](const bool current_player)
     {
         // TODO: NOW!!!
     };

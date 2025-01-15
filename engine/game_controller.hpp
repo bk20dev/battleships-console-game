@@ -1,43 +1,42 @@
 #pragma once
+
+#include "i_peer_connection.hpp"
 #include "player.hpp"
 
 namespace engine
 {
     class game_controller final
     {
-        player current_player;
+        i_peer_connection peer_connection;
 
+        player current_player;
         player opponent_player;
 
         void initialize_players();
 
-        bool is_opponent_bullet_present(const models::bullet& bullet_to_find) const;
+        [[nodiscard]] bool is_opponent_bullet_present(const models::bullet& bullet_to_find) const;
 
-        void remote_set_currently_plays(bool currently_plays);
+        void peer_notify_board_prepared();
+        void peer_change_turn(bool current_player);
+        void peer_fire_shot(const core::position& position);
+        void peer_notify_battleship_part_damaged(const core::position& damaged_battleship_part);
+        void peer_notify_battleship_destroyed(const models::battleship& destroyed_battleship);
 
-        void remote_shoot_opponent_board(const core::position& position);
-
-        void remote_add_damaged_battleship_part(const core::position& damaged_battleship_part);
-
-        void remote_add_destroyed_battleship(const models::battleship& destroyed_battleship);
-
-        void handle_shoot_current_player_board(const core::position& position);
-
-        void handle_add_damaged_opponent_battleship_part(const core::position& damaged_battleship_part);
-
-        void handle_destroyed_opponent_battleship(const models::battleship& destroyed_battleship);
+        void handle_opponent_board_prepared();
+        void handle_turn_changed(bool opponent_player);
+        void handle_opponent_shot_received(const core::position& position);
+        void handle_opponent_battleship_part_damaged(const core::position& damaged_battleship_part);
+        void handle_opponent_battleship_destroyed(const models::battleship& destroyed_battleship);
 
     public:
-        std::function<void(bool current_player)> on_set_player = nullptr;
-
         explicit game_controller(const std::vector<models::battleship>& current_player_placed_battleships);
 
-        void set_player(bool selected_player);
+        std::function<void(bool current_player)> on_turn_changed = nullptr;
 
+        void change_turn(bool selected_player);
         bool shoot_opponent_board(const core::position& position);
 
-        const player& get_current_player() const;
-
-        const player& get_opponent_player() const;
+        [[nodiscard]] const player& get_current_player() const;
+        [[nodiscard]] const player& get_opponent_player() const;
     };
 }
