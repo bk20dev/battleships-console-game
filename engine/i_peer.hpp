@@ -7,7 +7,7 @@
 
 namespace engine
 {
-    class i_peer_connection
+    class i_peer
     {
     public:
         std::function<void()> on_opponent_board_prepared;
@@ -22,6 +22,6 @@ namespace engine
         virtual void notify_battleship_part_damaged(const core::position& damaged_battleship_part);
         virtual void notify_battleship_destroyed(const models::battleship& destroyed_battleship);
 
-        virtual ~i_peer_connection() = default;
+        virtual ~i_peer() = default;
     };
 }

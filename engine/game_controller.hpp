@@ -1,13 +1,13 @@
 #pragma once
 
-#include "i_peer_connection.hpp"
+#include "i_peer.hpp"
 #include "player.hpp"
 
 namespace engine
 {
     class game_controller final
     {
-        i_peer_connection peer_connection;
+        i_peer peer_connection;
 
         player current_player;
         player opponent_player;
