@@ -11,13 +11,14 @@ namespace screens
         enum destination
         {
             GAME_SETUP_SCREEN,
+            BOARD_DESIGNER_SCREEN
         };
 
         std::shared_ptr<component> current_screen = nullptr;
 
-        std::shared_ptr<game_setup_screen> create_game_setup_screen() const;
-
-        std::shared_ptr<component> create_screen(destination destination) const;
+        std::shared_ptr<game_setup_screen> create_game_setup_screen();
+        std::shared_ptr<board_designer_screen> create_board_designer_screen();
+        std::shared_ptr<component> create_screen(destination destination);
 
         void navigate_to(destination destination);
 

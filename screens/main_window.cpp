@@ -2,19 +2,26 @@
 
 #include "../constants/dimension.hpp"
 
-std::shared_ptr<screens::game_setup_screen> screens::main_window::create_game_setup_screen() const
+std::shared_ptr<screens::game_setup_screen> screens::main_window::create_game_setup_screen()
 {
     return std::make_shared<game_setup_screen>(0, 0, console_view, []
     {
     });
 }
 
-std::shared_ptr<core::component> screens::main_window::create_screen(const destination destination) const
+std::shared_ptr<screens::board_designer_screen> screens::main_window::create_board_designer_screen()
+{
+    return std::make_shared<board_designer_screen>(0, 0, console_view);
+}
+
+std::shared_ptr<core::component> screens::main_window::create_screen(const destination destination)
 {
     switch (destination)
     {
     case GAME_SETUP_SCREEN:
         return create_game_setup_screen();
+    case BOARD_DESIGNER_SCREEN:
+        return create_board_designer_screen();
     // ReSharper disable once CppDFAUnreachableCode
     default:
         return nullptr;
@@ -31,13 +38,15 @@ void screens::main_window::navigate_to(destination destination)
 
 screens::main_window::main_window(
     const int x, const int y, const std::shared_ptr<console::console>& console)
-    : component(0, 0, constants::dimension::screen_width, constants::dimension::screen_height, console)
+    : component(x, y, constants::dimension::screen_width, constants::dimension::screen_height, console)
 {
     navigate_to(GAME_SETUP_SCREEN);
 }
 
 void screens::main_window::paint()
 {
+    console_view->clear();
+
     if (current_screen)
     {
         current_screen->paint();
