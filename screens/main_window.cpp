@@ -4,9 +4,12 @@
 
 std::shared_ptr<screens::game_setup_screen> screens::main_window::create_game_setup_screen()
 {
-    return std::make_shared<game_setup_screen>(0, 0, console_view, []
-    {
-    });
+    return std::make_shared<game_setup_screen>(
+        0, 0, console_view,
+        [this](const std::shared_ptr<engine::game_controller>& game_controller)
+        {
+            handle_game_controller_ready(game_controller);
+        });
 }
 
 std::shared_ptr<screens::board_designer_screen> screens::main_window::create_board_designer_screen()
@@ -34,6 +37,13 @@ void screens::main_window::navigate_to(destination destination)
     current_screen = destination_screen;
 
     paint();
+}
+
+void screens::main_window::handle_game_controller_ready(
+    const std::shared_ptr<engine::game_controller>& prepared_game_controller)
+{
+    game_controller = prepared_game_controller;
+    navigate_to(BOARD_DESIGNER_SCREEN);
 }
 
 screens::main_window::main_window(

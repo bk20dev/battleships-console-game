@@ -1,8 +1,10 @@
 #pragma once
+
 #include "game_mode_selector_screen.hpp"
 #include "join_network_game_screen.hpp"
 #include "start_network_game_screen.hpp"
 #include "../../core/component.hpp"
+#include "../../engine/game_controller.hpp"
 
 namespace screens
 {
@@ -15,7 +17,7 @@ namespace screens
             JOIN_NETWORK_GAME_SCREEN,
         };
 
-        const std::function<void()> on_connection_established;
+        const std::function<void(const std::shared_ptr<engine::game_controller>&)> on_game_controller_ready;
 
         std::shared_ptr<component> current_screen = nullptr;
 
@@ -27,9 +29,12 @@ namespace screens
 
         void navigate_to(destination destination);
 
+        void handle_peer_created(const std::shared_ptr<engine::i_peer>& created_peer) const;
+
     public:
-        game_setup_screen(int x, int y, const std::shared_ptr<console::console>& console,
-                          const std::function<void()>& on_connection_established);
+        game_setup_screen(
+            int x, int y, const std::shared_ptr<console::console>& console,
+            const std::function<void(const std::shared_ptr<engine::game_controller>&)>&);
 
         void paint() override;
 

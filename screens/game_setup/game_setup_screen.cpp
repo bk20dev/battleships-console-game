@@ -36,6 +36,7 @@ std::shared_ptr<screens::join_network_game_screen> screens::game_setup_screen::c
         0, 0, console_view,
         [this](const std::shared_ptr<engine::i_peer>& created_peer)
         {
+            handle_peer_created(created_peer);
         },
         [this]
         {
@@ -67,13 +68,19 @@ void screens::game_setup_screen::navigate_to(destination destination)
     paint();
 }
 
+void screens::game_setup_screen::handle_peer_created(const std::shared_ptr<engine::i_peer>& created_peer) const
+{
+    const auto created_game_controller = std::make_shared<engine::game_controller>(created_peer);
+    on_game_controller_ready(created_game_controller);
+}
+
 screens::game_setup_screen::game_setup_screen(
     const int x, const int y, const std::shared_ptr<console::console>& console,
-    const std::function<void()>& on_connection_established)
+    const std::function<void(const std::shared_ptr<engine::game_controller>&)>& on_game_controller_ready)
     : component(x, y, constants::dimension::screen_width, constants::dimension::screen_height, console),
-      on_connection_established(on_connection_established)
+      on_game_controller_ready(on_game_controller_ready)
 {
-    navigate_to(JOIN_NETWORK_GAME_SCREEN);
+    navigate_to(GAME_MODE_SELECTOR_SCREEN);
 }
 
 void screens::game_setup_screen::paint()
