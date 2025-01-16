@@ -9,7 +9,8 @@ console::console::console(std::ostream& output_stream)
 
 void console::console::clear() const
 {
-    output_stream << "\x1b[0m\033[2J" << std::flush;
+    output_stream << "\x1b[0m" << std::flush; // Reset all styles
+    system("clear");
 }
 
 void console::console::set_cursor_display(const bool display) const
