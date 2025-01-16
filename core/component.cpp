@@ -6,7 +6,7 @@ void core::component::invalidate()
 }
 
 bool core::component::handle_keyboard_event_for_child(const console::keyboard::key& key,
-                                                      const std::shared_ptr<component>& child_component)
+                                                      std::shared_ptr<component> child_component)
 {
     if (!child_component)
     {
