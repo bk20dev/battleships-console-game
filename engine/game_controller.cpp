@@ -26,29 +26,29 @@ bool engine::game_controller::is_opponent_bullet_present(const models::bullet& b
         });
 }
 
-void engine::game_controller::peer_notify_board_prepared()
+void engine::game_controller::peer_notify_board_prepared() const
 {
-    peer_connection.notify_board_prepared();
+    peer_connection->notify_board_prepared();
 }
 
-void engine::game_controller::peer_change_turn(const bool current_player)
+void engine::game_controller::peer_change_turn(const bool current_player) const
 {
-    peer_connection.change_turn(current_player);
+    peer_connection->change_turn(current_player);
 }
 
-void engine::game_controller::peer_fire_shot(const core::position& position)
+void engine::game_controller::peer_fire_shot(const core::position& position) const
 {
-    peer_connection.notify_shot_fired(position);
+    peer_connection->notify_shot_fired(position);
 }
 
-void engine::game_controller::peer_notify_battleship_part_damaged(const core::position& damaged_battleship_part)
+void engine::game_controller::peer_notify_battleship_part_damaged(const core::position& damaged_battleship_part) const
 {
-    peer_connection.notify_battleship_part_damaged(damaged_battleship_part);
+    peer_connection->notify_battleship_part_damaged(damaged_battleship_part);
 }
 
-void engine::game_controller::peer_notify_battleship_destroyed(const models::battleship& destroyed_battleship)
+void engine::game_controller::peer_notify_battleship_destroyed(const models::battleship& destroyed_battleship) const
 {
-    peer_connection.notify_battleship_destroyed(destroyed_battleship);
+    peer_connection->notify_battleship_destroyed(destroyed_battleship);
 }
 
 void engine::game_controller::handle_opponent_board_prepared()
@@ -78,9 +78,15 @@ void engine::game_controller::handle_opponent_battleship_destroyed(const models:
     opponent_player.add_destroyed_battleship(destroyed_battleship);
 }
 
-engine::game_controller::game_controller(const std::vector<models::battleship>& current_player_placed_battleships)
+engine::game_controller::game_controller(const std::shared_ptr<i_peer>& peer_connection)
 {
     initialize_players();
+    this->peer_connection = peer_connection;
+}
+
+void engine::game_controller::set_placed_battleships(
+    const std::vector<models::battleship>& current_player_placed_battleships)
+{
     current_player.set_placed_battleships(current_player_placed_battleships);
 }
 
