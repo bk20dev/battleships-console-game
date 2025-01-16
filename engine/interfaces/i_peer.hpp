@@ -2,8 +2,8 @@
 
 #include <functional>
 
-#include "../core/dimension.hpp"
-#include "../models/battleship.hpp"
+#include "../../core/dimension.hpp"
+#include "../../models/battleship.hpp"
 
 namespace engine
 {

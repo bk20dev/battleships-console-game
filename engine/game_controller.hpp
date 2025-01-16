@@ -1,7 +1,7 @@
 #pragma once
 
-#include "i_peer.hpp"
 #include "player.hpp"
+#include "interfaces/i_peer.hpp"
 
 namespace engine
 {

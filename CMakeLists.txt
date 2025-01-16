@@ -53,8 +53,10 @@ add_executable(battleships_console_game main.cpp
         engine/game_controller.cpp
         engine/game_object_serializer.hpp
         engine/game_object_serializer.cpp
-        engine/i_peer.hpp
-        engine/i_peer.cpp
+        engine/interfaces/i_peer.hpp
+        engine/interfaces/i_peer.cpp
+        engine/interfaces/i_connection.hpp
+        engine/interfaces/i_connection.cpp
         engine/message_serializer.cpp
         engine/message_serializer.hpp
         engine/player.hpp
