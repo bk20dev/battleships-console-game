@@ -10,21 +10,23 @@ namespace screens
 {
     class board_designer_screen final : public components::screen
     {
+        bool is_board_submitted = false;
         core::tab_indexer tab_indexer{};
 
         std::shared_ptr<engine::game_controller> game_controller;
 
         std::shared_ptr<components::full_board_designer_picker> full_board_designer_picker;
         std::shared_ptr<components::text_button> submit_placement_button;
-        std::shared_ptr<components::label> submit_placement_validation_error_label;
+        std::shared_ptr<components::label> submit_feedback_label;
 
         void initialize_components();
         void initialize_tab_indexer();
 
         void display_validation_error_message(const std::string& error_message) const;
+        void display_notice_message(const std::string& notice_message) const;
         bool validate_battleship_placement() const;
-        void submit_battleship_placement(const std::vector<models::battleship>& placed_battleships) const;
-        void validate_and_submit_battleship_placement() const;
+        void submit_battleship_placement(const std::vector<models::battleship>& placed_battleships);
+        void validate_and_submit_battleship_placement();
 
     public:
         board_designer_screen(int x, int y, const std::shared_ptr<console::console>& console,

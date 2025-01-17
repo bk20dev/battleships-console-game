@@ -19,10 +19,13 @@ namespace constants::style
         constexpr console::style::style hint_style = {
             .text_effect = console::style::text_effect::FAINT,
         };
-
         /** Used to draw textual errors, e.g. validation errors. */
-        constexpr console::style::style error = {
+        constexpr console::style::style error_style = {
             .foreground_color = console::style::RED,
+        };
+        /** Used to draw textual errors, e.g. validation errors. */
+        constexpr console::style::style notice_style = {
+            .foreground_color = console::style::CYAN,
         };
 
         /** Used to draw selected elements, e.g. buttons. */
