@@ -4,12 +4,15 @@
 #include "../../components/full_board_designer_picker.hpp"
 #include "../../components/screen.hpp"
 #include "../../core/tab_indexer.hpp"
+#include "../../engine/game_controller.hpp"
 
 namespace screens
 {
     class board_designer_screen final : public components::screen
     {
         core::tab_indexer tab_indexer{};
+
+        std::shared_ptr<engine::game_controller> game_controller;
 
         std::shared_ptr<components::full_board_designer_picker> full_board_designer_picker;
         std::shared_ptr<components::text_button> submit_placement_button;
@@ -24,7 +27,8 @@ namespace screens
         void validate_and_submit_battleship_placement() const;
 
     public:
-        board_designer_screen(int x, int y, const std::shared_ptr<console::console>& console);
+        board_designer_screen(int x, int y, const std::shared_ptr<console::console>& console,
+                              const std::shared_ptr<engine::game_controller>& game_controller);
 
         void paint() override;
 

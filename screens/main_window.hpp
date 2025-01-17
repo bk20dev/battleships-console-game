@@ -2,6 +2,7 @@
 
 #include "board_designer/board_designer_screen.hpp"
 #include "../core/component.hpp"
+#include "gameplay/gameplay_screen.hpp"
 #include "game_setup/game_setup_screen.hpp"
 
 namespace screens
@@ -11,7 +12,8 @@ namespace screens
         enum destination
         {
             GAME_SETUP_SCREEN,
-            BOARD_DESIGNER_SCREEN
+            BOARD_DESIGNER_SCREEN,
+            GAMEPLAY_SCREEN,
         };
 
         std::shared_ptr<component> current_screen = nullptr;
@@ -19,11 +21,14 @@ namespace screens
 
         std::shared_ptr<game_setup_screen> create_game_setup_screen();
         std::shared_ptr<board_designer_screen> create_board_designer_screen();
+        std::shared_ptr<gameplay_screen> create_gameplay_screen();
         std::shared_ptr<component> create_screen(destination destination);
 
         void navigate_to(destination destination);
 
         void handle_game_controller_ready(const std::shared_ptr<engine::game_controller>&);
+
+        void handle_all_boards_ready();
 
     public:
         main_window(int x, int y, const std::shared_ptr<console::console>& console);

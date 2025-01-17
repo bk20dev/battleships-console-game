@@ -45,7 +45,8 @@ bool screens::board_designer_screen::validate_battleship_placement() const
 void screens::board_designer_screen::submit_battleship_placement(
     const std::vector<models::battleship>& placed_battleships) const
 {
-    // TODO:
+    game_controller->set_placed_battleships(placed_battleships);
+    game_controller->mark_board_prepared();
 }
 
 void screens::board_designer_screen::validate_and_submit_battleship_placement() const
@@ -63,8 +64,9 @@ void screens::board_designer_screen::validate_and_submit_battleship_placement() 
 }
 
 screens::board_designer_screen::board_designer_screen(
-    const int x, const int y, const std::shared_ptr<console::console>& console)
-    : screen(x, y, console, "Place your battleships")
+    const int x, const int y, const std::shared_ptr<console::console>& console,
+    const std::shared_ptr<engine::game_controller>& game_controller)
+    : screen(x, y, console, "Place your battleships"), game_controller(game_controller)
 {
     initialize_components();
     initialize_tab_indexer();

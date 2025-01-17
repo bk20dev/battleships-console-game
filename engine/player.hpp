@@ -10,6 +10,8 @@ namespace engine
 {
     class player final
     {
+        /** Tells whether the player has prepared their board (placed their battleships). */
+        bool is_board_ready = false;
         /** Tells whether the player is currently making their turn. */
         bool currently_plays = false;
 
@@ -33,6 +35,8 @@ namespace engine
         [[nodiscard]] bool is_battleship_destroyed(const models::battleship& battleship_to_check) const;
 
     public:
+        [[nodiscard]] bool get_is_board_ready() const;
+
         [[nodiscard]] bool get_is_currently_playing() const;
 
         [[nodiscard]] const std::vector<models::battleship>& get_placed_battleships() const;
@@ -54,6 +58,8 @@ namespace engine
         void add_damaged_battleship_part(const core::position& damaged_battleship_part);
 
         void add_destroyed_battleship(const models::battleship& destroyed_battleship);
+
+        void set_board_ready();
 
         void set_currently_plays(bool currently_plays);
     };

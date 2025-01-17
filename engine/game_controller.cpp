@@ -53,7 +53,8 @@ void engine::game_controller::peer_notify_battleship_destroyed(const models::bat
 
 void engine::game_controller::handle_opponent_board_prepared()
 {
-    // TODO:
+    opponent_player.set_board_ready();
+    handle_any_board_prepared();
 }
 
 void engine::game_controller::handle_turn_changed(const bool opponent_player)
@@ -78,6 +79,13 @@ void engine::game_controller::handle_opponent_battleship_destroyed(const models:
     opponent_player.add_destroyed_battleship(destroyed_battleship);
 }
 
+void engine::game_controller::handle_any_board_prepared() const
+{
+    if (!current_player.get_is_board_ready()) return;
+    if (!opponent_player.get_is_board_ready()) return;
+    on_all_boards_ready();
+}
+
 engine::game_controller::game_controller(const std::shared_ptr<i_peer>& peer_connection)
 {
     initialize_players();
@@ -88,6 +96,14 @@ void engine::game_controller::set_placed_battleships(
     const std::vector<models::battleship>& current_player_placed_battleships)
 {
     current_player.set_placed_battleships(current_player_placed_battleships);
+}
+
+void engine::game_controller::mark_board_prepared()
+{
+    current_player.set_board_ready();
+    peer_notify_board_prepared();
+
+    handle_any_board_prepared();
 }
 
 void engine::game_controller::change_turn(const bool selected_player)

@@ -34,6 +34,11 @@ bool engine::player::is_battleship_destroyed(const models::battleship& battleshi
     return shots_on_target >= battleship_size;
 }
 
+bool engine::player::get_is_board_ready() const
+{
+    return is_board_ready;
+}
+
 bool engine::player::get_is_currently_playing() const
 {
     return currently_plays;
@@ -112,6 +117,11 @@ void engine::player::add_damaged_battleship_part(const core::position& damaged_b
 void engine::player::add_destroyed_battleship(const models::battleship& destroyed_battleship)
 {
     destroyed_battleships.push_back(destroyed_battleship);
+}
+
+void engine::player::set_board_ready()
+{
+    is_board_ready = true;
 }
 
 void engine::player::set_currently_plays(const bool currently_plays)
