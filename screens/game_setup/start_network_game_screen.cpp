@@ -3,6 +3,9 @@
 #include <iostream>
 
 #include "../../constants/style.hpp"
+#include "../../engine/serializable_peer.hpp"
+#include "../../engine/interfaces/i_connection.hpp"
+#include "../../network/socket_error.hpp"
 
 namespace
 {
@@ -36,9 +39,9 @@ void screens::start_network_game_screen::initialize_components()
     port_input_hint_label->set_style(constants::style::general::hint_style);
 
     start_game_button = std::make_shared<components::text_button>(
-        0, 6, child_console_view, "Start game", []
+        0, 6, child_console_view, "Start game", [this]
         {
-            // TODO: Implement establishing a connection
+            handle_start_game_button_clicked();
         });
     go_back_button = std::make_shared<components::text_button>(
         0, 7, child_console_view, "Go back", [this]
@@ -59,14 +62,50 @@ void screens::start_network_game_screen::initialize_tab_indexer()
     tab_indexer.connect_component(go_back_button);
 }
 
+void screens::start_network_game_screen::initialize_tcp_server() const
+{
+    tcp_server->on_client_connected = [this]
+    {
+        display_network_log("Opponent connected.");
+        const auto server_connection = std::static_pointer_cast<engine::i_connection>(tcp_server);
+        const auto server_peer = std::make_shared<engine::serializable_peer>(server_connection);
+        on_peer_created(server_peer);
+    };
+}
+
+void screens::start_network_game_screen::display_network_log(const std::string& network_log) const
+{
+    network_log_label->set_text(network_log);
+    if (network_log_label->should_repaint())
+    {
+        network_log_label->paint();
+    }
+}
+
+void screens::start_network_game_screen::handle_start_game_button_clicked()
+{
+    try
+    {
+        tcp_server->start_listening(3000); // TODO: Read port and lock controls
+        display_network_log("Waiting for opponent to connect...");
+    }
+    catch (const network::socket_error& error)
+    {
+        std::cout << error.what() << std::endl;
+    }
+}
+
 screens::start_network_game_screen::start_network_game_screen(
     const int x, const int y, const std::shared_ptr<console::console>& console,
+    const std::function<void(const std::shared_ptr<engine::i_peer>&)>& on_peer_created,
     const std::function<void()>& on_navigate_up)
     : screen(x, y, console, "Start network game"),
+      on_peer_created(on_peer_created),
       on_navigate_up(on_navigate_up)
 {
     initialize_components();
     initialize_tab_indexer();
+    initialize_tcp_server();
 }
 
 void screens::start_network_game_screen::paint()

@@ -24,6 +24,10 @@ std::shared_ptr<screens::start_network_game_screen> screens::game_setup_screen::
 {
     return std::make_shared<start_network_game_screen>(
         0, 0, console_view,
+        [this](const std::shared_ptr<engine::i_peer>& created_peer)
+        {
+            handle_peer_created(created_peer);
+        },
         [this]
         {
             navigate_to(GAME_MODE_SELECTOR_SCREEN);
