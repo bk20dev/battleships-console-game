@@ -64,11 +64,10 @@ void screens::start_network_game_screen::initialize_tab_indexer()
 
 void screens::start_network_game_screen::initialize_tcp_server() const
 {
-    tcp_server->on_client_connected = [this]
+    tcp_server_connection->on_client_connected = [this]
     {
         display_network_log("Opponent connected.");
-        const auto server_connection = std::static_pointer_cast<engine::i_connection>(tcp_server);
-        const auto server_peer = std::make_shared<engine::serializable_peer>(server_connection);
+        const auto server_peer = std::make_shared<engine::serializable_peer>(tcp_server_connection);
         on_peer_created(server_peer);
     };
 }
@@ -116,7 +115,7 @@ void screens::start_network_game_screen::handle_start_game_button_clicked() cons
 
     try
     {
-        tcp_server->start_listening(port);
+        tcp_server_connection->start_listening(port);
         display_notice_message("Waiting for opponent...");
         display_network_log("Waiting for opponent to connect...");
     }
@@ -166,7 +165,7 @@ void screens::start_network_game_screen::paint()
 
 bool screens::start_network_game_screen::handle_keyboard_event(const console::keyboard::key& key)
 {
-    if (tcp_server->is_listening())
+    if (tcp_server_connection->is_listening())
     {
         return false;
     }

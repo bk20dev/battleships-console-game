@@ -20,7 +20,7 @@ namespace engine
         void handle_message(const std::string& serialized_message) const;
 
     public:
-        explicit serializable_peer(const std::shared_ptr<i_connection>& connection);
+        explicit serializable_peer(std::shared_ptr<i_connection> connection);
 
         void notify_board_prepared() override;
         void change_turn(bool current_player) override;

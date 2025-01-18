@@ -26,7 +26,8 @@ namespace screens
         std::shared_ptr<components::label> start_game_feedback_label;
         std::shared_ptr<components::label> network_log_label;
 
-        std::shared_ptr<network::tcp_server> tcp_server = std::make_shared<network::tcp_server>();
+        std::shared_ptr<network::tcp_server_connection> tcp_server_connection
+            = std::make_shared<network::tcp_server_connection>();
 
         const std::function<void(const std::shared_ptr<engine::i_peer>&)> on_peer_created;
         const std::function<void()> on_navigate_up;

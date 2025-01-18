@@ -33,7 +33,7 @@ void engine::serializable_peer::handle_message(const std::string& serialized_mes
     }
 }
 
-engine::serializable_peer::serializable_peer(const std::shared_ptr<i_connection>& connection)
+engine::serializable_peer::serializable_peer(const std::shared_ptr<i_connection> connection)
 {
     this->connection = connection;
     this->connection->on_message = [this](const std::string& serialized_message)

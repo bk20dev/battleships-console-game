@@ -4,30 +4,6 @@
 
 #include "socket_error.hpp"
 
-void network::tcp_server::handle_client_connected() const
-{
-    if (on_client_connected)
-    {
-        on_client_connected();
-    }
-}
-
-void network::tcp_server::handle_client_disconnected() const
-{
-    if (on_client_disconnected)
-    {
-        on_client_disconnected();
-    }
-}
-
-void network::tcp_server::handle_client_message(const std::string& client_message) const
-{
-    if (on_client_message)
-    {
-        on_client_message(client_message);
-    }
-}
-
 void network::tcp_server::listener_thread()
 {
     client_socket_descriptor = native_socket::
@@ -120,4 +96,28 @@ void network::tcp_server::stop_listening()
 
     close_socket(server_socket_descriptor);
     close_socket(client_socket_descriptor);
+}
+
+void network::tcp_server::handle_client_connected() const
+{
+    if (on_client_connected)
+    {
+        on_client_connected();
+    }
+}
+
+void network::tcp_server::handle_client_disconnected() const
+{
+    if (on_client_disconnected)
+    {
+        on_client_disconnected();
+    }
+}
+
+void network::tcp_server::handle_client_message(const std::string& client_message) const
+{
+    if (on_client_message)
+    {
+        on_client_message(client_message);
+    }
 }
