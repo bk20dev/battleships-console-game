@@ -41,3 +41,32 @@ void network::native_socket::bind_address_to_socket(const int socket_descriptor,
         throw socket_error("Failed to bind a socket");
     }
 }
+
+void network::native_socket::listen_for_connections(const int socket_descriptor, const int max_clients)
+{
+    if (listen(socket_descriptor, max_clients) < 0)
+    {
+        throw socket_error("Failed to listen on the socket.");
+    }
+}
+
+int network::native_socket::accept_client_connection(const int socket_descriptor)
+{
+    const int client_socket = accept(socket_descriptor, nullptr, nullptr);
+    if (client_socket < 0)
+    {
+        throw socket_error("Failed to accept client connection.");
+    }
+    return client_socket;
+}
+
+int network::native_socket::receive(const int socket_descriptor, char* const buffer, const int buffer_size)
+{
+    constexpr int flags = 0;
+    const int bytes_read = recv(socket_descriptor, buffer, buffer_size, flags);
+    if (bytes_read < 0)
+    {
+        throw socket_error("Failed to read from socket");
+    }
+    return bytes_read;
+}
