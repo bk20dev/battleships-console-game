@@ -71,7 +71,19 @@ int network::native_socket::receive(const int socket_descriptor, char* const buf
     const int bytes_read = recv(socket_descriptor, buffer, buffer_size, flags);
     if (bytes_read < 0)
     {
-        throw socket_error("Failed to read from socket");
+        throw socket_error("Failed to read from socket.");
     }
     return bytes_read;
+}
+
+void network::native_socket::send(const int socket_descriptor, const std::string& message_to_send)
+{
+    constexpr int flags = 0;
+    const char* buffer = message_to_send.c_str();
+    const int buffer_size = message_to_send.size();
+    const int bytes_sent = send(socket_descriptor, buffer, buffer_size, flags);
+    if (bytes_sent < 0)
+    {
+        throw socket_error("Failed to send message.");
+    }
 }

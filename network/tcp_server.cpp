@@ -81,6 +81,16 @@ void network::tcp_server::start_listening(const int port)
     start_server_listener_thread();
 }
 
+void network::tcp_server::send_message(const std::string& message_to_send) const
+{
+    if (!is_listening())
+    {
+        return;
+    }
+
+    native_socket::send(server_socket_descriptor, message_to_send);
+}
+
 void network::tcp_server::stop_listening()
 {
     if (!is_listening())
@@ -120,4 +130,18 @@ void network::tcp_server::handle_client_message(const std::string& client_messag
     {
         on_client_message(client_message);
     }
+}
+
+void network::tcp_server_connection::handle_client_message(const std::string& client_message) const
+{
+    if (on_message)
+    {
+        on_message(client_message);
+    }
+    tcp_server::handle_client_message(client_message);
+}
+
+void network::tcp_server_connection::send(const std::string& message_to_send)
+{
+    send_message(message_to_send);
 }

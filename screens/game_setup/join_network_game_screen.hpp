@@ -23,8 +23,8 @@ namespace screens
         std::shared_ptr<components::text_button> join_game_button;
         std::shared_ptr<components::text_button> go_back_button;
 
-        const std::function<void()> on_navigate_up;
         const std::function<void(const std::shared_ptr<engine::i_peer>&)> on_peer_created;
+        const std::function<void()> on_navigate_up;
 
         void initialize_components();
         void initialize_tab_indexer();

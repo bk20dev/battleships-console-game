@@ -11,6 +11,7 @@ namespace network::native_socket
     using ::listen;
     using ::accept;
     using ::recv;
+    using ::send;
     using ::close;
 
     using socket_error_code = errno_t;
@@ -30,4 +31,6 @@ namespace network::native_socket
     int accept_client_connection(int socket_descriptor);
 
     int receive(int socket_descriptor, char* buffer, int buffer_size);
+
+    void send(int socket_descriptor, const std::string& message_to_send);
 }

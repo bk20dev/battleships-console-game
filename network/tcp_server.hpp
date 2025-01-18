@@ -36,17 +36,15 @@ namespace network
         bool is_listening() const;
 
         void start_listening(int port);
+
+        void send_message(const std::string&) const;
     };
 
     class tcp_server_connection final : public tcp_server, public engine::i_connection
     {
-        void handle_client_message(const std::string& client_message) const override
-        {
-            if (on_message)
-            {
-                on_message(client_message);
-            }
-            tcp_server::handle_client_message(client_message);
-        }
+        void handle_client_message(const std::string& client_message) const override;
+
+    public:
+        void send(const std::string&) override;
     };
 }
