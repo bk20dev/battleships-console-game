@@ -49,6 +49,11 @@ std::shared_ptr<console::console_view> console::console::create_view(const core:
     return std::make_shared<console_view>(*this, view_position);
 }
 
+void console::console::flush() const
+{
+    output_stream << std::flush;
+}
+
 std::string console::console_view::move_to(const int x, const int y) const
 {
     const int row = y + position.y, column = x + position.x;

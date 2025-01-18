@@ -25,7 +25,7 @@ void screens::board_designer_screen::initialize_tab_indexer()
     tab_indexer.connect_component(submit_placement_button);
 }
 
-void display_label_message(std::shared_ptr<components::label> target_label, const std::string& message)
+static void display_label_message(std::shared_ptr<components::label> target_label, const std::string& message)
 {
     target_label->set_text(message);
 

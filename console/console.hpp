@@ -26,10 +26,12 @@ namespace console
 
         void write_at(int x, int y, const std::string& text) const;
 
-        void fill_rectangle(const core::rectangle& rectangle, const std::string& character,
-                            const std::string& line_prefix = "") const;
+        void fill_rectangle(
+            const core::rectangle& rectangle, const std::string& character, const std::string& line_prefix = "") const;
 
         [[nodiscard]] virtual std::shared_ptr<console_view> create_view(const core::offset& offset) const;
+
+        void flush() const;
     };
 
     class console_view final : public console

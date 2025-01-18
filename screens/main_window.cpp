@@ -81,6 +81,7 @@ void screens::main_window::paint()
     if (current_screen)
     {
         current_screen->paint();
+        console_view->flush();
     }
 
     component::paint();
