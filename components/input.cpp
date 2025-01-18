@@ -32,6 +32,25 @@ console::style::style components::input::get_input_style(const bool is_placehold
     return result_style;
 }
 
+bool components::input::append_character(const char character_to_append)
+{
+    switch (input_type)
+    {
+    case TEXT:
+        text += character_to_append;
+        return true;
+    case NUMBER:
+        if (isdigit(character_to_append))
+        {
+            text += character_to_append;
+            return true;
+        }
+        break;
+    }
+
+    return false;
+}
+
 components::input::input(const int x, const int y, const std::shared_ptr<console::console>& console,
                          const components::input_type input_type, const int max_length,
                          const std::string& placeholder, const std::string& text)
@@ -51,6 +70,11 @@ void components::input::set_text(const std::string& new_text)
 void components::input::set_placeholder(const std::string& new_placeholder)
 {
     placeholder = new_placeholder;
+}
+
+std::string components::input::get_text()
+{
+    return text;
 }
 
 std::string pad_right(const std::string& text, const size_t text_length, const int desired_length,
@@ -103,19 +127,9 @@ bool components::input::handle_keyboard_event(const console::keyboard::key& key)
     }
 
     const char character = static_cast<char>(key.character);
-
-    switch (input_type)
+    if (append_character(character))
     {
-    case TEXT:
-        text += character;
         invalidate();
-        return true;
-    case NUMBER:
-        if (isdigit(character))
-        {
-            text += character;
-            invalidate();
-        }
         return true;
     }
 
