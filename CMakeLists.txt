@@ -71,6 +71,8 @@ add_executable(battleships_console_game main.cpp
         network/native_socket.cpp
         network/socket_error.hpp
         network/socket_error.cpp
+        network/tcp_server.hpp
+        network/tcp_server.cpp
         network/tcp_socket.hpp
         network/tcp_socket.cpp
         screens/board_designer/board_designer_screen.hpp
