@@ -24,6 +24,11 @@ void network::native_socket::close_socket(const int socket_to_close)
 
 network::native_socket::socket_internet_address network::native_socket::create_socket_internet_address(const int port)
 {
+    if (port < 0 || port >= 65536)
+    {
+        throw socket_error("Port out of bounds", 0);
+    }
+
     return {
         .sin_family = AF_INET,
         .sin_port = htons(port),

@@ -30,7 +30,7 @@ void screens::start_network_game_screen::initialize_components()
 {
     port_input_label = std::make_shared<components::label>(0, 0, child_console_view, "Port");
     port_input = std::make_shared<components::input>(
-        6, 0, child_console_view, components::input_type::NUMBER, 5, "3000");
+        6, 0, child_console_view, components::input_type::NUMBER, 5, std::to_string(default_port_value));
 
     port_input_hint_label = std::make_shared<components::label>(
         0, 2, child_console_view,
@@ -48,7 +48,7 @@ void screens::start_network_game_screen::initialize_components()
         {
             on_navigate_up();
         });
-
+    start_game_feedback_label = std::make_shared<components::label>(11, 6, child_console_view);
     network_log_label = std::make_shared<components::label>(0, child_console_view_height - 1, child_console_view);
     network_log_label->set_style(constants::style::general::hint_style);
 
@@ -73,6 +73,28 @@ void screens::start_network_game_screen::initialize_tcp_server() const
     };
 }
 
+static void display_label_message(std::shared_ptr<components::label> target_label, const std::string& message)
+{
+    target_label->set_text(message);
+
+    if (target_label->should_repaint())
+    {
+        target_label->paint();
+    }
+}
+
+void screens::start_network_game_screen::display_error_message(const std::string& error_message) const
+{
+    start_game_feedback_label->set_style(constants::style::general::error_style);
+    display_label_message(start_game_feedback_label, error_message);
+}
+
+void screens::start_network_game_screen::display_notice_message(const std::string& notice_message) const
+{
+    start_game_feedback_label->set_style(constants::style::general::notice_style);
+    display_label_message(start_game_feedback_label, notice_message);
+}
+
 void screens::start_network_game_screen::display_network_log(const std::string& network_log) const
 {
     network_log_label->set_text(network_log);
@@ -82,16 +104,38 @@ void screens::start_network_game_screen::display_network_log(const std::string& 
     }
 }
 
-void screens::start_network_game_screen::handle_start_game_button_clicked()
+void screens::start_network_game_screen::handle_start_game_button_clicked() const
 {
+    int port = default_port_value;
+
+    const std::string entered_port_text = port_input->get_text();
+    if (entered_port_text.length() > 0)
+    {
+        port = std::stoi(entered_port_text);
+    }
+
     try
     {
-        tcp_server->start_listening(3000); // TODO: Read port and lock controls
+        tcp_server->start_listening(port);
+        display_notice_message("Waiting for opponent...");
         display_network_log("Waiting for opponent to connect...");
     }
     catch (const network::socket_error& error)
     {
-        std::cout << error.what() << std::endl;
+        switch (error.socket_error_code)
+        {
+        case 0:
+            display_error_message("Invalid port value. Try a lower one.");
+            break;
+        case 48:
+            display_error_message("This port is in use. Try a different one.");
+            break;
+        default:
+            display_error_message("Something went wrong.");
+            break;
+        }
+
+        display_network_log(error.what());
     }
 }
 
@@ -122,6 +166,11 @@ void screens::start_network_game_screen::paint()
 
 bool screens::start_network_game_screen::handle_keyboard_event(const console::keyboard::key& key)
 {
+    if (tcp_server->is_listening())
+    {
+        return false;
+    }
+
     if (key == console::keyboard::character::ESCAPE)
     {
         on_navigate_up();

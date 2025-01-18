@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "socket_error.hpp"
+
 void network::tcp_server::handle_client_connected() const
 {
     if (on_client_connected)
@@ -82,13 +84,23 @@ void network::tcp_server::start_listening(const int port)
         return;
     }
 
-    server_socket_descriptor = native_socket::create_tcp_socket();
-    const auto server_address = native_socket::create_socket_internet_address(port);
+    try
+    {
+        server_socket_descriptor = native_socket::create_tcp_socket();
+        const auto server_address = native_socket::create_socket_internet_address(port);
 
-    native_socket::bind_address_to_socket(server_socket_descriptor, server_address);
+        native_socket::bind_address_to_socket(server_socket_descriptor, server_address);
 
-    static constexpr int max_clients = 1;
-    native_socket::listen_for_connections(server_socket_descriptor, max_clients);
+        static constexpr int max_clients = 1;
+        native_socket::listen_for_connections(server_socket_descriptor, max_clients);
+    }
+    catch (const socket_error&)
+    {
+        close_socket(server_socket_descriptor);
+        server_socket_descriptor = -1;
+
+        throw;
+    }
 
     start_server_listener_thread();
 }
