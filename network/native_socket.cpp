@@ -1,5 +1,9 @@
 #include "native_socket.hpp"
 
+#include <unistd.h>
+
+#include "socket_error.hpp"
+
 int network::native_socket::create_tcp_socket()
 {
     const int socket_descriptor = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -28,7 +32,7 @@ network::native_socket::socket_internet_address network::native_socket::create_s
 }
 
 void network::native_socket::bind_address_to_socket(const int socket_descriptor,
-                                                const socket_internet_address& socket_address)
+                                                    const socket_internet_address& socket_address)
 {
     // ReSharper disable once CppTooWideScopeInitStatement
     const auto address_to_bind = reinterpret_cast<const native_socket::socket_address*>(&socket_address);
