@@ -2,6 +2,7 @@
 
 #include "keyboard_actions.hpp"
 #include "label.hpp"
+#include "../constants/dimension.hpp"
 #include "../core/component.hpp"
 
 namespace components
@@ -24,6 +25,12 @@ namespace components
         void set_keyboard_actions(const std::vector<keyboard_actions::keyboard_action>& keyboard_actions) const;
 
     public:
+        static constexpr core::offset child_console_view_offset = {.x = 0, .y = 5};
+        static constexpr int screen_footer_height = 1;
+
+        static constexpr int child_console_view_height = constants::dimension::screen_height
+            - child_console_view_offset.y - screen_footer_height;
+
         screen(int x, int y, const std::shared_ptr<console::console>& console, const std::string& screen_title);
 
         void paint() override;

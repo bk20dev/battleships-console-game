@@ -14,7 +14,7 @@ namespace components
         void clear_previous_text_trail() const;
 
     public:
-        label(int x, int y, const std::shared_ptr<console::console>& console, const std::string& text);
+        label(int x, int y, const std::shared_ptr<console::console>& console, const std::string& text = "");
 
         void set_text(const std::string& text);
 

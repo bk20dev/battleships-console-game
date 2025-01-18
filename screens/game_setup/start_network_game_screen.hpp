@@ -18,6 +18,7 @@ namespace screens
         std::shared_ptr<components::label> port_input_hint_label;
         std::shared_ptr<components::text_button> start_game_button;
         std::shared_ptr<components::text_button> go_back_button;
+        std::shared_ptr<components::label> network_log_label;
 
         const std::function<void()> on_navigate_up;
 

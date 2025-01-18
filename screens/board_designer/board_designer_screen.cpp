@@ -16,7 +16,7 @@ void screens::board_designer_screen::initialize_components()
         {
             validate_and_submit_battleship_placement();
         });
-    submit_feedback_label = std::make_shared<components::label>(8, 12, child_console_view, "");
+    submit_feedback_label = std::make_shared<components::label>(8, 12, child_console_view);
 }
 
 void screens::board_designer_screen::initialize_tab_indexer()

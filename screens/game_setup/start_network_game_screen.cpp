@@ -46,6 +46,9 @@ void screens::start_network_game_screen::initialize_components()
             on_navigate_up();
         });
 
+    network_log_label = std::make_shared<components::label>(0, child_console_view_height - 1, child_console_view);
+    network_log_label->set_style(constants::style::general::hint_style);
+
     set_keyboard_actions(start_network_game_screen_keyboard_actions);
 }
 
@@ -73,6 +76,7 @@ void screens::start_network_game_screen::paint()
     port_input_hint_label->paint();
     start_game_button->paint();
     go_back_button->paint();
+    network_log_label->paint();
 
     screen::paint();
 }
