@@ -26,7 +26,7 @@ network::native_socket::socket_internet_address network::native_socket::create_s
 {
     if (port < 0 || port >= 65536)
     {
-        throw socket_error("Port out of bounds", 0);
+        throw socket_error("Port out of bounds.", 0);
     }
 
     return {
@@ -36,6 +36,19 @@ network::native_socket::socket_internet_address network::native_socket::create_s
     };
 }
 
+network::native_socket::socket_internet_address network::native_socket::create_socket_internet_address(
+    const std::string& ip_address, const int port)
+{
+    auto socket_internet_address = create_socket_internet_address(port);
+    const char* ip_address_cstr = ip_address.c_str();
+
+    if (inet_pton(socket_internet_address.sin_family, ip_address_cstr, &socket_internet_address.sin_addr) < 0)
+    {
+        throw socket_error("Invalid IP address.");
+    }
+    return socket_internet_address;
+}
+
 void network::native_socket::bind_address_to_socket(const int socket_descriptor,
                                                     const socket_internet_address& socket_address)
 {
@@ -43,7 +56,7 @@ void network::native_socket::bind_address_to_socket(const int socket_descriptor,
     const auto address_to_bind = reinterpret_cast<const native_socket::socket_address*>(&socket_address);
     if (bind(socket_descriptor, address_to_bind, sizeof(socket_address)) < 0)
     {
-        throw socket_error("Failed to bind a socket");
+        throw socket_error("Failed to bind a socket.");
     }
 }
 
@@ -63,6 +76,16 @@ int network::native_socket::accept_client_connection(const int socket_descriptor
         throw socket_error("Failed to accept client connection.");
     }
     return client_socket;
+}
+
+void network::native_socket::connect(int socket_descriptor, socket_internet_address& server_internet_address)
+{
+    const auto socket_address = reinterpret_cast<native_socket::socket_address*>(&server_internet_address);
+
+    if (connect(socket_descriptor, socket_address, sizeof(server_internet_address)) < 0)
+    {
+        throw socket_error("Failed to connect.");
+    }
 }
 
 int network::native_socket::receive(const int socket_descriptor, char* const buffer, const int buffer_size)
