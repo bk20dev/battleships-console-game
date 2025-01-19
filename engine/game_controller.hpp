@@ -13,6 +13,7 @@ namespace engine
         player opponent_player;
 
         void initialize_players();
+        void initialize_peer_connection(std::shared_ptr<i_peer> peer_connection);
 
         [[nodiscard]] bool is_opponent_bullet_present(const models::bullet& bullet_to_find) const;
 
@@ -39,8 +40,8 @@ namespace engine
         std::function<void()> on_all_boards_ready;
 
         void mark_board_prepared();
-        void change_turn(bool selected_player);
-        bool shoot_opponent_board(const core::position& position);
+        void change_turn(bool selected_player, bool force = false);
+        bool shoot_opponent_board(const core::position& position) const;
 
         [[nodiscard]] const player& get_current_player() const;
         [[nodiscard]] const player& get_opponent_player() const;

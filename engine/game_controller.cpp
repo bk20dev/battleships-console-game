@@ -16,6 +16,32 @@ void engine::game_controller::initialize_players()
     opponent_player = player();
 }
 
+void engine::game_controller::initialize_peer_connection(std::shared_ptr<i_peer> peer_connection)
+{
+    this->peer_connection = peer_connection;
+
+    peer_connection->on_opponent_board_prepared = [this]
+    {
+        handle_opponent_board_prepared();
+    };
+    peer_connection->on_turn_changed = [this](const bool opponent_player)
+    {
+        handle_turn_changed(opponent_player);
+    };
+    peer_connection->on_opponent_shot_received = [this](const core::position& position)
+    {
+        handle_opponent_shot_received(position);
+    };
+    peer_connection->on_opponent_battleship_part_damaged = [this](const core::position& damaged_battleship_part)
+    {
+        handle_opponent_battleship_part_damaged(damaged_battleship_part);
+    };
+    peer_connection->on_opponent_battleship_destroyed = [this](const models::battleship& destroyed_battleship)
+    {
+        handle_opponent_battleship_destroyed(destroyed_battleship);
+    };
+}
+
 bool engine::game_controller::is_opponent_bullet_present(const models::bullet& bullet_to_find) const
 {
     return std::ranges::any_of(
@@ -89,7 +115,7 @@ void engine::game_controller::handle_any_board_prepared() const
 engine::game_controller::game_controller(const std::shared_ptr<i_peer>& peer_connection)
 {
     initialize_players();
-    this->peer_connection = peer_connection;
+    initialize_peer_connection(peer_connection);
 }
 
 void engine::game_controller::set_placed_battleships(
@@ -101,14 +127,19 @@ void engine::game_controller::set_placed_battleships(
 void engine::game_controller::mark_board_prepared()
 {
     current_player.set_board_ready();
+
     peer_notify_board_prepared();
+    if (!opponent_player.get_is_currently_playing())
+    {
+        change_turn(/* current player */ true, /* force */ true);
+    }
 
     handle_any_board_prepared();
 }
 
-void engine::game_controller::change_turn(const bool selected_player)
+void engine::game_controller::change_turn(const bool selected_player, const bool force)
 {
-    if (!current_player.get_is_currently_playing())
+    if (!force && !current_player.get_is_currently_playing())
     {
         return;
     }
@@ -117,7 +148,7 @@ void engine::game_controller::change_turn(const bool selected_player)
     peer_change_turn(selected_player);
 }
 
-bool engine::game_controller::shoot_opponent_board(const core::position& position)
+bool engine::game_controller::shoot_opponent_board(const core::position& position) const
 {
     if (!current_player.get_is_currently_playing())
     {
