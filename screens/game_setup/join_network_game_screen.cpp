@@ -1,6 +1,9 @@
 #include "join_network_game_screen.hpp"
 
 #include "../../components/button.hpp"
+#include "../../constants/style.hpp"
+#include "../../engine/serializable_peer.hpp"
+#include "../../network/socket_error.hpp"
 
 namespace
 {
@@ -24,9 +27,10 @@ namespace
 void screens::join_network_game_screen::initialize_components()
 {
     ip_input_label = std::make_shared<components::label>(0, 0, child_console_view, "IP Address");
-    ip_input = std::make_shared<components::input>(11, 0, child_console_view, components::TEXT, 15, "192.168.123.123");
+    ip_input = std::make_shared<components::input>(11, 0, child_console_view, components::TEXT, 15, "0.0.0.0");
     port_input_label = std::make_shared<components::label>(0, 1, child_console_view, "Port");
-    port_input = std::make_shared<components::input>(5, 1, child_console_view, components::NUMBER, 5, "3000");
+    port_input = std::make_shared<components::input>(5, 1, child_console_view, components::NUMBER, 5,
+                                                     std::to_string(default_port_value));
     join_game_button = std::make_shared<components::text_button>(0, 4, child_console_view, "Join game", [this]
     {
         handle_join_game_button_clicked();
@@ -35,6 +39,9 @@ void screens::join_network_game_screen::initialize_components()
     {
         on_navigate_up();
     });
+    join_game_feedback_label = std::make_shared<components::label>(10, 4, child_console_view);
+    network_log_label = std::make_shared<components::label>(0, child_console_view_height - 1, child_console_view);
+    network_log_label->set_style(constants::style::general::hint_style);
     set_keyboard_actions(join_network_game_screen_keyboard_actions);
 }
 
@@ -46,12 +53,84 @@ void screens::join_network_game_screen::initialize_tab_indexer()
     tab_indexer.connect_component(go_back_button);
 }
 
+void screens::join_network_game_screen::initialize_tcp_client() const
+{
+    tcp_client_connection->on_server_connected = [this]
+    {
+        display_network_log("Connected to opponent.");
+        const auto client_peer = std::make_shared<engine::serializable_peer>(tcp_client_connection);
+        on_peer_created(client_peer);
+    };
+}
+
+static void display_label_message(std::shared_ptr<components::label> target_label, const std::string& message)
+{
+    target_label->set_text(message);
+
+    if (target_label->should_repaint())
+    {
+        target_label->paint();
+    }
+}
+
+
+void screens::join_network_game_screen::display_error_message(const std::string& error_message) const
+{
+    join_game_feedback_label->set_style(constants::style::general::error_style);
+    display_label_message(join_game_feedback_label, error_message);
+}
+
+void screens::join_network_game_screen::display_notice_message(const std::string& notice_message) const
+{
+    join_game_feedback_label->set_style(constants::style::general::notice_style);
+    display_label_message(join_game_feedback_label, notice_message);
+}
+
+void screens::join_network_game_screen::display_network_log(const std::string& network_log) const
+{
+    network_log_label->set_text(network_log);
+    if (network_log_label->should_repaint())
+    {
+        network_log_label->paint();
+    }
+}
+
 void screens::join_network_game_screen::handle_join_game_button_clicked() const
 {
-    // TODO: Implement establishing a connection
+    int port = default_port_value;
 
-    const auto created_peer = std::make_shared<engine::i_peer>();
-    on_peer_created(created_peer);
+    const std::string entered_port_text = port_input->get_text();
+    if (entered_port_text.length() > 0)
+    {
+        port = std::stoi(entered_port_text);
+    }
+
+    const std::string entered_ip_text = ip_input->get_text();
+
+    try
+    {
+        display_notice_message("Connecting...");
+        tcp_client_connection->connect_to(entered_ip_text, port);
+    }
+    catch (const network::socket_error& error)
+    {
+        switch (error.socket_error_code)
+        {
+        case 0:
+            display_error_message("Invalid port value. Try a lower one.");
+            break;
+        case 60:
+            display_error_message("Server not found. Try a different IP.");
+            break;
+        case 61:
+            display_error_message("Server is not running or is listening on a different port.");
+            break;
+        default:
+            display_error_message("Something went wrong.");
+            break;
+        }
+        display_network_log(error.what());
+    }
 }
 
 screens::join_network_game_screen::join_network_game_screen(
@@ -63,6 +142,7 @@ screens::join_network_game_screen::join_network_game_screen(
 {
     initialize_components();
     initialize_tab_indexer();
+    initialize_tcp_client();
 }
 
 void screens::join_network_game_screen::paint()

@@ -115,6 +115,7 @@ void screens::start_network_game_screen::handle_start_game_button_clicked() cons
 
     try
     {
+        display_notice_message("Starting the server...");
         tcp_server_connection->start_listening(port);
         display_notice_message("Waiting for opponent...");
         display_network_log("Waiting for opponent to connect...");

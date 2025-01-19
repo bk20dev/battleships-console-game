@@ -60,9 +60,10 @@ void network::tcp_server::start_listening(const int port)
         return;
     }
 
+    server_socket_descriptor = native_socket::create_tcp_socket();
+
     try
     {
-        server_socket_descriptor = native_socket::create_tcp_socket();
         const auto server_address = native_socket::create_socket_internet_address(port);
 
         native_socket::bind_address_to_socket(server_socket_descriptor, server_address);
@@ -88,7 +89,7 @@ void network::tcp_server::send_message(const std::string& message_to_send) const
         return;
     }
 
-    native_socket::send(server_socket_descriptor, message_to_send);
+    native_socket::send(client_socket_descriptor, message_to_send);
 }
 
 void network::tcp_server::stop_listening()
@@ -104,8 +105,8 @@ void network::tcp_server::stop_listening()
     }
     server_listener_thread = std::nullopt;
 
-    close_socket(server_socket_descriptor);
     close_socket(client_socket_descriptor);
+    close_socket(server_socket_descriptor);
 }
 
 void network::tcp_server::handle_client_connected() const
