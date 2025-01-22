@@ -35,7 +35,14 @@ void network::tcp_server::start_server_listener_thread()
 {
     server_listener_thread = std::thread([this]
     {
-        listener_thread();
+        try
+        {
+            listener_thread();
+        }
+        catch (const socket_error& error)
+        {
+            handle_network_error(error);
+        }
     });
 }
 
@@ -70,16 +77,33 @@ void network::tcp_server::start_listening(const int port)
 
         static constexpr int max_clients = 1;
         native_socket::listen_for_connections(server_socket_descriptor, max_clients);
+
+        start_server_listener_thread();
     }
-    catch (const socket_error&)
+    catch (const socket_error& network_error)
     {
         close_socket(server_socket_descriptor);
         server_socket_descriptor = -1;
 
-        throw;
+        handle_network_error(network_error);
+    }
+}
+
+void network::tcp_server::stop_listening()
+{
+    if (!is_listening())
+    {
+        return;
     }
 
-    start_server_listener_thread();
+    close_socket(client_socket_descriptor);
+    close_socket(server_socket_descriptor);
+
+    if (server_listener_thread && server_listener_thread->joinable())
+    {
+        server_listener_thread->join();
+    }
+    server_listener_thread = std::nullopt;
 }
 
 void network::tcp_server::send_message(const std::string& message_to_send) const
@@ -90,23 +114,6 @@ void network::tcp_server::send_message(const std::string& message_to_send) const
     }
 
     native_socket::send(client_socket_descriptor, message_to_send);
-}
-
-void network::tcp_server::stop_listening()
-{
-    if (!is_listening())
-    {
-        return;
-    }
-
-    if (server_listener_thread && server_listener_thread->joinable())
-    {
-        server_listener_thread->join();
-    }
-    server_listener_thread = std::nullopt;
-
-    close_socket(client_socket_descriptor);
-    close_socket(server_socket_descriptor);
 }
 
 void network::tcp_server::handle_client_connected() const
@@ -131,6 +138,19 @@ void network::tcp_server::handle_client_message(const std::string& client_messag
     {
         on_client_message(client_message);
     }
+}
+
+void network::tcp_server::handle_network_error(const socket_error& network_error) const
+{
+    if (on_network_error)
+    {
+        on_network_error(network_error);
+    }
+}
+
+network::tcp_server::~tcp_server()
+{
+    stop_listening();
 }
 
 void network::tcp_server_connection::handle_client_message(const std::string& client_message) const

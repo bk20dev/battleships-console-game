@@ -3,6 +3,7 @@
 #include <thread>
 
 #include "native_socket.hpp"
+#include "socket_error.hpp"
 #include "../engine/interfaces/i_connection.hpp"
 
 namespace network
@@ -19,23 +20,24 @@ namespace network
 
         static void close_socket(int& socket_descriptor);
 
-        void stop_listening();
-
     protected:
         virtual void handle_client_connected() const;
         virtual void handle_client_disconnected() const;
         virtual void handle_client_message(const std::string&) const;
+        virtual void handle_network_error(const socket_error&) const;
 
     public:
-        virtual ~tcp_server() = default;
+        virtual ~tcp_server();
 
         std::function<void()> on_client_connected = nullptr;
         std::function<void()> on_client_disconnected = nullptr;
         std::function<void(const std::string&)> on_client_message = nullptr;
+        std::function<void(const socket_error&)> on_network_error = nullptr;
 
-        bool is_listening() const;
+        [[nodiscard]] bool is_listening() const;
 
         void start_listening(int port);
+        void stop_listening();
 
         void send_message(const std::string&) const;
     };
