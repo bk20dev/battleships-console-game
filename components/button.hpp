@@ -27,10 +27,15 @@ namespace components
     class text_button final : public button
     {
         std::string text;
+        std::string previous_painted_text;
+
+        void clear_previous_text_trail() const;
 
     public:
         text_button(int x, int y, const std::shared_ptr<console::console>& console,
-                    const std::string& text, const std::function<void()>& on_select);
+                    const std::string& text = "", const std::function<void()>& on_select = nullptr);
+
+        void set_text(const std::string&);
 
         void paint() override;
     };

@@ -8,8 +8,7 @@ namespace components
     class label final : public core::component, public core::component_traits::styleable
     {
         std::string text;
-
-        std::string previous_painted_text = "";
+        std::string previous_painted_text;
 
         void clear_previous_text_trail() const;
 
