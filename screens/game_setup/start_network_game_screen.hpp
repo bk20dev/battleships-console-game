@@ -24,7 +24,7 @@ namespace screens
         std::shared_ptr<components::text_button> start_game_button;
         std::shared_ptr<components::text_button> go_back_button;
         std::shared_ptr<components::label> start_game_feedback_label;
-        std::shared_ptr<components::label> network_log_label;
+        std::shared_ptr<components::label> network_details_label;
 
         std::shared_ptr<network::tcp_server_connection> tcp_server_connection
             = std::make_shared<network::tcp_server_connection>();
@@ -38,8 +38,16 @@ namespace screens
 
         void display_error_message(const std::string& error_message) const;
         void display_notice_message(const std::string& notice_message) const;
+        void clear_notice_message() const;
         void display_network_log(const std::string&) const;
+        void clear_network_log() const;
 
+        void handle_client_connected() const;
+        void handle_network_error(const network::socket_error& socket_error) const;
+
+        int get_port_value() const;
+        void start_listening_for_players(int port) const;
+        void stop_listening_for_players() const;
         void handle_start_game_button_clicked() const;
 
     public:
