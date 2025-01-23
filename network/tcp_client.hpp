@@ -45,6 +45,7 @@ namespace network
     class tcp_client_connection final : public tcp_client, public engine::i_connection
     {
         void handle_server_message(const std::string&) const override;
+        void handle_server_disconnected() const override;
 
     public:
         void send(const std::string&) override;

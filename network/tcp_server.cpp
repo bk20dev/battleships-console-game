@@ -161,6 +161,15 @@ void network::tcp_server_connection::handle_client_message(const std::string& cl
     tcp_server::handle_client_message(client_message);
 }
 
+void network::tcp_server_connection::handle_client_disconnected() const
+{
+    if (on_disconnect)
+    {
+        on_disconnect();
+    }
+    tcp_server::handle_client_disconnected();
+}
+
 void network::tcp_server_connection::send(const std::string& message_to_send)
 {
     send_message(message_to_send);
