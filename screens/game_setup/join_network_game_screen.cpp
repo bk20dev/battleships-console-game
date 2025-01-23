@@ -31,15 +31,15 @@ void screens::join_network_game_screen::initialize_components()
     port_input_label = std::make_shared<components::label>(0, 1, child_console_view, "Port");
     port_input = std::make_shared<components::input>(5, 1, child_console_view, components::NUMBER, 5,
                                                      std::to_string(default_port_value));
-    join_game_button = std::make_shared<components::text_button>(0, 4, child_console_view, "Join game", [this]
+    join_game_feedback_label = std::make_shared<components::label>(0, 3, child_console_view);
+    join_game_button = std::make_shared<components::text_button>(0, 5, child_console_view, "Join game", [this]
     {
         handle_join_game_button_clicked();
     });
-    go_back_button = std::make_shared<components::text_button>(0, 5, child_console_view, "Go back", [this]
+    go_back_button = std::make_shared<components::text_button>(0, 6, child_console_view, "Go back", [this]
     {
         on_navigate_up();
     });
-    join_game_feedback_label = std::make_shared<components::label>(11, 4, child_console_view);
     network_log_label = std::make_shared<components::label>(0, child_console_view_height - 1, child_console_view);
     network_log_label->set_style(constants::style::general::hint_style);
 
@@ -66,7 +66,7 @@ void screens::join_network_game_screen::initialize_tcp_client() const
     };
 }
 
-static void display_label_message(std::shared_ptr<components::label> target_label, const std::string& message)
+static void display_label_message(const std::shared_ptr<components::label>& target_label, const std::string& message)
 {
     target_label->set_text(message);
 
@@ -110,7 +110,6 @@ void screens::join_network_game_screen::clear_network_log() const
 
 void screens::join_network_game_screen::handle_server_connected() const
 {
-    display_network_log("Connected to opponent.");
     const auto client_peer = std::make_shared<engine::serializable_peer>(tcp_client_connection);
     on_peer_created(client_peer);
 }

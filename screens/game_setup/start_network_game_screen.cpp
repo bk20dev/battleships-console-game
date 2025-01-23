@@ -73,7 +73,7 @@ void screens::start_network_game_screen::initialize_tcp_server() const
     };
 }
 
-static void display_label_message(std::shared_ptr<components::label> target_label, const std::string& message)
+static void display_label_message(const std::shared_ptr<components::label>& target_label, const std::string& message)
 {
     target_label->set_text(message);
 
