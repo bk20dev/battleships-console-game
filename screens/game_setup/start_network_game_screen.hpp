@@ -43,7 +43,7 @@ namespace screens
         void clear_network_log() const;
 
         void handle_client_connected() const;
-        void handle_network_error(const network::socket_error& socket_error) const;
+        void handle_network_error(const network::socket_error&) const;
 
         int get_port_value() const;
         void start_listening_for_players(int port) const;

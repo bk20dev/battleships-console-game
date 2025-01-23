@@ -1,8 +1,9 @@
 #pragma once
 
 #include <unistd.h>
-#include <netinet/in.h>
 #include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/errno.h>
 #include <__format/format_functions.h>
 
 namespace network::native_socket
@@ -20,6 +21,11 @@ namespace network::native_socket
     using socket_error_code = errno_t;
     using socket_internet_address = sockaddr_in;
     using socket_address = sockaddr;
+
+    constexpr auto error_port_in_use = EADDRINUSE;
+    constexpr auto error_port_unavailable = EADDRNOTAVAIL;
+    constexpr auto error_timed_out = ETIMEDOUT;
+    constexpr auto error_connection_refused = ECONNREFUSED;
 
     int create_tcp_socket();
 

@@ -67,9 +67,9 @@ void screens::start_network_game_screen::initialize_tcp_server() const
     {
         handle_client_connected();
     };
-    tcp_server_connection->on_network_error = [this](const network::socket_error& socket_error)
+    tcp_server_connection->on_network_error = [this](const network::socket_error& network_error)
     {
-        handle_network_error(socket_error);
+        handle_network_error(network_error);
     };
 }
 
@@ -120,36 +120,38 @@ void screens::start_network_game_screen::handle_client_connected() const
     on_peer_created(server_peer);
 }
 
-static std::string get_textual_socket_error_feedback(const network::socket_error& network_error)
+static std::string get_textual_socket_error_feedback(const network::socket_error& socket_error)
 {
-    switch (network_error.socket_error_code)
+    using namespace network::native_socket;
+
+    switch (socket_error.socket_error_code)
     {
-    case 0:
-        return "Enter a valid port number. (0–65535)";
-    case 48:
+    case error_port_in_use:
         return "This port is already in use. Pick a different one.";
+    case error_port_unavailable:
+        return "Enter a valid port number. (0–65535)";
     default:
         return "Something went wrong.";
     }
 }
 
-void screens::start_network_game_screen::handle_network_error(const network::socket_error& socket_error) const
+void screens::start_network_game_screen::handle_network_error(const network::socket_error& network_error) const
 {
     stop_listening_for_players();
 
-    const std::string textual_socket_error_feedback = get_textual_socket_error_feedback(socket_error);
+    const std::string textual_socket_error_feedback = get_textual_socket_error_feedback(network_error);
     display_error_message(textual_socket_error_feedback);
-    display_network_log(socket_error.what());
+    display_network_log(network_error.what());
 }
 
 int screens::start_network_game_screen::get_port_value() const
 {
     const std::string entered_port_text = port_input->get_text();
-    if (entered_port_text.length() > 0)
+    if (entered_port_text.empty())
     {
-        return std::stoi(entered_port_text);
+        return default_port_value;
     }
-    return default_port_value;
+    return std::stoi(entered_port_text);
 }
 
 void screens::start_network_game_screen::start_listening_for_players(const int port) const
@@ -176,7 +178,7 @@ void screens::start_network_game_screen::stop_listening_for_players() const
         start_game_button->paint();
     }
 
-    display_notice_message("");
+    clear_notice_message();
 }
 
 void screens::start_network_game_screen::handle_start_game_button_clicked() const

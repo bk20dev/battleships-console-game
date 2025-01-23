@@ -39,9 +39,10 @@ void screens::join_network_game_screen::initialize_components()
     {
         on_navigate_up();
     });
-    join_game_feedback_label = std::make_shared<components::label>(10, 4, child_console_view);
+    join_game_feedback_label = std::make_shared<components::label>(11, 4, child_console_view);
     network_log_label = std::make_shared<components::label>(0, child_console_view_height - 1, child_console_view);
     network_log_label->set_style(constants::style::general::hint_style);
+
     set_keyboard_actions(join_network_game_screen_keyboard_actions);
 }
 
@@ -57,9 +58,11 @@ void screens::join_network_game_screen::initialize_tcp_client() const
 {
     tcp_client_connection->on_server_connected = [this]
     {
-        display_network_log("Connected to opponent.");
-        const auto client_peer = std::make_shared<engine::serializable_peer>(tcp_client_connection);
-        on_peer_created(client_peer);
+        handle_server_connected();
+    };
+    tcp_client_connection->on_network_error = [this](const network::socket_error& network_error)
+    {
+        handle_network_error(network_error);
     };
 }
 
@@ -86,6 +89,11 @@ void screens::join_network_game_screen::display_notice_message(const std::string
     display_label_message(join_game_feedback_label, notice_message);
 }
 
+void screens::join_network_game_screen::clear_notice_message() const
+{
+    display_label_message(join_game_feedback_label, "");
+}
+
 void screens::join_network_game_screen::display_network_log(const std::string& network_log) const
 {
     network_log_label->set_text(network_log);
@@ -95,42 +103,98 @@ void screens::join_network_game_screen::display_network_log(const std::string& n
     }
 }
 
+void screens::join_network_game_screen::clear_network_log() const
+{
+    display_network_log("");
+}
+
+void screens::join_network_game_screen::handle_server_connected() const
+{
+    display_network_log("Connected to opponent.");
+    const auto client_peer = std::make_shared<engine::serializable_peer>(tcp_client_connection);
+    on_peer_created(client_peer);
+}
+
+static std::string get_textual_socket_error_feedback(const network::socket_error& socket_error)
+{
+    using namespace network::native_socket;
+
+    switch (socket_error.socket_error_code)
+    {
+    case error_port_unavailable:
+        return "Enter a valid port number. (0–65535)";
+    case error_timed_out:
+        return "Server not found. Make sure the opponent's IP address matches the entered one.";
+    case error_connection_refused:
+        return "Connection refused. Make sure the opponent's port matches the entered one.";
+    default:
+        return "Something went wrong.";
+    }
+}
+
+void screens::join_network_game_screen::handle_network_error(const network::socket_error& network_error) const
+{
+    leave_game();
+
+    const std::string textual_socket_error_feedback = get_textual_socket_error_feedback(network_error);
+    display_error_message(textual_socket_error_feedback);
+    display_network_log(network_error.what());
+}
+
+int screens::join_network_game_screen::get_port_value() const
+{
+    const std::string entered_port_text = port_input->get_text();
+    if (entered_port_text.empty())
+    {
+        return default_port_value;
+    }
+    return std::stoi(entered_port_text);
+}
+
+std::string screens::join_network_game_screen::get_ip_address_value() const
+{
+    return ip_input->get_text();
+}
+
+void screens::join_network_game_screen::join_game(const std::string& ip_address, const int port) const
+{
+    join_game_button->set_text("Cancel");
+    if (join_game_button->should_repaint())
+    {
+        join_game_button->paint();
+    }
+
+    display_notice_message("Connecting...");
+    clear_network_log();
+
+    tcp_client_connection->connect_to(ip_address, port);
+}
+
+void screens::join_network_game_screen::leave_game() const
+{
+    display_notice_message("Disconnecting...");
+    tcp_client_connection->disconnect();
+
+    join_game_button->set_text("Start game");
+    if (join_game_button->should_repaint())
+    {
+        join_game_button->paint();
+    }
+
+    clear_notice_message();
+}
+
 void screens::join_network_game_screen::handle_join_game_button_clicked() const
 {
-    int port = default_port_value;
-
-    const std::string entered_port_text = port_input->get_text();
-    if (entered_port_text.length() > 0)
+    if (tcp_client_connection->is_listening())
     {
-        port = std::stoi(entered_port_text);
+        leave_game();
+        return;
     }
 
-    const std::string entered_ip_text = ip_input->get_text();
-
-    try
-    {
-        display_notice_message("Connecting...");
-        tcp_client_connection->connect_to(entered_ip_text, port);
-    }
-    catch (const network::socket_error& error)
-    {
-        switch (error.socket_error_code)
-        {
-        case 0:
-            display_error_message("Invalid port value. Try a lower one.");
-            break;
-        case 60:
-            display_error_message("Server not found. Try a different IP.");
-            break;
-        case 61:
-            display_error_message("Server is not running or is listening on a different port.");
-            break;
-        default:
-            display_error_message("Something went wrong.");
-            break;
-        }
-        display_network_log(error.what());
-    }
+    const std::string selected_ip_address = get_ip_address_value();
+    const int selected_port = get_port_value();
+    join_game(selected_ip_address, selected_port);
 }
 
 screens::join_network_game_screen::join_network_game_screen(

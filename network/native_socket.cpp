@@ -26,7 +26,7 @@ network::native_socket::socket_internet_address network::native_socket::create_s
 {
     if (port < 0 || port >= 65536)
     {
-        throw socket_error("Port out of bounds.", 0);
+        throw socket_error("Port out of bounds.", error_port_unavailable);
     }
 
     return {
