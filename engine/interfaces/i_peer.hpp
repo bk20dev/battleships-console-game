@@ -10,6 +10,8 @@ namespace engine
     class i_peer
     {
     public:
+        std::function<void()> on_disconnect;
+
         std::function<void()> on_opponent_board_prepared;
         std::function<void(bool opponent_player)> on_turn_changed;
         std::function<void(const core::position& position)> on_opponent_shot_received;

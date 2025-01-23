@@ -19,6 +19,8 @@ namespace engine
         void send_message(message_serializer::message_type, const std::string& serialized_game_object = "") const;
         void handle_message(const std::string& serialized_message) const;
 
+        void handle_disconnect() const;
+
         void handle_opponent_board_prepared() const;
         void handle_turn_changed(const std::string& serialized_game_object) const;
         void handle_opponent_shot_received(const std::string& serialized_game_object) const;
@@ -26,7 +28,7 @@ namespace engine
         void handle_opponent_battleship_destroyed(const std::string& serialized_game_object) const;
 
     public:
-        explicit serializable_peer(std::shared_ptr<i_connection> connection);
+        explicit serializable_peer(const std::shared_ptr<i_connection>& connection);
 
         void notify_board_prepared() override;
         void change_turn(bool current_player) override;

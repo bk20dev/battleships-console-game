@@ -33,6 +33,14 @@ void engine::serializable_peer::handle_message(const std::string& serialized_mes
     }
 }
 
+void engine::serializable_peer::handle_disconnect() const
+{
+    if (on_disconnect)
+    {
+        on_disconnect();
+    }
+}
+
 void engine::serializable_peer::handle_opponent_board_prepared() const
 {
     if (on_opponent_board_prepared)
@@ -85,12 +93,16 @@ void engine::serializable_peer::handle_opponent_battleship_destroyed(const std::
     }
 }
 
-engine::serializable_peer::serializable_peer(const std::shared_ptr<i_connection> connection)
+engine::serializable_peer::serializable_peer(const std::shared_ptr<i_connection>& connection)
 {
     this->connection = connection;
     this->connection->on_message = [this](const std::string& serialized_message)
     {
         handle_message(serialized_message);
+    };
+    this->connection->on_disconnect = [this]
+    {
+        handle_disconnect();
     };
 }
 
