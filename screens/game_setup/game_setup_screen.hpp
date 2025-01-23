@@ -29,6 +29,7 @@ namespace screens
 
         void navigate_to(destination destination);
 
+        void handle_game_controller_ready(const std::shared_ptr<engine::game_controller>&) const;
         void handle_peer_created(const std::shared_ptr<engine::i_peer>& created_peer) const;
 
     public:

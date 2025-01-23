@@ -111,7 +111,7 @@ void engine::serializable_peer::notify_board_prepared()
     send_message(message_serializer::NOTIFY_BOARD_PREPARED);
 }
 
-void engine::serializable_peer::change_turn(bool current_player)
+void engine::serializable_peer::change_turn(const bool current_player)
 {
     const std::string serialized_current_player = game_object_serializer
         .serialize_boolean_flag(current_player);

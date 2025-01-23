@@ -72,10 +72,19 @@ void screens::game_setup_screen::navigate_to(destination destination)
     paint();
 }
 
+void screens::game_setup_screen::handle_game_controller_ready(
+    const std::shared_ptr<engine::game_controller>& game_controller) const
+{
+    if (on_game_controller_ready)
+    {
+        on_game_controller_ready(game_controller);
+    }
+}
+
 void screens::game_setup_screen::handle_peer_created(const std::shared_ptr<engine::i_peer>& created_peer) const
 {
     const auto created_game_controller = std::make_shared<engine::game_controller>(created_peer);
-    on_game_controller_ready(created_game_controller);
+    handle_game_controller_ready(created_game_controller);
 }
 
 screens::game_setup_screen::game_setup_screen(

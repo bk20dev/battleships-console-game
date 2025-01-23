@@ -46,7 +46,7 @@ std::string engine::game_object_serializer::extract_serialized_game_object_value
     return serialized_game_object.substr(game_object_identifier_length);
 }
 
-std::string engine::game_object_serializer::serialize_boolean_flag(bool flag_to_serialize)
+std::string engine::game_object_serializer::serialize_boolean_flag(const bool flag_to_serialize)
 {
     return serialize_game_object(BOOLEAN_FLAG, {flag_to_serialize});
 }
