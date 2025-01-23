@@ -12,12 +12,13 @@ namespace screens
         const std::shared_ptr<engine::game_controller> game_controller;
 
         std::shared_ptr<components::opponent_board> opponent_board;
-
         std::shared_ptr<components::player_board> player_board;
 
         void initialize_components();
 
-        void shoot_opponent_board(const core::position& position) const;
+        void handle_turn_changed(bool current_player) const;
+
+        void shoot_opponent_board(const core::position& crosshair_position) const;
 
     public:
         gameplay_screen(int x, int y, const std::shared_ptr<console::console>& console,

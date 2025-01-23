@@ -150,20 +150,6 @@
 //     peer_change_turn(selected_player);
 // }
 //
-// bool engine::game_controller::shoot_opponent_board(const core::position& position) const
-// {
-//     if (!current_player.get_is_currently_playing())
-//     {
-//         return false;
-//     }
-//     const models::bullet bullet{.position = position};
-//     if (is_opponent_bullet_present(bullet))
-//     {
-//         return false;
-//     }
-//     peer_fire_shot(position);
-//     return true;
-// }
 //
 // const engine::player& engine::game_controller::get_current_player() const
 // {
@@ -181,6 +167,8 @@ void engine::game_controller::change_turn(const bool current_player_turn)
 
     current_player.set_currently_plays(current_player_turn);
     opponent_player.set_currently_plays(!current_player_turn);
+
+    handle_turn_changed(current_player_turn);
 }
 
 void engine::game_controller::handle_all_battleship_placements_submitted() const
@@ -284,6 +272,23 @@ void engine::game_controller::submit_current_player_battleship_placement(
     handle_any_battleship_placement_submitted();
 }
 
+void engine::game_controller::shoot_opponent_player(const core::position& crosshair_position)
+{
+    if (!is_current_player_turn())
+    {
+        return;
+    }
+
+    const models::bullet fired_bullet{.position = crosshair_position};
+    if (opponent_player.is_board_hit(crosshair_position))
+    {
+        return;
+    }
+
+    opponent_peer_connection->notify_shot_fired(fired_bullet.position);
+    change_turn(/* current_player_turn */ false);
+}
+
 bool engine::game_controller::is_opponent_battleship_placement_submitted() const
 {
     return opponent_player.get_is_board_ready();
@@ -292,4 +297,14 @@ bool engine::game_controller::is_opponent_battleship_placement_submitted() const
 bool engine::game_controller::is_current_player_turn() const
 {
     return current_player.get_is_currently_playing();
+}
+
+const engine::player& engine::game_controller::get_current_player() const
+{
+    return current_player;
+}
+
+const engine::player& engine::game_controller::get_opponent_player() const
+{
+    return opponent_player;
 }
