@@ -10,13 +10,12 @@ void screens::board_designer_screen::initialize_components()
         {
             set_keyboard_actions(keyboard_actions);
         });
-
     submit_placement_button = std::make_shared<components::text_button>(
-        0, 12, child_console_view, "Submit", [this]
+        0, 13, child_console_view, "Submit", [this]
         {
             validate_and_submit_battleship_placement();
         });
-    submit_feedback_label = std::make_shared<components::label>(8, 12, child_console_view);
+    submit_feedback_label = std::make_shared<components::label>(0, 11, child_console_view);
 }
 
 void screens::board_designer_screen::initialize_tab_indexer()
@@ -25,7 +24,7 @@ void screens::board_designer_screen::initialize_tab_indexer()
     tab_indexer.connect_component(submit_placement_button);
 }
 
-static void display_label_message(std::shared_ptr<components::label> target_label, const std::string& message)
+static void display_label_message(const std::shared_ptr<components::label>& target_label, const std::string& message)
 {
     target_label->set_text(message);
 
@@ -35,16 +34,21 @@ static void display_label_message(std::shared_ptr<components::label> target_labe
     }
 }
 
-void screens::board_designer_screen::display_validation_error_message(const std::string& error_message) const
+void screens::board_designer_screen::display_notice_message(const std::string& notice_message) const
+{
+    submit_feedback_label->set_style(constants::style::general::notice_style);
+    display_label_message(submit_feedback_label, notice_message);
+}
+
+void screens::board_designer_screen::display_error_message(const std::string& error_message) const
 {
     submit_feedback_label->set_style(constants::style::general::error_style);
     display_label_message(submit_feedback_label, error_message);
 }
 
-void screens::board_designer_screen::display_notice_message(const std::string& notice_message) const
+void screens::board_designer_screen::clear_notice_message() const
 {
-    submit_feedback_label->set_style(constants::style::general::notice_style);
-    display_label_message(submit_feedback_label, notice_message);
+    display_notice_message("");
 }
 
 bool screens::board_designer_screen::validate_battleship_placement() const
@@ -72,12 +76,18 @@ void screens::board_designer_screen::validate_and_submit_battleship_placement()
 
     if (!validate_battleship_placement())
     {
-        display_validation_error_message("Place all battleships and resolve conflicts.");
+        display_error_message("Place all battleships and resolve conflicts.");
         return;
     }
 
     display_notice_message("Waiting for opponent...");
     submit_battleship_placement(placed_battleships);
+}
+
+void screens::board_designer_screen::handle_opponent_board_prepared() const
+{
+    display_notice_message("Opponent is ready.");
+    console_view->flush();
 }
 
 screens::board_designer_screen::board_designer_screen(
@@ -92,6 +102,7 @@ screens::board_designer_screen::board_designer_screen(
 void screens::board_designer_screen::paint()
 {
     full_board_designer_picker->paint();
+    submit_feedback_label->paint();
     submit_placement_button->paint();
     screen::paint();
 }
@@ -116,7 +127,12 @@ bool screens::board_designer_screen::handle_keyboard_event(const console::keyboa
 
     const core::offset key_arrow_offset = key.get_arrow_offset();
     tab_indexer.focus_next_component(key_arrow_offset.y);
-    display_validation_error_message("");
+    clear_notice_message();
+
+    if (game_controller->is_opponent_battleship_placement_submitted())
+    {
+        display_notice_message("Opponent is ready.");
+    }
 
     invalidate();
     return true;
