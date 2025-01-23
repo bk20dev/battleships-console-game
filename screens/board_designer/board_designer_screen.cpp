@@ -60,8 +60,7 @@ bool screens::board_designer_screen::validate_battleship_placement() const
 void screens::board_designer_screen::submit_battleship_placement(
     const std::vector<models::battleship>& placed_battleships)
 {
-    game_controller->set_placed_battleships(placed_battleships);
-    game_controller->mark_board_prepared();
+    game_controller->submit_current_player_battleship_placement(placed_battleships);
     is_board_submitted = true;
 }
 
@@ -97,6 +96,11 @@ screens::board_designer_screen::board_designer_screen(
 {
     initialize_components();
     initialize_tab_indexer();
+
+    game_controller->on_opponent_battleship_placement_submitted = [this]
+    {
+        handle_opponent_board_prepared();
+    };
 }
 
 void screens::board_designer_screen::paint()

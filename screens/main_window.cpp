@@ -10,10 +10,10 @@ void screens::main_window::initialize_game_controller(const std::shared_ptr<engi
     {
         handle_opponent_disconnected();
     };
-    // game_controller->on_all_boards_ready = [this]
-    // {
-    //     handle_all_boards_ready();
-    // };
+    game_controller->on_all_battleship_placements_submitted = [this]
+    {
+        handle_all_boards_ready();
+    };
 }
 
 void screens::main_window::handle_game_controller_ready(const std::shared_ptr<engine::game_controller>& game_controller)
