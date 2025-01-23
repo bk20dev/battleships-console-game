@@ -24,7 +24,7 @@ namespace network
         virtual void handle_client_connected() const;
         virtual void handle_client_disconnected() const;
         virtual void handle_client_message(const std::string&) const;
-        virtual void handle_network_error(const socket_error&) const;
+        virtual void handle_network_error(const socket_error&);
 
     public:
         virtual ~tcp_server();

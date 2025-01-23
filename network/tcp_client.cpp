@@ -7,10 +7,10 @@ void network::tcp_client::listener_thread() const
     char message_buffer[1024];
     static constexpr int message_buffer_size = sizeof(message_buffer);
 
-    while (is_connected())
+    while (is_listening())
     {
-        const int bytes_receive = native_socket
-            ::receive(client_socket_descriptor, message_buffer, message_buffer_size);
+        const int bytes_receive = native_socket::
+            receive(client_socket_descriptor, message_buffer, message_buffer_size);
 
         if (bytes_receive == 0)
         {
@@ -27,7 +27,14 @@ void network::tcp_client::start_client_listener_thread()
 {
     client_listener_thread = std::thread([this]
     {
-        listener_thread();
+        try
+        {
+            listener_thread();
+        }
+        catch (const socket_error& network_error)
+        {
+            handle_network_error(network_error);
+        }
     });
 }
 
@@ -38,22 +45,6 @@ void network::tcp_client::close_socket(int& socket_descriptor)
         native_socket::close_socket(socket_descriptor);
     }
     socket_descriptor = -1;
-}
-
-void network::tcp_client::disconnect()
-{
-    if (!is_connected())
-    {
-        return;
-    }
-
-    if (client_listener_thread && client_listener_thread->joinable())
-    {
-        client_listener_thread->join();
-    }
-    client_listener_thread = std::nullopt;
-
-    close_socket(client_socket_descriptor);
 }
 
 void network::tcp_client::handle_server_connected() const
@@ -80,14 +71,29 @@ void network::tcp_client::handle_server_message(const std::string& server_messag
     }
 }
 
-bool network::tcp_client::is_connected() const
+void network::tcp_client::handle_network_error(const socket_error& network_error)
+{
+    disconnect();
+
+    if (on_network_error)
+    {
+        on_network_error(network_error);
+    }
+}
+
+network::tcp_client::~tcp_client()
+{
+    disconnect();
+}
+
+bool network::tcp_client::is_listening() const
 {
     return client_socket_descriptor != -1;
 }
 
 void network::tcp_client::connect_to(const std::string& ip_address, const int port)
 {
-    if (is_connected())
+    if (is_listening())
     {
         return;
     }
@@ -99,23 +105,35 @@ void network::tcp_client::connect_to(const std::string& ip_address, const int po
         auto server_address = native_socket::create_socket_internet_address(ip_address, port);
 
         native_socket::connect(client_socket_descriptor, server_address);
-
         handle_server_connected();
+
+        start_client_listener_thread();
     }
-    catch (const socket_error&)
+    catch (const socket_error& network_error)
     {
-        native_socket::close_socket(client_socket_descriptor);
-        client_socket_descriptor = -1;
+        handle_network_error(network_error);
+    }
+}
 
-        throw;
+void network::tcp_client::disconnect()
+{
+    if (!is_listening())
+    {
+        return;
     }
 
-    start_client_listener_thread();
+    close_socket(client_socket_descriptor);
+
+    if (client_listener_thread && client_listener_thread->joinable())
+    {
+        client_listener_thread->join();
+    }
+    client_listener_thread = std::nullopt;
 }
 
 void network::tcp_client::send_message(const std::string& message_to_send) const
 {
-    if (!is_connected())
+    if (!is_listening())
     {
         return;
     }
