@@ -1,6 +1,42 @@
 #include "main_window.hpp"
 
+#include "opponent_disconnected_screen.hpp"
 #include "../constants/dimension.hpp"
+
+void screens::main_window::initialize_game_controller(const std::shared_ptr<engine::game_controller>& game_controller)
+{
+    this->game_controller = game_controller;
+    game_controller->on_opponent_disconnected = [this]
+    {
+        handle_opponent_disconnected();
+    };
+    // game_controller->on_all_boards_ready = [this]
+    // {
+    //     handle_all_boards_ready();
+    // };
+}
+
+void screens::main_window::handle_game_controller_ready(const std::shared_ptr<engine::game_controller>& game_controller)
+{
+    initialize_game_controller(game_controller);
+    navigate_to(BOARD_DESIGNER_SCREEN);
+}
+
+void screens::main_window::handle_opponent_disconnected()
+{
+    navigate_to(OPPONENT_DISCONNECTED_SCREEN);
+}
+
+void screens::main_window::handle_exit_to_main_screen()
+{
+    game_controller = nullptr;
+    navigate_to(GAME_SETUP_SCREEN);
+}
+
+void screens::main_window::handle_all_boards_ready()
+{
+    navigate_to(GAMEPLAY_SCREEN);
+}
 
 std::shared_ptr<screens::game_setup_screen> screens::main_window::create_game_setup_screen()
 {
@@ -9,6 +45,16 @@ std::shared_ptr<screens::game_setup_screen> screens::main_window::create_game_se
         [this](const std::shared_ptr<engine::game_controller>& game_controller)
         {
             handle_game_controller_ready(game_controller);
+        });
+}
+
+std::shared_ptr<screens::opponent_disconnected_screen> screens::main_window::create_opponent_disconnected_screen()
+{
+    return std::make_shared<opponent_disconnected_screen>(
+        0, 0, console_view,
+        [this]
+        {
+            handle_exit_to_main_screen();
         });
 }
 
@@ -32,6 +78,8 @@ std::shared_ptr<core::component> screens::main_window::create_screen(const desti
     {
     case GAME_SETUP_SCREEN:
         return create_game_setup_screen();
+    case OPPONENT_DISCONNECTED_SCREEN:
+        return create_opponent_disconnected_screen();
     case BOARD_DESIGNER_SCREEN:
         return create_board_designer_screen();
     case GAMEPLAY_SCREEN:
@@ -50,23 +98,6 @@ void screens::main_window::navigate_to(const destination destination)
     paint();
 }
 
-void screens::main_window::handle_game_controller_ready(
-    const std::shared_ptr<engine::game_controller>& prepared_game_controller)
-{
-    game_controller = prepared_game_controller;
-    game_controller->on_all_boards_ready = [this]
-    {
-        handle_all_boards_ready();
-    };
-
-    navigate_to(BOARD_DESIGNER_SCREEN);
-}
-
-void screens::main_window::handle_all_boards_ready()
-{
-    navigate_to(GAMEPLAY_SCREEN);
-}
-
 screens::main_window::main_window(
     const int x, const int y, const std::shared_ptr<console::console>& console)
     : component(x, y, constants::dimension::screen_width, constants::dimension::screen_height, console)
@@ -81,8 +112,8 @@ void screens::main_window::paint()
     if (current_screen)
     {
         current_screen->paint();
-        console_view->flush();
     }
+    console_view->flush();
 
     component::paint();
 }
