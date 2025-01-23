@@ -89,6 +89,8 @@ add_executable(battleships_console_game main.cpp
         screens/gameplay/gameplay_screen.cpp
         screens/main_window.hpp
         screens/main_window.cpp
+        screens/opponent_disconnected_screen.hpp
+        screens/opponent_disconnected_screen.cpp
         utils/text.hpp
         utils/text.cpp
         utils/vector.hpp
