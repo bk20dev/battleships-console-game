@@ -175,6 +175,14 @@
 //     return opponent_player;
 // }
 
+void engine::game_controller::change_turn(const bool current_player_turn)
+{
+    opponent_peer_connection->change_turn(current_player_turn);
+
+    current_player.set_currently_plays(current_player_turn);
+    opponent_player.set_currently_plays(!current_player_turn);
+}
+
 void engine::game_controller::handle_all_battleship_placements_submitted() const
 {
     if (on_all_battleship_placements_submitted)
@@ -210,6 +218,17 @@ void engine::game_controller::handle_opponent_battleship_placement_submitted()
     handle_any_battleship_placement_submitted();
 }
 
+void engine::game_controller::handle_turn_changed(const bool current_player_turn)
+{
+    current_player.set_currently_plays(current_player_turn);
+    opponent_player.set_currently_plays(!current_player_turn);
+
+    if (on_turn_changed)
+    {
+        on_turn_changed(current_player_turn);
+    }
+}
+
 void engine::game_controller::initialize_players()
 {
     current_player = player(
@@ -238,6 +257,10 @@ void engine::game_controller::setup_opponent_peer_connection(const std::shared_p
     {
         handle_opponent_battleship_placement_submitted();
     };
+    opponent_peer_connection->on_turn_changed = [this](const bool opponent_player)
+    {
+        handle_turn_changed(!opponent_player);
+    };
 }
 
 engine::game_controller::game_controller(const std::shared_ptr<i_peer>& opponent_peer_connection)
@@ -251,11 +274,22 @@ void engine::game_controller::submit_current_player_battleship_placement(
 {
     current_player.set_placed_battleships(battleship_placement);
     current_player.set_board_ready();
+
     opponent_peer_connection->notify_board_prepared();
+    if (!opponent_player.get_is_currently_playing())
+    {
+        change_turn(/* current_player_turn */ true);
+    }
+
     handle_any_battleship_placement_submitted();
 }
 
 bool engine::game_controller::is_opponent_battleship_placement_submitted() const
 {
     return opponent_player.get_is_board_ready();
+}
+
+bool engine::game_controller::is_current_player_turn() const
+{
+    return current_player.get_is_currently_playing();
 }
