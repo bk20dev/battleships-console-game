@@ -154,9 +154,9 @@ void network::tcp_server::send_message(const std::string& message_to_send) const
 
 void network::tcp_server_connection::handle_client_message(const std::string& client_message) const
 {
-    if (on_message)
+    if (on_receive)
     {
-        on_message(client_message);
+        on_receive(client_message);
     }
     tcp_server::handle_client_message(client_message);
 }

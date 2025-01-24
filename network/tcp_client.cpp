@@ -9,16 +9,16 @@ void network::tcp_client::listener_thread() const
 
     while (is_listening())
     {
-        const int bytes_receive = native_socket::
+        const int bytes_received = native_socket::
             receive(client_socket_descriptor, message_buffer, message_buffer_size);
 
-        if (bytes_receive == 0)
+        if (bytes_received == 0)
         {
             handle_server_disconnected();
             break;
         }
 
-        const std::string received_message(message_buffer, message_buffer_size);
+        const std::string received_message(message_buffer, bytes_received);
         handle_server_message(received_message);
     }
 }
@@ -143,9 +143,9 @@ void network::tcp_client::send_message(const std::string& message_to_send) const
 
 void network::tcp_client_connection::handle_server_message(const std::string& server_message) const
 {
-    if (on_message)
+    if (on_receive)
     {
-        on_message(server_message);
+        on_receive(server_message);
     }
     tcp_client::handle_server_message(server_message);
 }

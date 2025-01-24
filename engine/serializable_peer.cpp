@@ -33,6 +33,42 @@ void engine::serializable_peer::handle_message(const std::string& serialized_mes
     }
 }
 
+std::vector<std::string> unpack_serialized_message_bundle(const std::string& serialized_message_bundle)
+{
+    std::vector<std::string> unpacked_messages{};
+
+    int current_message_start_position = 0;
+
+    while (const int current_message_end_position = serialized_message_bundle.
+        find('\n', current_message_start_position))
+    {
+        if (current_message_end_position == std::string::npos)
+        {
+            break;
+        }
+
+        const int message_length = current_message_end_position - current_message_start_position;
+        const std::string serialized_message = serialized_message_bundle
+            .substr(current_message_start_position, message_length);
+
+        unpacked_messages.push_back(serialized_message);
+
+        current_message_start_position = current_message_end_position + 1;
+    }
+
+    return unpacked_messages;
+}
+
+void engine::serializable_peer::handle_message_bundle(const std::string& serialized_message_bundle) const
+{
+    const auto unpacked_messages = unpack_serialized_message_bundle(serialized_message_bundle);
+
+    for (const std::string& serialized_message : unpacked_messages)
+    {
+        handle_message(serialized_message);
+    }
+}
+
 void engine::serializable_peer::handle_disconnect() const
 {
     if (on_disconnect)
@@ -96,9 +132,9 @@ void engine::serializable_peer::handle_opponent_battleship_destroyed(const std::
 engine::serializable_peer::serializable_peer(const std::shared_ptr<i_connection>& connection)
 {
     this->connection = connection;
-    this->connection->on_message = [this](const std::string& serialized_message)
+    this->connection->on_receive = [this](const std::string& serialized_message)
     {
-        handle_message(serialized_message);
+        handle_message_bundle(serialized_message);
     };
     this->connection->on_disconnect = [this]
     {

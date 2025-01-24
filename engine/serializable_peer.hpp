@@ -18,6 +18,7 @@ namespace engine
 
         void send_message(message_serializer::message_type, const std::string& serialized_game_object = "") const;
         void handle_message(const std::string& serialized_message) const;
+        void handle_message_bundle(const std::string& serialized_message_bundle) const;
 
         void handle_disconnect() const;
 
