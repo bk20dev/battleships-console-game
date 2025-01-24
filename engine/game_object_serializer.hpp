@@ -11,9 +11,9 @@ namespace engine
     {
         enum game_object_identifier : char
         {
-            BOOLEAN_FLAG = 'f',
+            BOOLEAN_FLAG = 'b',
             POSITION = 'p',
-            BATTLESHIP = 'b',
+            BATTLESHIP = 's',
         };
 
         static constexpr int game_object_identifier_length = 1;

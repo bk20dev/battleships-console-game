@@ -9,11 +9,11 @@ namespace engine
     public:
         enum message_type : char
         {
-            NOTIFY_BOARD_PREPARED = 1,
-            CHANGE_TURN = 2,
-            NOTIFY_SHOT_FIRED = 3,
-            NOTIFY_BATTLESHIP_PART_DAMAGED = 4,
-            NOTIFY_BATTLESHIP_DESTROYED = 5,
+            NOTIFY_BOARD_PREPARED = 'p',
+            CHANGE_TURN = 't',
+            NOTIFY_SHOT_FIRED = 's',
+            NOTIFY_BATTLESHIP_PART_DAMAGED = 'm',
+            NOTIFY_BATTLESHIP_DESTROYED = 'd',
         };
 
     private:
