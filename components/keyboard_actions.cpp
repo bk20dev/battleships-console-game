@@ -14,6 +14,11 @@ namespace
     constexpr console::style::style background_style = {
         .background_color = console::style::CYAN,
     };
+
+    constexpr console::style::style no_actions_available_hint_style = {
+        .foreground_color = console::style::WHITE,
+        .background_color = background_style.background_color,
+    };
 }
 
 static int get_key_to_press_length(const std::string& key_to_press,
@@ -35,6 +40,14 @@ void components::keyboard_actions::footer_component::paint_background() const
 
     const std::string background_style_sequence = background_style.to_control_sequence();
     console_view->fill_rectangle(background_rectangle, " ", background_style_sequence);
+}
+
+void components::keyboard_actions::footer_component::paint_no_actions_available() const
+{
+    constexpr std::string hint_text = "No actions available";
+    const std::string styled_hint = no_actions_available_hint_style.apply_to_text(hint_text);
+
+    console_view->write_at(0, 0, styled_hint);
 }
 
 int components::keyboard_actions::footer_component::paint_keyboard_action(
@@ -69,6 +82,11 @@ void components::keyboard_actions::footer_component::set_actions(const std::vect
 void components::keyboard_actions::footer_component::paint()
 {
     paint_background();
+
+    if (keyboard_actions.empty())
+    {
+        paint_no_actions_available();
+    }
 
     for (int current_x = 0; const auto& keyboard_action : keyboard_actions)
     {

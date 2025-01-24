@@ -1,4 +1,5 @@
 #pragma once
+
 #include "../core/component.hpp"
 
 namespace components::keyboard_actions
@@ -22,7 +23,7 @@ namespace components::keyboard_actions
         std::vector<keyboard_action> keyboard_actions{};
 
         void paint_background() const;
-
+        void paint_no_actions_available() const;
         int paint_keyboard_action(int x, const keyboard_action& action) const;
 
     public:
