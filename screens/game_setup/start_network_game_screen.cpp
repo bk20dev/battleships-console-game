@@ -8,7 +8,7 @@
 
 namespace
 {
-    const std::vector<components::keyboard_actions::keyboard_action> start_network_game_screen_keyboard_actions = {
+    const std::vector<components::keyboard_actions::keyboard_action> default_keyboard_actions = {
         {
             .key_to_press = components::keyboard_actions::VERTICAL_ARROWS,
             .action_description = "Move cursor",
@@ -21,6 +21,13 @@ namespace
         {
             .key_to_press = "ESC",
             .action_description = "Go back",
+        },
+    };
+
+    const std::vector<components::keyboard_actions::keyboard_action> waiting_for_opponent_keyboard_actions = {
+        {
+            .key_to_press = "Enter",
+            .action_description = "Cancel",
         },
     };
 }
@@ -50,8 +57,6 @@ void screens::start_network_game_screen::initialize_components()
     start_game_feedback_label = std::make_shared<components::label>(0, 5, child_console_view);
     network_details_label = std::make_shared<components::label>(0, child_console_view_height - 1, child_console_view);
     network_details_label->set_style(constants::style::general::hint_style);
-
-    set_keyboard_actions(start_network_game_screen_keyboard_actions);
 }
 
 void screens::start_network_game_screen::initialize_tab_indexer()
@@ -165,6 +170,8 @@ void screens::start_network_game_screen::start_listening_for_players(const int p
     display_notice_message("Waiting for opponent...");
     clear_network_log();
 
+    set_keyboard_actions(waiting_for_opponent_keyboard_actions);
+
     tcp_server_connection->start_listening(port);
 }
 
@@ -179,6 +186,8 @@ void screens::start_network_game_screen::stop_listening_for_players() const
     }
 
     clear_notice_message();
+
+    set_keyboard_actions(default_keyboard_actions);
 }
 
 void screens::start_network_game_screen::handle_start_game_button_clicked() const
@@ -204,6 +213,7 @@ screens::start_network_game_screen::start_network_game_screen(
     initialize_components();
     initialize_tab_indexer();
     initialize_tcp_server();
+    set_keyboard_actions(default_keyboard_actions);
 }
 
 void screens::start_network_game_screen::paint()

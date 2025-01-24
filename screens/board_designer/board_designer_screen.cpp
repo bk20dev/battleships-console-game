@@ -81,6 +81,7 @@ void screens::board_designer_screen::validate_and_submit_battleship_placement()
 
     display_notice_message("Waiting for opponent...");
     submit_battleship_placement(placed_battleships);
+    set_keyboard_actions({});
 }
 
 void screens::board_designer_screen::handle_opponent_board_prepared() const

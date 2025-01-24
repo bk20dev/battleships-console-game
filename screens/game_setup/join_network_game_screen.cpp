@@ -7,7 +7,7 @@
 
 namespace
 {
-    const std::vector<components::keyboard_actions::keyboard_action> join_network_game_screen_keyboard_actions = {
+    const std::vector<components::keyboard_actions::keyboard_action> default_keyboard_actions = {
         {
             .key_to_press = components::keyboard_actions::ARROWS,
             .action_description = "Move cursor",
@@ -20,6 +20,13 @@ namespace
         {
             .key_to_press = "ESC",
             .action_description = "Go back",
+        },
+    };
+
+    const std::vector<components::keyboard_actions::keyboard_action> connecting_to_server_keyboard_actions = {
+        {
+            .key_to_press = "Enter",
+            .action_description = "Cancel",
         },
     };
 }
@@ -43,7 +50,7 @@ void screens::join_network_game_screen::initialize_components()
     network_log_label = std::make_shared<components::label>(0, child_console_view_height - 1, child_console_view);
     network_log_label->set_style(constants::style::general::hint_style);
 
-    set_keyboard_actions(join_network_game_screen_keyboard_actions);
+    set_keyboard_actions(default_keyboard_actions);
 }
 
 void screens::join_network_game_screen::initialize_tab_indexer()
@@ -166,6 +173,8 @@ void screens::join_network_game_screen::join_game(const std::string& ip_address,
     display_notice_message("Connecting...");
     clear_network_log();
 
+    set_keyboard_actions(connecting_to_server_keyboard_actions);
+
     tcp_client_connection->connect_to(ip_address, port);
 }
 
@@ -181,6 +190,8 @@ void screens::join_network_game_screen::leave_game() const
     }
 
     clear_notice_message();
+
+    set_keyboard_actions(default_keyboard_actions);
 }
 
 void screens::join_network_game_screen::handle_join_game_button_clicked() const
