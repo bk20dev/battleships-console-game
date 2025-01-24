@@ -37,6 +37,7 @@ void screens::gameplay_screen::handle_turn_changed(const bool current_player) co
     if (opponent_board->should_repaint())
     {
         opponent_board->paint();
+        console_view->flush();
     }
 }
 

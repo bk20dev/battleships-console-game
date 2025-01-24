@@ -47,7 +47,9 @@ namespace components
                        const std::function<void(const core::position& position)>& on_position_select);
 
         void paint() override;
-
         bool handle_keyboard_event(const console::keyboard::key& key) override;
+
+        void focus() override;
+        void blur() override;
     };
 }

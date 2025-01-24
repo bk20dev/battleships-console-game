@@ -197,3 +197,15 @@ bool components::opponent_board::handle_keyboard_event(const console::keyboard::
 
     return component::handle_keyboard_event(key);
 }
+
+void components::opponent_board::focus()
+{
+    invalidate();
+    focusable::focus();
+}
+
+void components::opponent_board::blur()
+{
+    invalidate();
+    focusable::blur();
+}
