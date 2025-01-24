@@ -64,14 +64,6 @@ const std::vector<models::battleship>& engine::player::get_destroyed_battleships
     return destroyed_battleships;
 }
 
-bool engine::player::is_board_hit(const core::position& position_to_check) const
-{
-    return std::ranges::any_of(opponent_bullets, [position_to_check](const models::bullet& current_bullet)
-    {
-        return current_bullet.position == position_to_check;
-    });
-}
-
 void engine::player::set_placed_battleships(const std::vector<models::battleship>& placed_battleships)
 {
     this->placed_battleships = placed_battleships;

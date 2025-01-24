@@ -280,7 +280,7 @@ void engine::game_controller::shoot_opponent_player(const core::position& crossh
     }
 
     const models::bullet fired_bullet{.position = crosshair_position};
-    if (opponent_player.is_board_hit(crosshair_position))
+    if (!opponent_player.shoot_with(fired_bullet))
     {
         return;
     }

@@ -47,8 +47,6 @@ namespace engine
 
         [[nodiscard]] const std::vector<models::battleship>& get_destroyed_battleships() const;
 
-        [[nodiscard]] bool is_board_hit(const core::position&) const;
-
         void set_placed_battleships(const std::vector<models::battleship>& placed_battleships);
 
         bool shoot_with(const models::bullet& bullet);
