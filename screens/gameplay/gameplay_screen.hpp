@@ -2,12 +2,13 @@
 
 #include "../../components/opponent_board.hpp"
 #include "../../components/player_board.hpp"
+#include "../../components/screen.hpp"
 #include "../../core/component.hpp"
 #include "../../engine/game_controller.hpp"
 
 namespace screens
 {
-    class gameplay_screen final : public core::component
+    class gameplay_screen final : public components::screen
     {
         const std::shared_ptr<engine::game_controller> game_controller;
 
