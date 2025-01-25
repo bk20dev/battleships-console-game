@@ -25,6 +25,8 @@ add_executable(battleships_console_game main.cpp
         components/opponent_board.cpp
         components/player_board.hpp
         components/player_board.cpp
+        components/remaining_battleship_viewer.hpp
+        components/remaining_battleship_viewer.cpp
         components/screen.hpp
         components/screen.cpp
         console/console.hpp
