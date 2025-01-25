@@ -69,7 +69,10 @@ std::shared_ptr<screens::gameplay_screen> screens::main_window::create_gameplay_
     {
         throw std::runtime_error("Game controller is not initialized.");
     }
-    return std::make_shared<gameplay_screen>(0, 0, console_view, game_controller);
+    return std::make_shared<gameplay_screen>(0, 0, console_view, game_controller, [this]
+    {
+        handle_exit_to_main_screen();
+    });
 }
 
 std::shared_ptr<core::component> screens::main_window::create_screen(const destination destination)

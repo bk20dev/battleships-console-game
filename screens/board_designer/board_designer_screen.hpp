@@ -32,6 +32,8 @@ namespace screens
         void handle_opponent_board_prepared() const;
 
     public:
+        ~board_designer_screen() override;
+
         board_designer_screen(int x, int y, const std::shared_ptr<console::console>& console,
                               const std::shared_ptr<engine::game_controller>& game_controller);
 

@@ -202,6 +202,12 @@ void screens::start_network_game_screen::handle_start_game_button_clicked() cons
     start_listening_for_players(selected_port);
 }
 
+screens::start_network_game_screen::~start_network_game_screen()
+{
+    tcp_server_connection->on_client_connected = nullptr;
+    tcp_server_connection->on_network_error = nullptr;
+}
+
 screens::start_network_game_screen::start_network_game_screen(
     const int x, const int y, const std::shared_ptr<console::console>& console,
     const std::function<void(const std::shared_ptr<engine::i_peer>&)>& on_peer_created,

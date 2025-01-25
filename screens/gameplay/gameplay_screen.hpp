@@ -21,6 +21,8 @@ namespace screens
         std::shared_ptr<components::remaining_battleship_viewer> opponent_remaining_battleships_viewer;
         std::shared_ptr<components::turn_label> turn_label;
 
+        const std::function<void()> on_exit;
+
         void initialize_components();
 
         void handle_current_player_turn() const;
@@ -33,8 +35,11 @@ namespace screens
         void shoot_opponent_board(const core::position& crosshair_position) const;
 
     public:
+        ~gameplay_screen() override;
+
         gameplay_screen(int x, int y, const std::shared_ptr<console::console>& console,
-                        const std::shared_ptr<engine::game_controller>& game_controller);
+                        const std::shared_ptr<engine::game_controller>& game_controller,
+                        const std::function<void()>& on_exit);
 
         void paint() override;
 

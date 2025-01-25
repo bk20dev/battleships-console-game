@@ -90,6 +90,11 @@ void screens::board_designer_screen::handle_opponent_board_prepared() const
     console_view->flush();
 }
 
+screens::board_designer_screen::~board_designer_screen()
+{
+    game_controller->on_opponent_battleship_placement_submitted = nullptr;
+}
+
 screens::board_designer_screen::board_designer_screen(
     const int x, const int y, const std::shared_ptr<console::console>& console,
     const std::shared_ptr<engine::game_controller>& game_controller)

@@ -127,10 +127,21 @@ void screens::gameplay_screen::shoot_opponent_board(const core::position& crossh
     game_controller->shoot_opponent_player(crosshair_position);
 }
 
+screens::gameplay_screen::~gameplay_screen()
+{
+    game_controller->on_turn_changed = nullptr;
+    game_controller->on_current_player_board_updated = nullptr;
+    game_controller->on_opponent_board_updated = nullptr;
+    game_controller->on_game_over = nullptr;
+}
+
 screens::gameplay_screen::gameplay_screen(
     const int x, const int y, const std::shared_ptr<console::console>& console,
-    const std::shared_ptr<engine::game_controller>& game_controller)
-    : screen(x, y, console, "Destroy opponent's battleships"), game_controller(game_controller)
+    const std::shared_ptr<engine::game_controller>& game_controller,
+    const std::function<void()>& on_exit)
+    : screen(x, y, console, "Destroy opponent's battleships"),
+      game_controller(game_controller),
+      on_exit(on_exit)
 {
     initialize_components();
 
@@ -186,6 +197,17 @@ void screens::gameplay_screen::paint()
 
 bool screens::gameplay_screen::handle_keyboard_event(const console::keyboard::key& key)
 {
+    if (game_controller->is_game_over())
+    {
+        if (key == console::keyboard::character::ENTER)
+        {
+            if (on_exit)
+            {
+                on_exit();
+            }
+        }
+        return false;
+    }
     if (handle_keyboard_event_if_focused(opponent_board, key))
     {
         return true;

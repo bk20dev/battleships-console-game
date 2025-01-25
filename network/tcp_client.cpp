@@ -124,6 +124,14 @@ void network::tcp_client::disconnect()
 
     close_socket(client_socket_descriptor);
 
+    if (!client_listener_thread)
+    {
+        return;
+    }
+    if (client_listener_thread->get_id() == std::this_thread::get_id())
+    {
+        return; // Avoid deadlock, but the listener thread won't be stopped until the app exits
+    }
     if (client_listener_thread && client_listener_thread->joinable())
     {
         client_listener_thread->join();

@@ -207,12 +207,18 @@ void screens::join_network_game_screen::handle_join_game_button_clicked() const
     join_game(selected_ip_address, selected_port);
 }
 
+screens::join_network_game_screen::~join_network_game_screen()
+{
+    tcp_client_connection->on_server_connected = nullptr;
+    tcp_client_connection->on_network_error = nullptr;
+}
+
 screens::join_network_game_screen::join_network_game_screen(
     const int x, const int y, const std::shared_ptr<console::console>& console,
     const std::function<void(const std::shared_ptr<engine::i_peer>&)>& on_peer_created,
     const std::function<void()>& on_navigate_up)
     : screen(x, y, console, "Join network game"),
-      on_navigate_up(on_navigate_up), on_peer_created(on_peer_created)
+      on_peer_created(on_peer_created), on_navigate_up(on_navigate_up)
 {
     initialize_components();
     initialize_tab_indexer();

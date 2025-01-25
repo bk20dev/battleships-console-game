@@ -135,7 +135,15 @@ void network::tcp_server::stop_listening()
     close_socket(client_socket_descriptor);
     close_socket(server_socket_descriptor);
 
-    if (server_listener_thread && server_listener_thread->joinable())
+    if (!server_listener_thread)
+    {
+        return;
+    }
+    if (server_listener_thread->get_id() == std::this_thread::get_id())
+    {
+        return; // Avoid deadlock, but the listener thread won't be stopped until the app exits
+    }
+    if (server_listener_thread->joinable())
     {
         server_listener_thread->join();
     }

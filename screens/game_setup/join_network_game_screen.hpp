@@ -55,6 +55,8 @@ namespace screens
         void handle_join_game_button_clicked() const;
 
     public:
+        ~join_network_game_screen() override;
+
         join_network_game_screen(int x, int y, const std::shared_ptr<console::console>& console,
                                  const std::function<void(const std::shared_ptr<engine::i_peer>&)>& on_peer_created,
                                  const std::function<void()>& on_navigate_up);

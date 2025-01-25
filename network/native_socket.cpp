@@ -16,10 +16,7 @@ int network::native_socket::create_tcp_socket()
 
 void network::native_socket::close_socket(const int socket_to_close)
 {
-    if (close(socket_to_close) < 0)
-    {
-        throw socket_error("Failed to close the socket.");
-    }
+    close(socket_to_close);
 }
 
 network::native_socket::socket_internet_address network::native_socket::create_socket_internet_address(const int port)
