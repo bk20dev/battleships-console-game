@@ -14,6 +14,16 @@ void components::label::clear_previous_text_trail() const
     console_view->write_at(0, 0, styled_empty_fill);
 }
 
+void components::label::paint_without_clearing_trail()
+{
+    const std::string styled_text = style.apply_to_text(text);
+    console_view->write_at(0, 0, styled_text);
+
+    previous_painted_text = text;
+
+    component::paint();
+}
+
 components::label::label(const int x, const int y, const std::shared_ptr<console::console>& console,
                          const std::string& text)
     : component(x, y, text.size(), 1, console), text(text)
@@ -35,10 +45,5 @@ void components::label::paint()
         clear_previous_text_trail();
     }
 
-    const std::string styled_text = style.apply_to_text(text);
-    console_view->write_at(0, 0, styled_text);
-
-    previous_painted_text = text;
-
-    component::paint();
+    paint_without_clearing_trail();
 }

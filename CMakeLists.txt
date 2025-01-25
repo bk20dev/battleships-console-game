@@ -31,6 +31,8 @@ add_executable(battleships_console_game main.cpp
         components/remaining_battleship_viewer.cpp
         components/screen.hpp
         components/screen.cpp
+        components/turn_label.hpp
+        components/turn_label.cpp
         console/console.hpp
         console/console.cpp
         console/keyboard.hpp
