@@ -1,6 +1,7 @@
 #pragma once
 
 #include "player.hpp"
+#include "../components/battleship.hpp"
 #include "interfaces/i_peer.hpp"
 
 namespace engine
@@ -9,11 +10,6 @@ namespace engine
     {
         //     [[nodiscard]] bool is_opponent_bullet_present(const models::bullet& bullet_to_find) const;
         //
-        //     void peer_fire_shot(const core::position& position) const;
-        //     void peer_notify_battleship_part_damaged(const core::position& damaged_battleship_part) const;
-        //     void peer_notify_battleship_destroyed(const models::battleship& destroyed_battleship) const;
-        //
-        //     void handle_opponent_shot_received(const core::position& position);
         //     void handle_opponent_battleship_part_damaged(const core::position& damaged_battleship_part);
         //     void handle_opponent_battleship_destroyed(const models::battleship& destroyed_battleship);
 
@@ -27,9 +23,14 @@ namespace engine
         void handle_all_battleship_placements_submitted() const;
         void handle_any_battleship_placement_submitted() const;
 
-        void handle_opponent_disconnected() const;
-        void handle_opponent_battleship_placement_submitted();
+        void handle_opponent_player_disconnected() const;
+        void handle_opponent_player_battleship_placement_submitted();
         void handle_turn_changed(bool current_player_turn);
+        void handle_opponent_player_shot_received(const core::position&);
+        void handle_current_player_battleship_part_damaged(const core::position&) const;
+        void handle_current_player_battleship_destroyed(const models::battleship&) const;
+        void handle_opponent_player_battleship_part_damaged(const core::position&);
+        void handle_opponent_player_battleship_destroyed(const models::battleship&);
 
         void initialize_players();
         void setup_opponent_peer_connection(const std::shared_ptr<i_peer>&);
@@ -49,7 +50,5 @@ namespace engine
         [[nodiscard]] bool is_current_player_turn() const;
         [[nodiscard]] const player& get_current_player() const;
         [[nodiscard]] const player& get_opponent_player() const;
-
-        //     bool shoot_opponent_board(const core::position& position) const;
     };
 }
