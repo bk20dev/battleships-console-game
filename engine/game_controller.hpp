@@ -42,6 +42,8 @@ namespace engine
         std::function<void()> on_opponent_battleship_placement_submitted = nullptr;
         std::function<void()> on_all_battleship_placements_submitted = nullptr;
         std::function<void(bool current_player_turn)> on_turn_changed = nullptr;
+        std::function<void()> on_current_player_board_updated = nullptr;
+        std::function<void()> on_opponent_board_updated = nullptr;
 
         void submit_current_player_battleship_placement(const std::vector<models::battleship>&);
         void shoot_opponent_player(const core::position&);

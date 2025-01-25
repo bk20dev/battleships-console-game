@@ -19,11 +19,19 @@ namespace
 
 void screens::gameplay_screen::initialize_components()
 {
+    current_player_board_label = std::make_shared<components::label>(0, 0, child_console_view, "Opponent's board");
+    opponent_board_label = std::make_shared<components::label>(26, 0, child_console_view, "Your board");
+
     const auto& current_player = game_controller->get_current_player();
     const auto& opponent_player = game_controller->get_opponent_player();
 
+    current_player_board = std::make_shared<components::player_board>(
+        26, 2, child_console_view,
+        current_player.get_placed_battleships(),
+        current_player.get_opponent_bullets());
+
     opponent_board = std::make_shared<components::opponent_board>(
-        0, 0, child_console_view,
+        0, 2, child_console_view,
         opponent_player.get_opponent_bullets(),
         opponent_player.get_damaged_battleship_parts(),
         opponent_player.get_destroyed_battleships(),
@@ -31,11 +39,6 @@ void screens::gameplay_screen::initialize_components()
         {
             shoot_opponent_board(crosshair_position);
         });
-
-    player_board = std::make_shared<components::player_board>(
-        26, 0, child_console_view,
-        current_player.get_placed_battleships(),
-        current_player.get_opponent_bullets());
 }
 
 void screens::gameplay_screen::handle_turn_changed(const bool current_player) const
@@ -58,6 +61,18 @@ void screens::gameplay_screen::handle_turn_changed(const bool current_player) co
     }
 }
 
+void screens::gameplay_screen::handle_current_player_board_updated() const
+{
+    current_player_board->paint();
+    console_view->flush();
+}
+
+void screens::gameplay_screen::handle_opponent_player_board_updated() const
+{
+    opponent_board->paint();
+    console_view->flush();
+}
+
 void screens::gameplay_screen::shoot_opponent_board(const core::position& crosshair_position) const
 {
     game_controller->shoot_opponent_player(crosshair_position);
@@ -74,6 +89,15 @@ screens::gameplay_screen::gameplay_screen(
     {
         handle_turn_changed(current_player_turn);
     };
+    game_controller->on_current_player_board_updated = [this]
+    {
+        handle_current_player_board_updated();
+    };
+    game_controller->on_opponent_board_updated = [this]
+    {
+        handle_opponent_player_board_updated();
+    };
+
     handle_turn_changed(game_controller->is_current_player_turn());
 }
 
@@ -96,8 +120,11 @@ static bool handle_keyboard_event_if_focused(const std::shared_ptr<C>& component
 
 void screens::gameplay_screen::paint()
 {
+    current_player_board_label->paint();
+    opponent_board_label->paint();
+
+    current_player_board->paint();
     opponent_board->paint();
-    player_board->paint();
 
     screen::paint();
 }

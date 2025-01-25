@@ -5,10 +5,6 @@
 void engine::game_controller::change_turn(const bool current_player_turn)
 {
     opponent_peer_connection->change_turn(current_player_turn);
-
-    current_player.set_currently_plays(current_player_turn);
-    opponent_player.set_currently_plays(!current_player_turn);
-
     handle_turn_changed(current_player_turn);
 }
 
@@ -61,7 +57,10 @@ void engine::game_controller::handle_turn_changed(const bool current_player_turn
 void engine::game_controller::handle_opponent_player_shot_received(const core::position& crosshair_position)
 {
     const models::bullet opponent_bullet{crosshair_position};
-    current_player.shoot_with(opponent_bullet);
+    if (current_player.shoot_with(opponent_bullet) && on_current_player_board_updated)
+    {
+        on_current_player_board_updated();
+    }
 }
 
 void engine::game_controller::handle_current_player_battleship_part_damaged(
@@ -80,12 +79,20 @@ void engine::game_controller::handle_opponent_player_battleship_part_damaged(
     const core::position& damaged_part_position)
 {
     opponent_player.add_damaged_battleship_part(damaged_part_position);
+    if (on_opponent_board_updated)
+    {
+        on_opponent_board_updated();
+    }
 }
 
 void engine::game_controller::handle_opponent_player_battleship_destroyed(
     const models::battleship& destroyed_battleship)
 {
     opponent_player.add_destroyed_battleship(destroyed_battleship);
+    if (on_opponent_board_updated)
+    {
+        on_opponent_board_updated();
+    }
 }
 
 void engine::game_controller::initialize_players()
