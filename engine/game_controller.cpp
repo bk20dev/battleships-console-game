@@ -54,12 +54,24 @@ void engine::game_controller::handle_turn_changed(const bool current_player_turn
     }
 }
 
+void engine::game_controller::handle_current_player_board_updated() const
+{
+    if (on_current_player_board_updated)
+    {
+        on_current_player_board_updated();
+    }
+}
+
 void engine::game_controller::handle_opponent_player_shot_received(const core::position& crosshair_position)
 {
     const models::bullet opponent_bullet{crosshair_position};
-    if (current_player.shoot_with(opponent_bullet) && on_current_player_board_updated)
+    if (current_player.shoot_with(opponent_bullet))
     {
-        on_current_player_board_updated();
+        handle_current_player_board_updated();
+    }
+    if (current_player.get_is_game_lost())
+    {
+        handle_current_player_game_lost();
     }
 }
 
@@ -93,6 +105,27 @@ void engine::game_controller::handle_opponent_player_battleship_destroyed(
     {
         on_opponent_board_updated();
     }
+}
+
+void engine::game_controller::handle_game_over(const bool current_player_won)
+{
+    game_over = true;
+
+    if (on_game_over)
+    {
+        on_game_over(current_player_won);
+    }
+}
+
+void engine::game_controller::handle_current_player_game_lost()
+{
+    opponent_peer_connection->notify_player_lost();
+    handle_game_over(false);
+}
+
+void engine::game_controller::handle_opponent_player_game_lost()
+{
+    handle_game_over(true);
 }
 
 void engine::game_controller::initialize_players()
@@ -138,6 +171,10 @@ void engine::game_controller::setup_opponent_peer_connection(const std::shared_p
     opponent_peer_connection->on_opponent_battleship_destroyed = [this](const models::battleship& destroyed_battleship)
     {
         handle_opponent_player_battleship_destroyed(destroyed_battleship);
+    };
+    opponent_peer_connection->on_opponent_player_lost = [this]
+    {
+        handle_opponent_player_game_lost();
     };
 }
 
@@ -197,4 +234,9 @@ const engine::player& engine::game_controller::get_current_player() const
 const engine::player& engine::game_controller::get_opponent_player() const
 {
     return opponent_player;
+}
+
+bool engine::game_controller::is_game_over() const
+{
+    return game_over;
 }

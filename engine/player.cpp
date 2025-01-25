@@ -64,6 +64,11 @@ const std::vector<models::battleship>& engine::player::get_destroyed_battleships
     return destroyed_battleships;
 }
 
+bool engine::player::get_is_game_lost() const
+{
+    return destroyed_battleships.size() >= placed_battleships.size();
+}
+
 void engine::player::set_placed_battleships(const std::vector<models::battleship>& placed_battleships)
 {
     this->placed_battleships = placed_battleships;

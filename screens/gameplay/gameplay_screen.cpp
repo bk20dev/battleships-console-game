@@ -16,16 +16,12 @@ namespace
             .action_description = "Shoot",
         },
     };
-}
 
-namespace
-{
-    constexpr console::style::style current_player_turn_label_style = {
-        .foreground_color = console::style::CYAN,
-    };
-
-    constexpr console::style::style opponent_player_turn_label_style = {
-        .foreground_color = console::style::WHITE,
+    const std::vector<components::keyboard_actions::keyboard_action> game_end_keyboard_actions = {
+        {
+            .key_to_press = "Enter",
+            .action_description = "Exit",
+        },
     };
 }
 
@@ -57,27 +53,30 @@ void screens::gameplay_screen::initialize_components()
         std::vector(constants::gameplay::battleships.begin(), constants::gameplay::battleships.end()),
         opponent_player.get_destroyed_battleships());
 
-    turn_label = std::make_shared<components::label>(0, 14, child_console_view, "Waiting for turn...");
+    turn_label = std::make_shared<components::turn_label>(0, 14, size.width, child_console_view);
 }
 
 void screens::gameplay_screen::handle_current_player_turn() const
 {
     opponent_board->focus();
-    turn_label->set_text("Your turn");
-    turn_label->set_style(current_player_turn_label_style);
+    turn_label->set_current_player_turn();
     set_keyboard_actions(opponent_board_keyboard_actions);
 }
 
 void screens::gameplay_screen::handle_opponent_player_turn() const
 {
     opponent_board->blur();
-    turn_label->set_text("Opponent's turn");
-    turn_label->set_style(opponent_player_turn_label_style);
+    turn_label->set_opponent_player_turn();
     set_keyboard_actions({});
 }
 
 void screens::gameplay_screen::handle_turn_changed(const bool current_player) const
 {
+    if (game_controller->is_game_over())
+    {
+        return;
+    }
+
     if (current_player)
     {
         handle_current_player_turn();
@@ -105,6 +104,24 @@ void screens::gameplay_screen::handle_opponent_player_board_updated() const
     console_view->flush();
 }
 
+void screens::gameplay_screen::handle_game_over(const bool current_player_won)
+{
+    opponent_board->blur();
+    set_keyboard_actions(game_end_keyboard_actions);
+
+    if (current_player_won)
+    {
+        turn_label->set_current_player_won();
+    }
+    else
+    {
+        turn_label->set_current_player_lost();
+    }
+
+    paint();
+    console_view->flush();
+}
+
 void screens::gameplay_screen::shoot_opponent_board(const core::position& crosshair_position) const
 {
     game_controller->shoot_opponent_player(crosshair_position);
@@ -128,6 +145,10 @@ screens::gameplay_screen::gameplay_screen(
     game_controller->on_opponent_board_updated = [this]
     {
         handle_opponent_player_board_updated();
+    };
+    game_controller->on_game_over = [this](const bool current_player_won)
+    {
+        handle_game_over(current_player_won);
     };
 
     handle_turn_changed(game_controller->is_current_player_turn());
