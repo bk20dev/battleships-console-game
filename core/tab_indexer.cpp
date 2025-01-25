@@ -42,7 +42,7 @@ void core::tab_indexer::repaint_component_if_needed(
 
 void core::tab_indexer::blur(const std::shared_ptr<component_traits::focusable>& component_to_focus)
 {
-    if (const auto focusable = component_to_focus)
+    if (const auto& focusable = component_to_focus)
     {
         focusable->blur();
     }
@@ -51,7 +51,7 @@ void core::tab_indexer::blur(const std::shared_ptr<component_traits::focusable>&
 
 void core::tab_indexer::focus(const std::shared_ptr<component_traits::focusable>& component_to_blur)
 {
-    if (const auto focusable = component_to_blur)
+    if (const auto& focusable = component_to_blur)
     {
         focusable->focus();
     }

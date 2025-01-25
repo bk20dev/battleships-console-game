@@ -75,7 +75,7 @@ int network::native_socket::accept_client_connection(const int socket_descriptor
     return client_socket;
 }
 
-void network::native_socket::connect(int socket_descriptor, socket_internet_address& server_internet_address)
+void network::native_socket::connect(const int socket_descriptor, socket_internet_address& server_internet_address)
 {
     const auto socket_address = reinterpret_cast<native_socket::socket_address*>(&server_internet_address);
 

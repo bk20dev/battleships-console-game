@@ -11,7 +11,7 @@ network::native_socket::socket_error_code network::socket_error::get_socket_erro
     return errno;
 }
 
-network::socket_error::socket_error(const std::string& message, const native_socket::socket_error_code error_code):
+network::socket_error::socket_error(const std::string& message, const native_socket::socket_error_code& error_code):
     std::runtime_error(format_socket_error_message(message, error_code)), socket_error_code(error_code)
 {
 }

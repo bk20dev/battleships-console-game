@@ -17,7 +17,7 @@ namespace network
     public:
         const int socket_error_code;
 
-        socket_error(const std::string& message, const native_socket::socket_error_code error_code);
+        socket_error(const std::string& message, const native_socket::socket_error_code& error_code);
 
         explicit socket_error(const std::string& message);
     };

@@ -64,7 +64,7 @@ std::shared_ptr<core::component> screens::game_setup_screen::create_screen(const
     }
 }
 
-void screens::game_setup_screen::navigate_to(destination destination)
+void screens::game_setup_screen::navigate_to(const destination destination)
 {
     const auto& destination_screen = create_screen(destination);
     current_screen = destination_screen;

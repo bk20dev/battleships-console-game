@@ -141,7 +141,7 @@ bool models::rectangle::intersects(const rectangle& other_rectangle) const
     return is_any_segment_between(ax, bx, px, qx) && is_any_segment_between(ay, by, py, qy);
 }
 
-models::rectangle models::rectangle::operator+(const models::offset& offset_to_add) const
+models::rectangle models::rectangle::operator+(const offset& offset_to_add) const
 {
     return {
         .position = position + offset_to_add,

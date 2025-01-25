@@ -5,7 +5,7 @@ models::battleship models::battleship::rotated() const
     return with_rectangle(rectangle.rotated());
 }
 
-models::battleship models::battleship::moved_by(const models::offset& offset) const
+models::battleship models::battleship::moved_by(const offset& offset) const
 {
     return with_rectangle(rectangle + offset);
 }

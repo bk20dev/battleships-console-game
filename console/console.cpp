@@ -48,7 +48,7 @@ void console::console::rainbow_fill_row(const int x, const int y, const int widt
     output_stream << move_to(x, y);
     for (int i = 0; i < width; i++)
     {
-        const int color_code = (i % 6) + 101;
+        const int color_code = i % 6 + 101;
         output_stream << std::format("\033[{}m ", color_code);
     }
     output_stream << "\033[0m";
@@ -71,7 +71,8 @@ std::string console::console_view::move_to(const int x, const int y) const
     return console::move_to(column, row);
 }
 
-console::console_view::console_view(const console& base_console, const models::position& position): console(base_console),
+console::console_view::console_view(const console& base_console, const models::position& position):
+    console(base_console),
     position(position)
 {
 }

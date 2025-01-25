@@ -40,6 +40,7 @@ void network::tcp_client::start_client_listener_thread()
 
 void network::tcp_client::close_socket(int& socket_descriptor)
 {
+    // ReSharper disable once CppDFAConstantConditions
     if (socket_descriptor != -1)
     {
         native_socket::close_socket(socket_descriptor);

@@ -100,6 +100,7 @@ void console::keyboard::keyboard::keyboard_input_listener()
         keyboard_input_queue.push(pressed_key);
         keyboard_input_condition_variable.notify_one(); // Allow ::get_key() to continue running
     }
+    // ReSharper disable once CppDFAUnreachableCode
 }
 
 void set_terminal_non_blocking_mode()

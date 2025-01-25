@@ -6,7 +6,7 @@ void core::component::invalidate()
 }
 
 bool core::component::handle_keyboard_event_for_child(const console::keyboard::key& key,
-                                                      std::shared_ptr<component> child_component)
+                                                      const std::shared_ptr<component>& child_component)
 {
     if (!child_component)
     {
@@ -44,7 +44,7 @@ bool core::component::handle_keyboard_event(const console::keyboard::key& key)
     return false;
 }
 
-std::shared_ptr<console::console> create_console_view(
+static std::shared_ptr<console::console> create_console_view(
     const std::shared_ptr<console::console>& console, const models::offset& component_offset)
 {
     if (!console)

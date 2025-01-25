@@ -21,7 +21,7 @@ namespace core
         void invalidate();
 
         static bool handle_keyboard_event_for_child(const console::keyboard::key& key,
-                                                    std::shared_ptr<component> child_component);
+                                                    const std::shared_ptr<component>& child_component);
 
     public:
         virtual ~component() = default;

@@ -62,7 +62,7 @@ screens::game_mode_selector_screen::game_mode_selector_screen(
     const std::function<void()>& on_play_with_computer_selected,
     const std::function<void()>& on_start_network_game_selected,
     const std::function<void()>& on_join_network_game_selected)
-    : screen(0, 0, console, "Select game mode"),
+    : screen(x, y, console, "Select game mode"),
       on_play_with_computer_selected(on_play_with_computer_selected),
       on_start_network_game_selected(on_start_network_game_selected),
       on_join_network_game_selected(on_join_network_game_selected)

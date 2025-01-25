@@ -18,7 +18,7 @@ std::string engine::game_object_serializer::serialize_components(const std::init
         current_component_index++;
     }
 
-    return std::string(serialized_components.begin(), serialized_components.end());
+    return {serialized_components.begin(), serialized_components.end()};
 }
 
 std::string engine::game_object_serializer::serialize_game_object(
