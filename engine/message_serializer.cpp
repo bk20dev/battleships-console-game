@@ -11,6 +11,7 @@ engine::message_serializer::message_type engine::message_serializer::get_message
     case NOTIFY_SHOT_FIRED:
     case NOTIFY_BATTLESHIP_PART_DAMAGED:
     case NOTIFY_BATTLESHIP_DESTROYED:
+    case NOTIFY_PLAYER_LOST:
         return static_cast<message_type>(message_type_character);
     default:
         const std::string error_message = std::format("Unknown message type \"{}\".", message_type_character);

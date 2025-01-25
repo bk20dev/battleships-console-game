@@ -14,6 +14,7 @@ namespace engine
             NOTIFY_SHOT_FIRED = 's',
             NOTIFY_BATTLESHIP_PART_DAMAGED = 'm',
             NOTIFY_BATTLESHIP_DESTROYED = 'd',
+            NOTIFY_PLAYER_LOST = 'l',
         };
 
     private:

@@ -19,3 +19,7 @@ void engine::i_peer::notify_battleship_part_damaged(const core::position& damage
 void engine::i_peer::notify_battleship_destroyed(const models::battleship& destroyed_battleship)
 {
 }
+
+void engine::i_peer::notify_player_lost()
+{
+}

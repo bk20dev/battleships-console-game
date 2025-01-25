@@ -30,6 +30,9 @@ void engine::serializable_peer::handle_message(const std::string& serialized_mes
     case message_serializer::NOTIFY_BATTLESHIP_DESTROYED:
         handle_opponent_battleship_destroyed(serialized_game_object);
         break;
+    case message_serializer::NOTIFY_PLAYER_LOST:
+        handle_opponent_player_lost();
+        break;
     }
 }
 
@@ -129,6 +132,14 @@ void engine::serializable_peer::handle_opponent_battleship_destroyed(const std::
     }
 }
 
+void engine::serializable_peer::handle_opponent_player_lost() const
+{
+    if (on_opponent_player_lost)
+    {
+        on_opponent_player_lost();
+    }
+}
+
 engine::serializable_peer::serializable_peer(const std::shared_ptr<i_connection>& connection)
 {
     this->connection = connection;
@@ -177,4 +188,9 @@ void engine::serializable_peer::notify_battleship_destroyed(const models::battle
         .serialize_battleship(destroyed_battleship);
 
     send_message(message_serializer::NOTIFY_BATTLESHIP_DESTROYED, serialized_destroyed_battleship);
+}
+
+void engine::serializable_peer::notify_player_lost()
+{
+    send_message(message_serializer::NOTIFY_PLAYER_LOST);
 }
