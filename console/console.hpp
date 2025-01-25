@@ -29,6 +29,8 @@ namespace console
         void fill_rectangle(
             const core::rectangle& rectangle, const std::string& character, const std::string& line_prefix = "") const;
 
+        void rainbow_fill_row(int x, int y, int width) const;
+
         [[nodiscard]] virtual std::shared_ptr<console_view> create_view(const core::offset& offset) const;
 
         void flush() const;
