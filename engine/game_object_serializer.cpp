@@ -51,7 +51,7 @@ std::string engine::game_object_serializer::serialize_boolean_flag(const bool fl
     return serialize_game_object(BOOLEAN_FLAG, {flag_to_serialize});
 }
 
-std::string engine::game_object_serializer::serialize_position(const core::position& position_to_serialize)
+std::string engine::game_object_serializer::serialize_position(const models::position& position_to_serialize)
 {
     const auto [x, y] = position_to_serialize;
     return serialize_game_object(POSITION, {x, y});
@@ -80,7 +80,7 @@ bool engine::game_object_serializer::deserialize_boolean_flag(const std::string&
     return serialized_boolean_flag_value[0];
 }
 
-core::position engine::game_object_serializer::deserialize_position(const std::string& serialized_game_object)
+models::position engine::game_object_serializer::deserialize_position(const std::string& serialized_game_object)
 {
     const std::string serialized_position_value =
         extract_serialized_game_object_value(POSITION, serialized_game_object);
@@ -90,7 +90,7 @@ core::position engine::game_object_serializer::deserialize_position(const std::s
         throw std::invalid_argument("Serialized game object is too short.");
     }
 
-    return core::position{
+    return models::position{
         .x = serialized_position_value[0],
         .y = serialized_position_value[1],
     };

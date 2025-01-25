@@ -7,5 +7,5 @@
 namespace components::battleship
 {
     void paint(const std::shared_ptr<const console::console>& console, const models::battleship& battleship_to_paint,
-               const console::style::style& style, const core::size& pixel_size = {1, 1});
+               const console::style::style& style, const models::size& pixel_size = {1, 1});
 }

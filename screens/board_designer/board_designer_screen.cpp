@@ -135,7 +135,7 @@ bool screens::board_designer_screen::handle_keyboard_event(const console::keyboa
         return screen::handle_keyboard_event(key);
     }
 
-    const core::offset key_arrow_offset = key.get_arrow_offset();
+    const models::offset key_arrow_offset = key.get_arrow_offset();
     tab_indexer.focus_next_component(key_arrow_offset.y);
     clear_notice_message();
 

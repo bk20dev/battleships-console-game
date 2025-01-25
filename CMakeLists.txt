@@ -48,8 +48,6 @@ add_executable(battleships_console_game main.cpp
         core/component.cpp
         core/component_traits.hpp
         core/component_traits.cpp
-        core/dimension.hpp
-        core/dimension.cpp
         core/tab_indexer.hpp
         core/tab_indexer.tpp
         core/tab_indexer.cpp
@@ -71,6 +69,13 @@ add_executable(battleships_console_game main.cpp
         models/battleship.cpp
         models/bullet.hpp
         models/bullet.cpp
+        models/offset.hpp
+        models/position.hpp
+        models/position.cpp
+        models/rectangle.hpp
+        models/rectangle.cpp
+        models/size.hpp
+        models/size.cpp
         network/native_socket.hpp
         network/native_socket.cpp
         network/socket_error.hpp

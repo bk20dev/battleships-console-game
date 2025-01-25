@@ -8,11 +8,11 @@ void engine::i_peer::change_turn(bool current_player)
 {
 }
 
-void engine::i_peer::notify_shot_fired(const core::position& position)
+void engine::i_peer::notify_shot_fired(const models::position& position)
 {
 }
 
-void engine::i_peer::notify_battleship_part_damaged(const core::position& damaged_battleship_part)
+void engine::i_peer::notify_battleship_part_damaged(const models::position& damaged_battleship_part)
 {
 }
 

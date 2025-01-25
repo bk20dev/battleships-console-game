@@ -20,17 +20,17 @@ namespace engine
         /** Bullets shot by the opponent player. */
         std::vector<models::bullet> opponent_bullets{};
         /** Parts of battleships that were damaged by the opponent player. */
-        std::vector<core::position> damaged_battleship_parts{};
+        std::vector<models::position> damaged_battleship_parts{};
         /** Battleships that were destroyed by the opponent player. */
         std::vector<models::battleship> destroyed_battleships{};
 
-        std::function<void(const core::position& damaged_battleship_part)> on_add_damaged_battleship_part;
+        std::function<void(const models::position& damaged_battleship_part)> on_add_damaged_battleship_part;
         std::function<void(const models::battleship& destroyed_battleship)> on_destroyed_battleship;
 
         /** Checks if a given bullet was already shot. */
         [[nodiscard]] bool is_opponent_bullet_present(const models::bullet& bullet_to_find) const;
         /** Returns a battleship at a given position. */
-        [[nodiscard]] std::optional<models::battleship> get_battleship(const core::position& position) const;
+        [[nodiscard]] std::optional<models::battleship> get_battleship(const models::position& position) const;
         /** Checks whether a battleship was destroyed by opponent's bullets. */
         [[nodiscard]] bool is_battleship_destroyed(const models::battleship& battleship_to_check) const;
 
@@ -43,7 +43,7 @@ namespace engine
 
         [[nodiscard]] const std::vector<models::bullet>& get_opponent_bullets() const;
 
-        [[nodiscard]] const std::vector<core::position>& get_damaged_battleship_parts() const;
+        [[nodiscard]] const std::vector<models::position>& get_damaged_battleship_parts() const;
 
         [[nodiscard]] const std::vector<models::battleship>& get_destroyed_battleships() const;
 
@@ -54,10 +54,10 @@ namespace engine
         bool shoot_with(const models::bullet& bullet);
 
         explicit player(
-            const std::function<void(const core::position&)>& on_add_damaged_battleship_part = nullptr,
+            const std::function<void(const models::position&)>& on_add_damaged_battleship_part = nullptr,
             const std::function<void(const models::battleship&)>& on_destroyed_battleship = nullptr);
 
-        void add_damaged_battleship_part(const core::position& damaged_battleship_part);
+        void add_damaged_battleship_part(const models::position& damaged_battleship_part);
 
         void add_destroyed_battleship(const models::battleship& destroyed_battleship);
 

@@ -31,7 +31,7 @@ void console::console::write_at(const int x, const int y, const std::string& tex
     output_stream << move_to(x, y) << text;
 }
 
-void console::console::fill_rectangle(const core::rectangle& rectangle, const std::string& character,
+void console::console::fill_rectangle(const models::rectangle& rectangle, const std::string& character,
                                       const std::string& line_prefix) const
 {
     const auto [position, size] = rectangle;
@@ -54,9 +54,9 @@ void console::console::rainbow_fill_row(const int x, const int y, const int widt
     output_stream << "\033[0m";
 }
 
-std::shared_ptr<console::console_view> console::console::create_view(const core::offset& offset) const
+std::shared_ptr<console::console_view> console::console::create_view(const models::offset& offset) const
 {
-    const core::position view_position = {.x = offset.x, .y = offset.y};
+    const models::position view_position = {.x = offset.x, .y = offset.y};
     return std::make_shared<console_view>(*this, view_position);
 }
 
@@ -71,13 +71,13 @@ std::string console::console_view::move_to(const int x, const int y) const
     return console::move_to(column, row);
 }
 
-console::console_view::console_view(const console& base_console, const core::position& position): console(base_console),
+console::console_view::console_view(const console& base_console, const models::position& position): console(base_console),
     position(position)
 {
 }
 
-std::shared_ptr<console::console_view> console::console_view::create_view(const core::offset& offset) const
+std::shared_ptr<console::console_view> console::console_view::create_view(const models::offset& offset) const
 {
-    const core::position new_position = position + offset;
+    const models::position new_position = position + offset;
     return std::make_shared<console_view>(*this, new_position);
 }

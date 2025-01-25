@@ -34,8 +34,8 @@ namespace engine
 
         void notify_board_prepared() override;
         void change_turn(bool current_player) override;
-        void notify_shot_fired(const core::position& shot_position) override;
-        void notify_battleship_part_damaged(const core::position& damaged_battleship_part) override;
+        void notify_shot_fired(const models::position& shot_position) override;
+        void notify_battleship_part_damaged(const models::position& damaged_battleship_part) override;
         void notify_battleship_destroyed(const models::battleship& destroyed_battleship) override;
         void notify_player_lost() override;
     };

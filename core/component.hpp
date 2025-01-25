@@ -2,9 +2,9 @@
 
 #include <vector>
 
-#include "dimension.hpp"
 #include "../console/console.hpp"
 #include "../console/keyboard.hpp"
+#include "../models/position.hpp"
 
 namespace core
 {
@@ -13,8 +13,8 @@ namespace core
     protected:
         bool needs_repaint = false;
 
-        position position;
-        size size;
+        models::position position;
+        models::size size;
 
         std::shared_ptr<console::console> console_view;
 

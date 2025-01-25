@@ -6,12 +6,12 @@
 
 namespace
 {
-    constexpr core::size pixel_size = {.width = 2, .height = 1};
+    constexpr models::size pixel_size = {.width = 2, .height = 1};
 
     constexpr int total_board_width = constants::dimension::board_column_count * pixel_size.width;
     constexpr int total_board_height = constants::dimension::board_row_count * pixel_size.height;
 
-    constexpr core::rectangle board_rectangle = {
+    constexpr models::rectangle board_rectangle = {
         .size = {
             .width = constants::dimension::board_column_count,
             .height = constants::dimension::board_row_count,
@@ -60,7 +60,7 @@ components::board_designer::board_designer(
 
 void components::board_designer::paint_board() const
 {
-    static constexpr core::rectangle board_fill_rectangle = {
+    static constexpr models::rectangle board_fill_rectangle = {
         .size = {
             .height = total_board_height,
             .width = total_board_width,
@@ -153,7 +153,7 @@ bool components::board_designer::handle_keyboard_event(const console::keyboard::
 
     if (key.is_arrow())
     {
-        const core::offset battleship_position_offset = key.get_arrow_offset();
+        const models::offset battleship_position_offset = key.get_arrow_offset();
         const models::battleship moved_battleship = updated_battleship.moved_by(battleship_position_offset);
         updated_battleship = moved_battleship;
     }

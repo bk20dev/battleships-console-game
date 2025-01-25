@@ -67,7 +67,7 @@ bool console::keyboard::key::is_arrow() const
     return is_vertical_arrow() || is_horizontal_arrow();
 }
 
-core::offset console::keyboard::key::get_arrow_offset() const
+models::offset console::keyboard::key::get_arrow_offset() const
 {
     if (!is_special)
     {

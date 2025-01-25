@@ -25,7 +25,7 @@ void components::turn_label::paint_won_background() const
 
 void components::turn_label::paint_lost_background() const
 {
-    const core::rectangle fill_rectangle = {
+    const models::rectangle fill_rectangle = {
         .size = {.width = label_width, .height = 1},
     };
     static constexpr console::style::style lost_background_style = {

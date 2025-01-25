@@ -22,7 +22,7 @@ bool components::list<C>::update_selected_item_index(const console::keyboard::ke
         return false;
     }
 
-    const core::offset key_arrow_offset = key.get_arrow_offset();
+    const models::offset key_arrow_offset = key.get_arrow_offset();
     const int item_index_delta = key_arrow_offset.y;
     const int new_selected_item_index = get_new_selected_item_index(item_index_delta);
 

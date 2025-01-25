@@ -25,7 +25,7 @@ namespace components
         void set_keyboard_actions(const std::vector<keyboard_actions::keyboard_action>& keyboard_actions) const;
 
     public:
-        static constexpr core::offset child_console_view_offset = {.x = 0, .y = 5};
+        static constexpr models::offset child_console_view_offset = {.x = 0, .y = 5};
         static constexpr int screen_footer_height = 1;
 
         static constexpr int child_console_view_height = constants::dimension::screen_height

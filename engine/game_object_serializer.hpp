@@ -2,7 +2,6 @@
 
 #include <string>
 
-#include "../core/dimension.hpp"
 #include "../models/battleship.hpp"
 
 namespace engine
@@ -32,11 +31,11 @@ namespace engine
 
     public:
         [[nodiscard]] static std::string serialize_boolean_flag(bool flag_to_serialize);
-        [[nodiscard]] static std::string serialize_position(const core::position& position_to_serialize);
+        [[nodiscard]] static std::string serialize_position(const models::position& position_to_serialize);
         [[nodiscard]] static std::string serialize_battleship(const models::battleship& battleship_to_serialize);
 
         [[nodiscard]] static bool deserialize_boolean_flag(const std::string& serialized_game_object);
-        [[nodiscard]] static core::position deserialize_position(const std::string& serialized_game_object);
+        [[nodiscard]] static models::position deserialize_position(const std::string& serialized_game_object);
         [[nodiscard]] static models::battleship deserialize_battleship(const std::string& serialized_game_object);
     };
 }

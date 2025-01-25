@@ -6,7 +6,7 @@
 
 namespace
 {
-    constexpr core::size pixel_size = {.width = 2, .height = 1};
+    constexpr models::size pixel_size = {.width = 2, .height = 1};
 }
 
 bool components::remaining_battleship_viewer::is_battleship_present(const models::battleship& battleship_to_find,

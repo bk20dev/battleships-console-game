@@ -177,7 +177,7 @@ std::optional<models::battleship> components::full_board_designer_picker::find_p
 bool components::full_board_designer_picker::check_battleship_conflicts(
     const models::battleship& battleship_to_check) const
 {
-    const core::rectangle prohibited_zone = battleship_to_check.rectangle.expanded_by(1);
+    const models::rectangle prohibited_zone = battleship_to_check.rectangle.expanded_by(1);
 
     return std::ranges::any_of(
         placed_battleships,

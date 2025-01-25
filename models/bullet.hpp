@@ -1,14 +1,14 @@
 #pragma once
 
-#include "../core/dimension.hpp"
+#include "position.hpp"
 
 namespace models
 {
     struct bullet
     {
-        core::position position;
+        position position;
 
-        [[nodiscard]] core::rectangle get_rectangle() const;
+        [[nodiscard]] rectangle get_rectangle() const;
 
         bool operator==(const bullet& other_bullet) const;
     };

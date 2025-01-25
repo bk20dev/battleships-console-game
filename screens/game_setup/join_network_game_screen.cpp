@@ -256,7 +256,7 @@ bool screens::join_network_game_screen::handle_keyboard_event(const console::key
         return component::handle_keyboard_event(key);
     }
 
-    const core::offset arrow_key_offset = key.get_arrow_offset();
+    const models::offset arrow_key_offset = key.get_arrow_offset();
     tab_indexer.focus_next_component(arrow_key_offset.y);
 
     return true;

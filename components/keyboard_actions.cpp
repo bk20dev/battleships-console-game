@@ -33,7 +33,7 @@ static int get_key_to_press_length(const std::string& key_to_press,
 
 void components::keyboard_actions::footer_component::paint_background() const
 {
-    const core::rectangle background_rectangle = {
+    const models::rectangle background_rectangle = {
         .position = {0, 0},
         .size = {size.width, 1},
     };

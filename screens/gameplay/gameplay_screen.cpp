@@ -43,7 +43,7 @@ void screens::gameplay_screen::initialize_components()
         opponent_player.get_opponent_bullets(),
         opponent_player.get_damaged_battleship_parts(),
         opponent_player.get_destroyed_battleships(),
-        [this](const core::position& crosshair_position)
+        [this](const models::position& crosshair_position)
         {
             shoot_opponent_board(crosshair_position);
         });
@@ -122,7 +122,7 @@ void screens::gameplay_screen::handle_game_over(const bool current_player_won)
     console_view->flush();
 }
 
-void screens::gameplay_screen::shoot_opponent_board(const core::position& crosshair_position) const
+void screens::gameplay_screen::shoot_opponent_board(const models::position& crosshair_position) const
 {
     game_controller->shoot_opponent_player(crosshair_position);
 }

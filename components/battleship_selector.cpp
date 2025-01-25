@@ -6,7 +6,7 @@
 
 namespace
 {
-    constexpr core::size pixel_size = {.width = 2, .height = 1};
+    constexpr models::size pixel_size = {.width = 2, .height = 1};
 }
 
 static bool is_battleship_contained(const models::battleship& battleship_to_check,
@@ -122,7 +122,7 @@ bool components::battleship_selector::handle_keyboard_event(const console::keybo
         return component::handle_keyboard_event(key);
     }
 
-    const core::offset key_arrow_offset = key.get_arrow_offset();
+    const models::offset key_arrow_offset = key.get_arrow_offset();
     if (!update_selected_battleship_index(key_arrow_offset.y))
     {
         return false;

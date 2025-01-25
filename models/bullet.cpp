@@ -1,8 +1,10 @@
 #include "bullet.hpp"
 
-core::rectangle models::bullet::get_rectangle() const
+#include "rectangle.hpp"
+
+models::rectangle models::bullet::get_rectangle() const
 {
-    return core::rectangle{
+    return rectangle{
         .position = position,
         .size = {.width = 1, .height = 1},
     };

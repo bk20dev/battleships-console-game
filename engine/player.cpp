@@ -12,7 +12,7 @@ bool engine::player::is_opponent_bullet_present(const models::bullet& bullet_to_
         });
 }
 
-std::optional<models::battleship> engine::player::get_battleship(const core::position& position) const
+std::optional<models::battleship> engine::player::get_battleship(const models::position& position) const
 {
     return utils::find_if_or_null(
         placed_battleships,
@@ -54,7 +54,7 @@ const std::vector<models::bullet>& engine::player::get_opponent_bullets() const
     return opponent_bullets;
 }
 
-const std::vector<core::position>& engine::player::get_damaged_battleship_parts() const
+const std::vector<models::position>& engine::player::get_damaged_battleship_parts() const
 {
     return damaged_battleship_parts;
 }
@@ -107,14 +107,14 @@ bool engine::player::shoot_with(const models::bullet& bullet)
 }
 
 engine::player::player(
-    const std::function<void(const core::position& damaged_battleship_part)>& on_add_damaged_battleship_part,
+    const std::function<void(const models::position& damaged_battleship_part)>& on_add_damaged_battleship_part,
     const std::function<void(const models::battleship& destroyed_battleship)>& on_destroyed_battleship)
     : on_add_damaged_battleship_part(on_add_damaged_battleship_part),
       on_destroyed_battleship(on_destroyed_battleship)
 {
 }
 
-void engine::player::add_damaged_battleship_part(const core::position& damaged_battleship_part)
+void engine::player::add_damaged_battleship_part(const models::position& damaged_battleship_part)
 {
     damaged_battleship_parts.push_back(damaged_battleship_part);
 }

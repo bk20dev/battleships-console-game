@@ -32,7 +32,7 @@ namespace screens
         void handle_opponent_player_board_updated() const;
         void handle_game_over(bool current_player_won);
 
-        void shoot_opponent_board(const core::position& crosshair_position) const;
+        void shoot_opponent_board(const models::position& crosshair_position) const;
 
     public:
         ~gameplay_screen() override;

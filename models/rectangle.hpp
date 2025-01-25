@@ -1,32 +1,11 @@
 #pragma once
 
-namespace core
+#include "offset.hpp"
+#include "position.hpp"
+#include "size.hpp"
+
+namespace models
 {
-    struct rectangle;
-
-    struct offset
-    {
-        int x = 0, y = 0;
-    };
-
-    struct position
-    {
-        int x = 0, y = 0;
-
-        [[nodiscard]] position fitted_into(const rectangle& target_rectangle) const;
-
-        position operator+(const offset& offset_to_add) const;
-
-        bool operator==(const position& other_position) const;
-    };
-
-    struct size
-    {
-        int width = 0, height = 0;
-
-        bool operator==(const size& other_size) const;
-    };
-
     struct rectangle
     {
         position position;
@@ -42,11 +21,11 @@ namespace core
 
         [[nodiscard]] rectangle expanded_by(int amount) const;
 
-        [[nodiscard]] rectangle scaled_by(const core::size& pixel_size) const;
+        [[nodiscard]] rectangle scaled_by(const models::size& pixel_size) const;
 
         [[nodiscard]] rectangle intersect(const rectangle& other_rectangle) const;
 
-        [[nodiscard]] bool intersects(const core::position& other_position) const;
+        [[nodiscard]] bool intersects(const models::position& other_position) const;
 
         [[nodiscard]] bool intersects(const rectangle& other_rectangle) const;
 

@@ -3,7 +3,7 @@
 #include <queue>
 #include <thread>
 
-#include "../core/dimension.hpp"
+#include "../models/battleship.hpp"
 
 namespace console::keyboard
 {
@@ -33,7 +33,7 @@ namespace console::keyboard
 
         [[nodiscard]] bool is_arrow() const;
 
-        [[nodiscard]] core::offset get_arrow_offset() const;
+        [[nodiscard]] models::offset get_arrow_offset() const;
     };
 
     class keyboard

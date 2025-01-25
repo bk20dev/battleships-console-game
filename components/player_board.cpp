@@ -7,7 +7,7 @@
 
 namespace
 {
-    constexpr core::size pixel_size = {.width = 2, .height = 1};
+    constexpr models::size pixel_size = {.width = 2, .height = 1};
 
     constexpr int total_board_width = constants::dimension::board_column_count * pixel_size.width;
     constexpr int total_board_height = constants::dimension::board_row_count * pixel_size.height;
@@ -21,17 +21,17 @@ namespace
 }
 
 static void paint_scaled_rectangle(const std::shared_ptr<const console::console>& console,
-                                   const core::rectangle& rectangle, const std::string& character,
-                                   const console::style::style& style, const core::size& pixel_size = ::pixel_size)
+                                   const models::rectangle& rectangle, const std::string& character,
+                                   const console::style::style& style, const models::size& pixel_size = ::pixel_size)
 {
-    const core::rectangle scaled_fill_rectangle = rectangle.scaled_by(pixel_size);
+    const models::rectangle scaled_fill_rectangle = rectangle.scaled_by(pixel_size);
     const std::string style_sequence = style.to_control_sequence();
     console->fill_rectangle(scaled_fill_rectangle, character, style_sequence);
 }
 
 void components::player_board::paint_board() const
 {
-    static constexpr core::rectangle board_fill_rectangle = {
+    static constexpr models::rectangle board_fill_rectangle = {
         .size = {
             .width = total_board_width,
             .height = total_board_height,

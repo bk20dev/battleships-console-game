@@ -101,7 +101,7 @@ void engine::serializable_peer::handle_turn_changed(const std::string& serialize
 
 void engine::serializable_peer::handle_opponent_shot_received(const std::string& serialized_game_object) const
 {
-    const core::position received_shot = game_object_serializer
+    const models::position received_shot = game_object_serializer
         .deserialize_position(serialized_game_object);
 
     if (on_opponent_shot_received)
@@ -112,7 +112,7 @@ void engine::serializable_peer::handle_opponent_shot_received(const std::string&
 
 void engine::serializable_peer::handle_opponent_battleship_part_damaged(const std::string& serialized_game_object) const
 {
-    const core::position damaged_battleship_part = game_object_serializer
+    const models::position damaged_battleship_part = game_object_serializer
         .deserialize_position(serialized_game_object);
 
     if (on_opponent_battleship_part_damaged)
@@ -166,7 +166,7 @@ void engine::serializable_peer::change_turn(const bool current_player)
     send_message(message_serializer::CHANGE_TURN, serialized_current_player);
 }
 
-void engine::serializable_peer::notify_shot_fired(const core::position& shot_position)
+void engine::serializable_peer::notify_shot_fired(const models::position& shot_position)
 {
     const std::string serialized_shot_position = game_object_serializer
         .serialize_position(shot_position);
@@ -174,7 +174,7 @@ void engine::serializable_peer::notify_shot_fired(const core::position& shot_pos
     send_message(message_serializer::NOTIFY_SHOT_FIRED, serialized_shot_position);
 }
 
-void engine::serializable_peer::notify_battleship_part_damaged(const core::position& damaged_battleship_part)
+void engine::serializable_peer::notify_battleship_part_damaged(const models::position& damaged_battleship_part)
 {
     const std::string serialized_damaged_battleship_part = game_object_serializer
         .serialize_position(damaged_battleship_part);

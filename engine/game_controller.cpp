@@ -62,7 +62,7 @@ void engine::game_controller::handle_current_player_board_updated() const
     }
 }
 
-void engine::game_controller::handle_opponent_player_shot_received(const core::position& crosshair_position)
+void engine::game_controller::handle_opponent_player_shot_received(const models::position& crosshair_position)
 {
     const models::bullet opponent_bullet{crosshair_position};
     if (current_player.shoot_with(opponent_bullet))
@@ -76,7 +76,7 @@ void engine::game_controller::handle_opponent_player_shot_received(const core::p
 }
 
 void engine::game_controller::handle_current_player_battleship_part_damaged(
-    const core::position& damaged_part_position) const
+    const models::position& damaged_part_position) const
 {
     opponent_peer_connection->notify_battleship_part_damaged(damaged_part_position);
 }
@@ -88,7 +88,7 @@ void engine::game_controller::handle_current_player_battleship_destroyed(
 }
 
 void engine::game_controller::handle_opponent_player_battleship_part_damaged(
-    const core::position& damaged_part_position)
+    const models::position& damaged_part_position)
 {
     opponent_player.add_damaged_battleship_part(damaged_part_position);
     if (on_opponent_board_updated)
@@ -131,7 +131,7 @@ void engine::game_controller::handle_opponent_player_game_lost()
 void engine::game_controller::initialize_players()
 {
     current_player = player(
-        [this](const core::position& damaged_part_position)
+        [this](const models::position& damaged_part_position)
         {
             handle_current_player_battleship_part_damaged(damaged_part_position);
         },
@@ -160,11 +160,11 @@ void engine::game_controller::setup_opponent_peer_connection(const std::shared_p
     {
         handle_turn_changed(!opponent_player);
     };
-    opponent_peer_connection->on_opponent_shot_received = [this](const core::position& bullet_position)
+    opponent_peer_connection->on_opponent_shot_received = [this](const models::position& bullet_position)
     {
         handle_opponent_player_shot_received(bullet_position);
     };
-    opponent_peer_connection->on_opponent_battleship_part_damaged = [this](const core::position& damaged_part_position)
+    opponent_peer_connection->on_opponent_battleship_part_damaged = [this](const models::position& damaged_part_position)
     {
         handle_opponent_player_battleship_part_damaged(damaged_part_position);
     };
@@ -199,7 +199,7 @@ void engine::game_controller::submit_current_player_battleship_placement(
     handle_any_battleship_placement_submitted();
 }
 
-void engine::game_controller::shoot_opponent_player(const core::position& crosshair_position)
+void engine::game_controller::shoot_opponent_player(const models::position& crosshair_position)
 {
     if (!is_current_player_turn())
     {
