@@ -18,9 +18,12 @@ namespace screens
         std::shared_ptr<components::player_board> current_player_board;
         std::shared_ptr<components::opponent_board> opponent_board;
         std::shared_ptr<components::remaining_battleship_viewer> opponent_remaining_battleships_viewer;
+        std::shared_ptr<components::label> turn_label;
 
         void initialize_components();
 
+        void handle_current_player_turn() const;
+        void handle_opponent_player_turn() const;
         void handle_turn_changed(bool current_player) const;
         void handle_current_player_board_updated() const;
         void handle_opponent_player_board_updated() const;

@@ -18,6 +18,17 @@ namespace
     };
 }
 
+namespace
+{
+    constexpr console::style::style current_player_turn_label_style = {
+        .foreground_color = console::style::CYAN,
+    };
+
+    constexpr console::style::style opponent_player_turn_label_style = {
+        .foreground_color = console::style::WHITE,
+    };
+}
+
 void screens::gameplay_screen::initialize_components()
 {
     current_player_board_label = std::make_shared<components::label>(0, 0, child_console_view, "Opponent's board");
@@ -41,31 +52,44 @@ void screens::gameplay_screen::initialize_components()
             shoot_opponent_board(crosshair_position);
         });
 
-    using namespace constants;
     opponent_remaining_battleships_viewer = std::make_shared<components::remaining_battleship_viewer>(
         24, 2, child_console_view,
-        std::vector(gameplay::battleships.begin(), gameplay::battleships.end()),
+        std::vector(constants::gameplay::battleships.begin(), constants::gameplay::battleships.end()),
         opponent_player.get_destroyed_battleships());
+
+    turn_label = std::make_shared<components::label>(0, 14, child_console_view, "Waiting for turn...");
+}
+
+void screens::gameplay_screen::handle_current_player_turn() const
+{
+    opponent_board->focus();
+    turn_label->set_text("Your turn");
+    turn_label->set_style(current_player_turn_label_style);
+    set_keyboard_actions(opponent_board_keyboard_actions);
+}
+
+void screens::gameplay_screen::handle_opponent_player_turn() const
+{
+    opponent_board->blur();
+    turn_label->set_text("Opponent's turn");
+    turn_label->set_style(opponent_player_turn_label_style);
+    set_keyboard_actions({});
 }
 
 void screens::gameplay_screen::handle_turn_changed(const bool current_player) const
 {
     if (current_player)
     {
-        opponent_board->focus();
-        set_keyboard_actions(opponent_board_keyboard_actions);
+        handle_current_player_turn();
     }
     else
     {
-        opponent_board->blur();
-        set_keyboard_actions({});
+        handle_opponent_player_turn();
     }
 
-    if (opponent_board->should_repaint())
-    {
-        opponent_board->paint();
-        console_view->flush();
-    }
+    opponent_board->paint();
+    turn_label->paint();
+    console_view->flush();
 }
 
 void screens::gameplay_screen::handle_current_player_board_updated() const
@@ -89,7 +113,7 @@ void screens::gameplay_screen::shoot_opponent_board(const core::position& crossh
 screens::gameplay_screen::gameplay_screen(
     const int x, const int y, const std::shared_ptr<console::console>& console,
     const std::shared_ptr<engine::game_controller>& game_controller)
-    : screen(x, y, console, "Destroy enemy's battleships"), game_controller(game_controller)
+    : screen(x, y, console, "Destroy opponent's battleships"), game_controller(game_controller)
 {
     initialize_components();
 
@@ -134,6 +158,7 @@ void screens::gameplay_screen::paint()
     current_player_board->paint();
     opponent_board->paint();
     opponent_remaining_battleships_viewer->paint();
+    turn_label->paint();
 
     screen::paint();
 }
