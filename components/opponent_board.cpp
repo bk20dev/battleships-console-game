@@ -91,7 +91,10 @@ void components::opponent_board::paint_prohibited_areas() const
 {
     for (const auto& destroyed_battleship : destroyed_battleships)
     {
-        const core::rectangle prohibited_area_rectangle = destroyed_battleship.rectangle.expanded_by(1);
+        const core::rectangle prohibited_area_rectangle = destroyed_battleship
+                                                          .rectangle
+                                                          .expanded_by(1)
+                                                          .intersect(board_rectangle);
         paint_scaled_rectangle(console_view, prohibited_area_rectangle, constants::style::tertiary_fill_character,
                                constants::style::battleship::destroyed_style, pixel_size);
         paint_crosshair_if_focused(prohibited_area_rectangle, constants::style::tertiary_fill_character);
