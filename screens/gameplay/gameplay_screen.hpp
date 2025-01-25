@@ -2,6 +2,7 @@
 
 #include "../../components/opponent_board.hpp"
 #include "../../components/player_board.hpp"
+#include "../../components/remaining_battleship_viewer.hpp"
 #include "../../components/screen.hpp"
 #include "../../core/component.hpp"
 #include "../../engine/game_controller.hpp"
@@ -16,6 +17,7 @@ namespace screens
         std::shared_ptr<components::label> opponent_board_label;
         std::shared_ptr<components::player_board> current_player_board;
         std::shared_ptr<components::opponent_board> opponent_board;
+        std::shared_ptr<components::remaining_battleship_viewer> opponent_remaining_battleships_viewer;
 
         void initialize_components();
 

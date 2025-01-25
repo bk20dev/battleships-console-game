@@ -10,6 +10,8 @@ add_executable(battleships_console_game main.cpp
         components/battleship_selector.cpp
         components/board_designer.hpp
         components/board_designer.cpp
+        components/button.hpp
+        components/button.cpp
         components/full_board_designer_picker.hpp
         components/full_board_designer_picker.cpp
         components/input.hpp
@@ -39,8 +41,6 @@ add_executable(battleships_console_game main.cpp
         constants/dimension.hpp
         constants/gameplay.hpp
         constants/style.hpp
-        components/button.hpp
-        components/button.cpp
         core/component.hpp
         core/component.tpp
         core/component.cpp

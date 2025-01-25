@@ -62,7 +62,7 @@ void components::full_board_designer_picker::initialize_board_designer()
 void components::full_board_designer_picker::initialize_battleship_selector()
 {
     battleship_selector = std::make_shared<components::battleship_selector>(
-        26, 0, console_view,
+        24, 0, console_view,
         all_battleships,
         placed_battleships,
         conflicting_battleships,
