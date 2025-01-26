@@ -51,6 +51,8 @@ add_executable(battleships_console_game main.cpp
         core/tab_indexer.hpp
         core/tab_indexer.tpp
         core/tab_indexer.cpp
+        engine/board_generator.hpp
+        engine/board_generator.cpp
         engine/game_controller.hpp
         engine/game_controller.cpp
         engine/game_object_serializer.hpp
