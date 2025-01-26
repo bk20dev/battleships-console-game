@@ -1,6 +1,7 @@
 #include "full_board_designer_picker.hpp"
 
 #include "../constants/dimension.hpp"
+#include "../engine/board_generator.hpp"
 #include "../utils/vector.tpp"
 
 const std::vector<components::keyboard_actions::keyboard_action> board_designer_keyboard_actions = {
@@ -36,6 +37,10 @@ const std::vector<components::keyboard_actions::keyboard_action> battleship_sele
     {
         .key_to_press = "Enter",
         .action_description = "Select",
+    },
+    {
+        .key_to_press = "P",
+        .action_description = "Randomize",
     },
 };
 
@@ -157,6 +162,16 @@ void components::full_board_designer_picker::select_battleship(const models::bat
     focus_board_designer();
 }
 
+void components::full_board_designer_picker::generate_random_battleship_placement()
+{
+    const std::vector random_battleship_placement = engine::generator::random_board(all_battleships);
+
+    placed_battleships = random_battleship_placement;
+    conflicting_battleships = find_conflicting_battleships();
+
+    focus_battleship_selector();
+}
+
 void components::full_board_designer_picker::erase_placed_battleship(const models::battleship& battleship_to_erase)
 {
     std::erase_if(placed_battleships, [battleship_to_erase](const models::battleship& current_battleship)
@@ -242,6 +257,10 @@ bool components::full_board_designer_picker::handle_keyboard_event(const console
     if (handle_keyboard_event_for_child(key, component))
     {
         return true;
+    }
+    if (component == battleship_selector && key == console::keyboard::character::P)
+    {
+        generate_random_battleship_placement();
     }
 
     return component::handle_keyboard_event(key);

@@ -38,6 +38,7 @@ namespace components
         void cancel_battleship_placement();
 
         void select_battleship(const models::battleship& battleship_to_select);
+        void generate_random_battleship_placement();
 
         void erase_placed_battleship(const models::battleship& battleship_to_erase);
         std::optional<models::battleship> find_placed_battleship(const models::battleship& battleship_to_find) const;
