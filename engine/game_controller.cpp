@@ -4,8 +4,8 @@
 
 void engine::game_controller::change_turn(const bool current_player_turn)
 {
-    opponent_peer_connection->change_turn(current_player_turn);
     handle_turn_changed(current_player_turn);
+    opponent_peer_connection->change_turn(current_player_turn);
 }
 
 void engine::game_controller::handle_all_battleship_placements_submitted() const
@@ -164,10 +164,11 @@ void engine::game_controller::setup_opponent_peer_connection(const std::shared_p
     {
         handle_opponent_player_shot_received(bullet_position);
     };
-    opponent_peer_connection->on_opponent_battleship_part_damaged = [this](const models::position& damaged_part_position)
-    {
-        handle_opponent_player_battleship_part_damaged(damaged_part_position);
-    };
+    opponent_peer_connection->on_opponent_battleship_part_damaged = [this
+        ](const models::position& damaged_part_position)
+        {
+            handle_opponent_player_battleship_part_damaged(damaged_part_position);
+        };
     opponent_peer_connection->on_opponent_battleship_destroyed = [this](const models::battleship& destroyed_battleship)
     {
         handle_opponent_player_battleship_destroyed(destroyed_battleship);
@@ -187,14 +188,14 @@ engine::game_controller::game_controller(const std::shared_ptr<i_peer>& opponent
 void engine::game_controller::submit_current_player_battleship_placement(
     const std::vector<models::battleship>& battleship_placement)
 {
-    current_player.set_placed_battleships(battleship_placement);
-    current_player.set_board_ready();
-
-    opponent_peer_connection->notify_board_prepared();
     if (!opponent_player.get_is_currently_playing())
     {
         change_turn(/* current_player_turn */ true);
     }
+    opponent_peer_connection->notify_board_prepared();
+
+    current_player.set_placed_battleships(battleship_placement);
+    current_player.set_board_ready();
 
     handle_any_battleship_placement_submitted();
 }

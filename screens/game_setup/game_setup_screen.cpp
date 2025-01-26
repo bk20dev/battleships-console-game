@@ -1,14 +1,16 @@
 #include "game_setup_screen.hpp"
 
 #include "../../constants/dimension.hpp"
+#include "../../engine/ai_peer.hpp"
 
 std::shared_ptr<screens::game_mode_selector_screen> screens::game_setup_screen::create_game_mode_selector_screen()
 {
     return std::make_shared<game_mode_selector_screen>(
         0, 0, console_view,
-        []
+        [this]
         {
-            // TODO:
+            const auto ai_peer = std::make_shared<engine::ai_peer>();
+            handle_peer_created(ai_peer);
         },
         [this]
         {
