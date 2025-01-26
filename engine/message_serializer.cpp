@@ -1,6 +1,6 @@
 #include "message_serializer.hpp"
 
-#include <__format/format_functions.h>
+#include <format>
 
 engine::message_serializer::message_type engine::message_serializer::get_message_type(char message_type_character)
 {

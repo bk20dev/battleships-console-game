@@ -1,7 +1,7 @@
 #include "style.hpp"
 
+#include <format>
 #include <string>
-#include <__format/format_functions.h>
 
 /**
  * Returns a Control Sequence Introducer. Read more at https://en.wikipedia.org/wiki/ANSI_escape_code#Control_Sequence_Introducer_commands
