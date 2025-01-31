@@ -35,7 +35,7 @@ void engine::ai_peer::shoot_opponent_board()
         return;
     }
 
-    const models::position shot_position = *positions_left_to_shoot.end();
+    const models::position shot_position = positions_left_to_shoot.back();
     positions_left_to_shoot.pop_back();
 
     const models::bullet bullet_fired{.position = shot_position};
